@@ -1,0 +1,37 @@
+# Programmable completion for all BinaryIMST project's bash executable scripts under bash.
+# Source this file (or on some systems add it to ~/.bash_completion or to /etc/bash_completion.d/
+# and start a new shell) and bash's completion mechanism will know all about scripts' options!
+# Provides completion for the buildProject.bash executable scripts. Who wants to read man pages/help text...
+
+_buildProject() {
+		local cur prev base opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    #
+    #  The basic options we'll complete.
+    #
+    base="autocompletion buildAll buildStaticLib buildExample moveFiles clean"
+		opts="-l --without-log -f --force"
+
+    #
+    #  Complete the arguments to some of the basic commands.
+    #
+		case "${prev}" in
+			buildAll|buildStaticLib|buildExample)
+				COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+				return 0
+			;;
+			moveFiles|clean)
+				COMPREPLY=()
+				return 0
+			;;
+			*)
+			;;
+		esac
+   COMPREPLY=($(compgen -W "${base}" -- ${cur}))  
+   return 0
+}
+
+complete -F _buildProject buildProject.bash

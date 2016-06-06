@@ -1,0 +1,432 @@
+% -*- TeX:PL -*-
+% $Id: $
+\documentclass[12pt]{beamer}
+\usepackage[T1]{polski}
+\usepackage[cp1250]{inputenc}
+\usepackage{lipsum}
+\usepackage{multimedia}
+
+\usepackage{mathtools}
+\usepackage[ruled,vlined]{algorithm2e}
+%\usepackage[a4paper]{geometry}
+%\usepackage{graphicx}
+%\usepackage[]{hyperref}
+%
+
+%
+\author{Tomasz Strza³ka}
+\title{Wybrane problemy \\ odpornej optymalizacji dyskretnej}
+ \subtitle{z mo¿liwoœci¹ modyfikacji}
+ \date{\today}
+ \institute{Wydzia³ Podstawowych Problemów Techniki}
+ \subject{Logotyp Politechniki Wroc³awskiej}
+ \keywords{logotyp, Politechnika Wroc³awska, LaTeX}
+
+\setbeamersize{text margin left=0mm,text margin right=2.5mm}
+%\setbeamersize{sidebar width left=0mm,sidebar width right=0cm}
+\usetheme[lang=pl,pasek=pasek1]{pwr}
+
+\setbeamercovered{transparent=25}
+
+\newtheorem{pwrblock}{Definicja}
+\newenvironment<>{pwrblock}[1][]{%
+	\setbeamertemplate{blocks}[rounded][shadow=true]
+	\setbeamercolor{block title}{fg=white,bg=red!75!black}%
+	\begin{block}#2{#1}}{\end{block}}
+
+
+\transdissolve[duration=0.2]
+\logo{\includegraphics[height=7mm]{poziom-pl-pantone}}
+\logo{\includegraphics[height=7.05mm]{logopwrpl}}
+
+\begin{document}
+\begin{frame}[plain,t]
+ \maketitle
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 1
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Minimalne drzewo rozpinaj¹ce}
+	
+	\begin{minipage}{0.5\textwidth}
+		\pgfimage[width=40mm,interpolate=false]{frame1/mst}
+	\end{minipage}% This must go next to `\end{minipage}
+	\begin{minipage}{0.5\textwidth}
+		\begin{pwrblock}[W³aœciwoœci]
+			\begin{gather*}
+				T^{\ast} = \min_{\mathclap{T \in \mathcal{T}}} c \left( T \right) \\
+				\left| T \right| = \left| V \right| - 1 \\
+				\exists v \overset{\ast}{\leadsto} v^{\prime} \; : \; v \neq v^{\prime}
+			\end{gather*}
+		\end{pwrblock}
+	\end{minipage}
+
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 2
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Przyk³ad}
+	
+	\begin{figure}[htbp]
+		\centering
+		\pgfimage[width=50mm,interpolate=false]{frame2/mstExample}
+	\end{figure}
+	
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 3
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Przyk³ad}
+	
+	\begin{figure}[htbp]
+		\centering
+		\pgfimage[width=115mm,interpolate=false]{frame3/mstExample}
+	\end{figure}
+	
+	\begin{pwrblock}[W³aœciwoœci]
+		Graf pe³ny z $43$ wierzcho³kami.
+	\end{pwrblock}
+	
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 4
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Incremental}
+	
+	\begin{pwrblock}[Opis]
+		\begin{gather*}
+			\min_{\mathclap{\textbf{y} \in S^{k}_{\textbf{x}}}} v \left( \textbf{y}, \textbf{s} \right) \\
+			\textbf{x} \in X \\
+			\textbf{x}^{\ast} = \min_{\mathclap{\textbf{x} \in X}}arg \; v \left( \textbf{x}, \textbf{s}^{0} \right) \\
+			\textbf{s} \in S = \left\{ \textbf{s}^{1}, \textbf{s}^{2}, \dots, \textbf{s}^{n} \right\} \\
+			v \left( \textbf{x}, \textbf{s}^{0} \right) = \sum_{e_{i} \in E} c_{i}^{\textbf{s}} \cdot  x_{i}
+		\end{gather*}
+	\end{pwrblock}
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 5
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem minimaxowy}
+	
+	\begin{pwrblock}[Opis]
+		\begin{gather*}
+			\min_{\mathclap{\textbf{x} \in X}} \max_{\mathclap{\textsc{s} \in S}} v \left( \textbf{x}, \textbf{s} \right) \\
+			\textbf{s} \in S = \left\{ \textbf{s}^{1}, \textbf{s}^{2}, \dots, \textbf{s}^{n} \right\}
+		\end{gather*}
+	\end{pwrblock}
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 6
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Najgorszy scenariusz}
+	
+	\begin{figure}[htbp]
+		\centering
+		\pgfimage[width=68mm,interpolate=false]{frame6/BlackHole}
+	\end{figure}
+	
+	\begin{pwrblock}[Opis]
+		\centering
+		$\textbf{s}^{?}$ --- pole grawitacyjne czarnej dziury zniekszta³ca orbity planet uk³adu s³onecznego powoduj¹c kolizje miêdzy nimi.
+		($Pr \left[ \textbf{s}^{?} \right] \approx \frac{1}{10^{18}}$)
+	\end{pwrblock}
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 7
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Regret min-max}
+	
+	\begin{pwrblock}[Opis]
+		\begin{gather*}
+		\min_{\mathclap{\textbf{x} \in X}} \max_{\mathclap{\textsc{s} \in S}} \left( v \left( \textbf{x}, \textbf{s} \right) - v^{\ast}_{\textbf{s}} \right) \\
+		v^{\ast}_{\textbf{s}} = v \left( \textbf{x}^{\ast}_{\textbf{s}}, \textbf{s} \right) \\
+		\textbf{x}^{\ast}_{\textbf{s}} = \min_{\mathclap{\textbf{x} \in X}}arg \; v \left( \textbf{x}, \textbf{s} \right)
+		\end{gather*}
+	\end{pwrblock}
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 8
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Najgorszy scenariusz}
+	
+	\begin{figure}[htbp]
+		\centering
+		\pgfimage[width=68mm,interpolate=false]{frame6/BlackHole}
+	\end{figure}
+	
+	\begin{pwrblock}[Opis]
+		\begin{equation*}
+			\forall \textbf{x} \in X \; v \left( \textbf{x}, \textbf{s} \right) - v^{\ast}_{\textbf{s}}\text{ --- ,,ma³e''}
+		\end{equation*}
+	\end{pwrblock}
+\end{frame}
+	
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 9
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Incremental}
+	
+	\begin{pwrblock}[Opis]
+		\begin{gather*}
+			\min_{\mathclap{\textbf{y} \in S^{k}_{\textbf{x}}}} v \left( \textbf{y}, \textbf{s} \right)
+		\end{gather*}
+	\end{pwrblock}
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 10
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Odporna optymalizacja}
+	
+	\begin{pwrblock}[Opis]
+		\begin{gather*}
+			\min_{\mathclap{\textbf{x} \in X}} \left( v \left( \textbf{x}, \textbf{s} \right) + \max_{\mathclap{\textbf{s}^{\prime} \in S}} \min_{\mathclap{\textbf{y} \in S_{\textbf{x}}}} v \left( \textbf{y}, \textbf{s}^{\prime} \right) \right)
+		\end{gather*}
+	\end{pwrblock}
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 11
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Odporna optymalizacja}
+	
+	\begin{pwrblock}[Problem MST]
+		\begin{gather*}
+			\min_{\mathclap{\textbf{y}}} v \left( \textbf{y}, \textbf{s} \right)
+		\end{gather*}
+	\end{pwrblock}
+	
+	\begin{pwrblock}[Problem Incremental MST]
+		\begin{gather*}
+		\min_{\mathclap{\textbf{y} \in S^{k}_{\textbf{x}}}} v \left( \textbf{y}, \textbf{s} \right)
+		\end{gather*}
+	\end{pwrblock}
+
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 12
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Odporna optymalizacja}
+	
+	\begin{pwrblock}[Problem Adwersarza MST]
+		\begin{gather*}
+		\max_{\mathclap{\textbf{s}^{\prime} \in S}} \min_{\mathclap{\textbf{y} \in S_{\textbf{x}}}} v \left( \textbf{y}, \textbf{s}^{\prime} \right)
+		\end{gather*}
+	\end{pwrblock}
+	
+	\begin{pwrblock}[Odporna optymalizacja MST]
+		\begin{gather*}
+		\min_{\mathclap{\textbf{x} \in X}} \left( v \left( \textbf{x}, \textbf{s} \right) + \max_{\mathclap{\textbf{s}^{\prime} \in S}} \min_{\mathclap{\textbf{y} \in S_{\textbf{x}}}} v \left( \textbf{y}, \textbf{s}^{\prime} \right) \right)
+		\end{gather*}
+	\end{pwrblock}
+	
+\end{frame}
+
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 13
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Incremental LP}
+	\small
+	\begin{subequations}
+		\begin{alignat*}{4}
+		& \text{min} & & \sum_{ e \in E} c_{e} \cdot y_{e}, \\
+		& \text{s.t.} & \quad & \sum_{\mathclap{ \left( j, s \right ) \in E }} f^{k}_{js} - \sum_{\mathclap{ \left( s, j \right ) \in E }} f^{k}_{sj} = -1, & \forall k \in V \setminus \left\{ v_{s} \right\},\\
+		& & & \sum_{\mathclap{ \left( j, i \right ) \in E }} f^{k}_{ji} - \sum_{\mathclap{ \left( i, j \right ) \in E }} f^{k}_{ij} = 0, & \forall i, k \in V \setminus \left\{ v_{s} \right\} \; \wedge \; i \neq k,\\
+		& & & \sum_{\mathclap{ \left( j, k \right ) \in E }} f^{k}_{jk} - \sum_{\mathclap{ \left( k, j \right ) \in E }} f^{k}_{kj} = 1, & \forall k \in V \setminus \left\{ v_{s} \right\},\\
+		& & & f^{k}_{ij} \leqslant y_{ij}, & \forall \left( i, j \right) \in E \; \wedge \; \forall k \in V \setminus \left\{ v_{s} \right\},&&&\\
+		& & & \sum_{\mathclap{ \left( i, j \right) \in E}} y_{ij} = n - 1, & \quad & &\\
+		& & & \phantom{\sum} f_{ij} \geqslant 0, & \forall \left( i, j \right) \in E,&&&\\
+		& & & \phantom{\sum} y_{ij} \geqslant 0, & \forall \left( i, j \right) \in E.&&&
+		\end{alignat*}
+	\end{subequations}
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 14
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Incremental LP}
+	\small
+	\begin{subequations}
+		\begin{alignat*}{6}
+		& \text{s.t.} & \cdots &&\\
+		& & & f^{k}_{ij} \leqslant y_{ij}, & \forall \left( i, j \right) \in E \; \wedge \; \forall k \in V \setminus \left\{ v_{s} \right\},&&&\\
+		& & & \sum_{\mathclap{ \left( i, j \right) \in E}} y_{ij} = n - 1, & \quad & &\\
+		& & & \sum_{\left( i, j \right) \in E} \left| x_{ij} - y_{ij} \right| \leqslant k &&&&\\
+		& & & \sum_{\mathclap{ \left( i, j \right) \in E}} y_{ij} = n - 1, & \quad & &\\
+		& & & x_{ij} = 1, & \forall \left( i, j \right) \in T^{0} & &\\
+		& & & x_{ij} = 0, & \forall \left( i, j \right) \notin T^{0} & &\\
+		\end{alignat*}
+	\end{subequations}
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 15
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Incremental LP}
+	\small
+	\begin{subequations}
+		\begin{alignat*}{3}
+		& \text{s.t.} & \cdots &&\\
+		& \phantom{\sum} f_{ij} \geqslant 0, & \forall \left( i, j \right) \in E,&&\\
+		& \phantom{\sum} y_{ij} \geqslant 0, & \forall \left( i, j \right) \in E.&&
+		\end{alignat*}
+	\end{subequations}
+\end{frame}
+
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 16
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Incremental LP}
+	
+	\begin{subequations}
+		\begin{alignat*}{4}
+		& \text{min} & & \sum_{e_{i} \in E^{\ast}} c_{i} \cdot x_{i} \\
+		& \text{s.t.} & \quad & \sum_{\mathclap{e_{i} \in E^{\ast}}} x_{i} = \left| V \right| - 1,\\
+		& & & \sum_{\mathclap{e_{i} \in E^{\ast} \left( S \right) }} x_{i} = \left| S \right| - 1, & \quad & S & \subseteq V,\\
+		& & & \phantom{\sum} x_{i} \geqslant 0, &\quad & e_{i} &\in E^{\ast}, \\
+		& & & \sum_{e_{i} \in T^{\ast} \setminus T^{0}} x_{i} \leqslant k.
+		\end{alignat*}
+	\end{subequations}
+	
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 17
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Incremental LP}
+	
+	\begin{subequations}
+		\begin{alignat*}{4}
+		& \text{min} & & \sum_{e_{i} \in E^{\ast}} c_{i} \cdot x_{i} \\
+		& \text{s.t.} & \quad & \sum_{\mathclap{e_{i} \in E^{\ast}}} x_{i} = \left| V \right| - 1,\\
+		& & & \sum_{\mathclap{e_{i} \in E^{\ast} \left( S \right) }} x_{i} = \left| S \right| - 1, & \quad & S & \subseteq V,\\
+		& & & \phantom{\sum} x_{i} \geqslant 0, &\quad & e_{i} &\in E^{\ast}, \\
+		& & & \sum_{\mathclap{e_{i} \in T^{0}}} x_{i} \geqslant n - 1 - k.
+		\end{alignat*}
+	\end{subequations}
+	
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 18
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Incremental LP - relaksacja}
+	
+	\begin{subequations}
+		\begin{alignat*}{4}
+		& \text{min} & & \sum_{e_{i} \in E^{\ast}} c_{i} \cdot x_{i} + \lambda \cdot \left( \left( n - 1 - k \right) - \sum_{\mathclap{e_{i} \in T^{0}}} x_{i} \right) \\
+		& \text{s.t.} & \quad & \sum_{\mathclap{e_{i} \in E^{\ast}}} x_{i} = \left| V \right| - 1,\\
+		& & & \sum_{\mathclap{e_{i} \in E^{\ast} \left( S \right) }} x_{i} = \left| S \right| - 1, & \quad & S & \subseteq V,\\
+		& & & \phantom{\sum} x_{i} \geqslant 0, &\quad & e_{i} &\in E^{\ast}.
+		\end{alignat*}
+	\end{subequations}
+	
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 19
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Incremental LP - funkcja celu}
+	
+	\begin{eqnarray*}
+	L \left( \lambda, x \right) = \sum_{e_{i} \in E^{\ast}} c_{i} \cdot x_{i} + \lambda \cdot \left( \left( n - 1 - k \right) - \sum_{\mathclap{e_{i} \in T^{0}}} x_{i} \right) = \\
+	\sum_{e_{i} \in T^{\ast} \cup T^{0}} c_{i} \cdot x_{i} - \lambda \sum_{\mathclap{e_{i} \in T^{0}}} x_{i} + \lambda \cdot \left( n - 1 - k \right) = \cdots \\ \cdots = \min \left\{ \sum_{e_{i} \in T^{\ast} \setminus T^{0}} c_{i} \cdot x_{i} + \sum_{\mathclap{e_{i} \in T^{0}}} \left( c_{i} - \lambda \right) \cdot x_{i} \right\}
+	\end{eqnarray*}
+	
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 20
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Tabu Search}
+	
+\end{frame}
+
+\end{document}

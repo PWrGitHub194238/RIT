@@ -1,0 +1,145 @@
+\chapter{Biblioteka:  RIT}
+\label{app:takeMeHome}
+\thispagestyle{appendixStyle}
+
+Poniżej opisana biblioteka \textsc{RIT} (ang. \textit{Recoverable Incremental Tree}) stanowi zwieńczenie naszej pracy --- zawiera implementacje wszystkich algorytmów, których pseudokody pojawiły się w powyższym tekście, zarówno tych klasycznych, imperatywnych, jak i dotyczących problemów programowania liniowego, bądź całkowitoliczbowego. Całość biblioteki została napisana w języku \textsc{C++} w jego najnowszym, dostępnym na chwilę powstawania tego dokumentu, standardzie \textsc{C++14}, z wykorzystaniem elementów bibliotek stron trzecich, takich jak: \textsc{graphviz}, \textsc{gtest} oraz \textsc{log4cxx}. Poniższy rozdział zawiera skrócony opis jej funkcjonalności\footnote{Pełen projekt wraz z jego dokumentacją został umieszczony na zdalnym repozytorium pod adresem: \url{https://github.com/PWrGitHub194238/RIT}.}, sposób instalacji oraz korzystania z niej, także w podstawowym zakresie.
+
+\section{Wymagania i instalacja}
+
+Całość omawianej biblioteki została zaimplementowana w środowisku systemu \textsc{Ubuntu 15.10} dla architektury $64$-bitowej w związku z tym wszelkie przykłady oraz wykorzystywane skrypty zostały napisane z myślą o użytkownikach systemu z tej rodziny --- proces kompilacji oraz instalacji biblioteki może się różnic w zależności od wykorzystywanego systemu operacyjnego. Dodatkowo jeden z prezentowanych skryptów korzysta z konsolowego \textsc{api} programu \textsc{Eclipse Mars.1 (4.5.1)}, przystosowanego do pisania we językach \textsc{C} oraz \textsc{C++} (\textsc{Eclipse CDT}), który posłużył do napisania całości biblioteki, co tym samym czyni go preferowanym narzędziem w przypadku chęci budowy biblioteki \textsc{RIT} na podstawie jej, udostępnionych na zdalnym repozytorium, źródeł. Poniżej prezentowany proces ma w tym pomóc.
+
+
+
+% Folder tree %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\dirtree{%
+.1 /.
+.2 \textsc{RIT}.
+.3 \textsc{BinaryIMST\_bac}.
+.3 \textsc{BinaryIMST_Library}.
+.3 \textsc{BinaryIMST_Examples}.
+.3 \textsc{buildProject.bash}.
+.3 \textsc{BinaryIMST\_bac}.
+.2 \textsc{\textcolor{lgray}{EmptyTeX}}.
+.2 \textsc{\textcolor{lgray}{Presentations}}.
+.2 \textsc{\textcolor{lgray}{References}}.
+.2 \textsc{Scripts}.
+.2 \textsc{\textcolor{lgray}{Thesis}}.
+.2 clear.bash. 
+.2 \textcolor{lgray}{LICENSE}. 
+.2 \textcolor{lgray}{README.md}. 
+}
+
+\dirtree{%
+	.1 /.
+	.2 clear.bash \ldots{} 
+	\begin{minipage}[t]{5cm}
+	\end{minipage}.
+	.2 \textsc{Scripts}.
+	.3 compileProject.bash \ldots{} 
+	\begin{minipage}[t]{5cm}
+		Jak omawialiśmy wcześniej~--- służy do kompilacji całego projektu{.}
+	\end{minipage}.
+	.3 generatePlot.bash \ldots{} 
+	\begin{minipage}[t]{5cm}
+		Generuje wykresy na podstawie danych, wygenerowanych przez przykładowy program \textsc{TMH\_Examples}{.}
+	\end{minipage}.
+	.3 makeGraphViz.bash \ldots{} 
+	\begin{minipage}[t]{5cm}
+		Generuje wizualizację grafu zdefiniowanego w~pliku zgodnym z~opisanym standardem{.}
+	\end{minipage}.
+}
+\newpage
+
+\dirtree{%
+	.1 /.
+	.2 \textsc{Scripts}.
+	.3 randDistance.pl \ldots{} 
+	\begin{minipage}[t]{5cm}
+		Pozwala na szybką modyfikację wszystkich kosztów ścieżek w~pliku, definiującym graf{.}
+	\end{minipage}.	
+	.2 \textsc{TMH\_GraphHelper}\ldots{} 
+	\begin{minipage}[t]{5cm}
+		Pomocniczy projekt do generowania danych wejściowych (napisany w~języku \textsc{Java}){.}
+	\end{minipage}.	
+}
+
+
+% OS path %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \textsf{/Scripts/compileProject.bash}
+
+% Shortcut %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \texttt{CRTL + ALT + T}
+
+% Nazwy własne, argumenty %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textsc{R\_USATest\_DKA}
+
+% ANG %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+(ang. \textit{Directed acyclic graph})
+
+% Listing %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{lstlisting}[language=bash]
+pcname@user:/Scripts$ bash compileProject.bash
+\end{lstlisting}
+
+% Figura %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[!htbp]
+	\null\hfill
+	%\includegraphics[width=0.8\textwidth]{Appendix_I/GENERATE-PLOT-bash/a_psfrag.pdf}
+	\hfill\null
+	\caption{
+		Wygenerowany wykres dwóch funkcji dla przykładowego wywołania skryptu \textsc{generatePlot.bash}.
+	}
+\end{figure}
+
+% Figury %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[!htbp]
+	\null\hfill
+	\begin{subfigure}[b]{0.49\textwidth}
+		\footnotesize
+		\begin{lstlisting}[language=bash]
+digraph G {
+	rankdir=LR;
+	node [shape = circle];
+	1 -> 2 [ label = "2"];
+	1 -> 3 [ label = "6"];
+	2 -> 3 [ label = "3"];
+	2 -> 4 [ label = "4"];
+	2 -> 5 [ label = "5"];
+	3 -> 5 [ label = "1"];
+	5 -> 4 [ label = "2"];
+}
+		\end{lstlisting}
+		\caption{}
+		\label{fig:graphViz:a}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.49\textwidth}
+		%\includegraphics[width=\textwidth]{Appendix_I/GRAPH-VIZ-Example/a.pdf}
+		\vspace{1em}
+		\caption{}
+		\label{fig:graphViz:b}
+	\end{subfigure}
+	\hfill\null
+	\caption{
+		Wygenerowana ilustracja grafu przez skrypt \textsc{makeGraphViz.bash}.
+		\textbf{(a)}~Kod pośredni pomiędzy danymi wejściowymi w standardowym formacie \textsc{DIMACS Implementation Challenge} a finalnym rysunkiem. Kod pośredni jest zapisany w języku \textsc{DOT}.
+		\textbf{(b)}~Rysunek grafu wygenerowany przez program \textsc{GraphViz}.
+	}
+	\label{fig:graphViz}
+\end{figure}
+
+% URL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\url{http://algs4.cs.princeton.edu/home/} na licencji \textsc{GNU GPLv3}
+
+% ALIGN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	\begin{align*}
+		f(x) +    g(x)  &=          \cos(x) +              \sin(x)             + h(x) \\
+		\phantom{f(x) +{}} g(x)  &= \phantom{\cos(x) +{}}          {\sin(x)} \phantom{{}+ h(x)}\\
+		f(x)  \phantom{{}+ g(x)} &=          \cos(x) \phantom{{} +  \sin(x)}            + h(x) \\
+		s(x)  \phantom{{}+ g(x)} &= \phantom{\cos(x) +{}} \makebox[\widthof{$\sin(x) + h(x)$}][c]{$\arcsin(x)$}
+	\end{align*}

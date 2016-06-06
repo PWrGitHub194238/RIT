@@ -1,0 +1,15 @@
+vMin = 50;
+vMax = 200;
+v = linspace (vMin,vMax);
+l = linspace (1,10);
+[V,L] = meshgrid (v,l);
+Z = (-1/12.*(-1.+L).*L.*(1.+L.-3.*V).*(-1.+V));
+surf (V, L, Z, Z.^(1/4));
+#set (gca, 'xscale', 'log');
+set (gca, 'zscale', 'log');
+xlabel('(V)');
+ylabel('(L)');
+shading interp;
+
+# print -depsc foo.eps
+# pdfcrop <inptu> <output>

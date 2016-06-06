@@ -1,0 +1,4 @@
+load max_data
+bar(y)
+axis([1,20,18.5,19.5])
+print -depsc max.eps

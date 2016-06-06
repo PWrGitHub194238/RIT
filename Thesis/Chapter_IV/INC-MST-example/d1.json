@@ -1,0 +1,123 @@
+{
+  "vl": {
+    "0": {
+      "cx": 300,
+      "cy": 160,
+      "text": "1",
+      "state": "default"
+    },
+    "1": {
+      "cx": 380,
+      "cy": 60,
+      "text": "2",
+      "state": "default"
+    },
+    "2": {
+      "cx": 520,
+      "cy": 60,
+      "text": "3",
+      "state": "default"
+    },
+    "3": {
+      "cx": 380,
+      "cy": 260,
+      "text": "4",
+      "state": "default"
+    },
+    "4": {
+      "cx": 520,
+      "cy": 260,
+      "text": "5",
+      "state": "default"
+    },
+    "5": {
+      "cx": 600,
+      "cy": 160,
+      "text": "6",
+      "state": "default"
+    }
+  },
+  "el": {
+    "0": {
+      "vertexA": 0,
+      "vertexB": 1,
+      "type": 0,
+      "weight": "0",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "1": {
+      "vertexA": 0,
+      "vertexB": 3,
+      "type": 0,
+      "weight": "-2",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "2": {
+      "vertexA": 1,
+      "vertexB": 3,
+      "type": 0,
+      "weight": "5",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "3": {
+      "vertexB": 1,
+      "vertexA": 2,
+      "type": 0,
+      "weight": "7",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "4": {
+      "vertexA": 1,
+      "vertexB": 4,
+      "type": 0,
+      "weight": "3",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "5": {
+      "vertexB": 3,
+      "vertexA": 4,
+      "type": 0,
+      "weight": "3",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "6": {
+      "vertexB": 4,
+      "vertexA": 2,
+      "type": 0,
+      "weight": "4",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "7": {
+      "vertexA": 2,
+      "vertexB": 5,
+      "type": 0,
+      "weight": "0",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "8": {
+      "vertexA": 4,
+      "vertexB": 5,
+      "type": 0,
+      "weight": "1",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "vl": {
+    "0": {
+      "cx": 250,
+      "cy": 150,
+      "text": "0",
+      "state": "default"
+    },
+    "1": {
+      "cx": 350,
+      "cy": 50,
+      "text": "1",
+      "state": "default"
+    },
+    "2": {
+      "cx": 450,
+      "cy": 150,
+      "text": "2",
+      "state": "default"
+    },
+    "3": {
+      "cx": 350,
+      "cy": 250,
+      "text": "3",
+      "state": "default"
+    },
+    "4": {
+      "cx": 350,
+      "cy": 150,
+      "text": "4",
+      "state": "default"
+    }
+  },
+  "el": {
+    "0": {
+      "vertexA": 1,
+      "vertexB": 2,
+      "type": 0,
+      "weight": "9",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "1": {
+      "vertexA": 2,
+      "vertexB": 3,
+      "type": 0,
+      "weight": "4",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "2": {
+      "vertexB": 0,
+      "vertexA": 3,
+      "type": 0,
+      "weight": "3",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "3": {
+      "vertexA": 0,
+      "vertexB": 1,
+      "type": 0,
+      "weight": "7",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "4": {
+      "vertexA": 1,
+      "vertexB": 4,
+      "type": 0,
+      "weight": "9",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    },
+    "5": {
+      "vertexB": 3,
+      "vertexA": 4,
+      "type": 0,
+      "weight": "1",
+      "state": "default",
+      "displayWeight": true,
+      "animateHighlighed": false
+    }
+  }
+}

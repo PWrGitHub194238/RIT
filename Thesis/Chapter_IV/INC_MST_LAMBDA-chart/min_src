@@ -1,0 +1,4 @@
+load min_data
+bar(y)
+axis([1,20,16.8,18.5])
+print -depsc min.eps
