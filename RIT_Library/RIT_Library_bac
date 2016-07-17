@@ -71,8 +71,8 @@ _config() {
     #  The basic options we'll complete.
     #
     base="autocompletion help install initBuild"
-    opts="-d --defaults -f --force-yes log4cxx graphviz rapidJSON --rapidjson-path --rapidjson-include-path"
-
+    opts="-d --defaults -f --force-yes -p log4cxx graphviz rapidJSON --rapidjson-path --rapidjson-include-path"
+    opts1="-p --path"
     #
     #  Complete the arguments to some of the basic commands.
     #
@@ -82,7 +82,7 @@ _config() {
             return 0
             ;;
 	initBuild)
-	    COMPREPLY=()
+	    COMPREPLY=( $(compgen -W "${opts1}" -- ${cur}) )
             return 0
             ;;
 	help)

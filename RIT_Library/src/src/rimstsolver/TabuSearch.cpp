@@ -34,6 +34,9 @@
 #include "../../include/utils/MemoryUtils.hpp"
 #include "../../include/utils/TabuSearchUtils.hpp"
 
+#include <iostream>
+#include <fstream>
+
 const static log4cxx::LoggerPtr logger(
 		log4cxx::Logger::getLogger("rimstsolver.TabuSearch"));
 
@@ -107,20 +110,10 @@ GraphEdgeCostsIF * TabuSearch::getWorstCaseScenario(EdgeSetIF * spanningTree) {
 	return worstCaseScenario;
 }
 
-EdgeSetIF * TabuSearch::getWorstCaseAlternative(
-		GraphEdgeCostsIF * worstCaseScenario) {
-	GraphEdgeCostsIF* graphEdgeCostsBackup = new GraphEdgeCostsImpl { graph };
-	GraphUtils::changeGraphCosts(graph, worstCaseScenario);
-	EdgeSetIF * mstForWorstScenario = this->mstSolver->getMST();
-	GraphUtils::changeGraphCosts(graph, graphEdgeCostsBackup);
-	delete graphEdgeCostsBackup;
-	return mstForWorstScenario;
-}
-
 bool TabuSearch::stopCriterionMet(TabuIterationCount iterationCount) {
-	INFO(logger, LogBundleKey::TS_RESOLVE_CHECK_STOP, iterationCount + 1,
+	INFO(logger, LogBundleKey::TS_RESOLVE_CHECK_STOP, iterationCount,
 			numberOfIterations);
-	return iterationCount >= numberOfIterations;
+	return iterationCount > numberOfIterations;
 }
 
 bool TabuSearch::isAspirationCriteriaMet(EdgeCost const neighborCost,
@@ -168,7 +161,8 @@ AIMSTSolution TabuSearch::getSolutionForTree(EdgeSetIF* initialSolution) {
 }
 
 NeighborSolution TabuSearch::findMinimumInNeighborhood(
-		EdgeSetIF* const rootSpanningTree, EdgeCost const tmpSolutionCost) {
+		EdgeSetIF* const rootSpanningTree, EdgeCost const tmpSolutionCost,
+		TabuIterationCount const globalIterationCount) {
 	NeighborSolution neighbor { };
 	EdgeIdx dropEdgeIdx { };
 	EdgeIdx addEdgeIdx { };
@@ -183,6 +177,13 @@ NeighborSolution TabuSearch::findMinimumInNeighborhood(
 	VisibilityList visibilityList = graph->storeEdgeVisibility();
 	EdgeIF * noMSTedge { };
 	EdgeIF * pathEdge { };
+
+	EdgeCost oldSolutionCost = rootSpanningTree->getTotalEdgeCost()
+			+ AIMSTUtils::getSolutionCost(getSolutionForTree(rootSpanningTree));
+	EdgeCost newSolutionCost { };
+
+	double oldMVal { 0 };
+	double newMval { };
 
 	INFO(logger, LogBundleKey::TS_FIND_NEIGHBORHOOD_INIT,
 			LogStringUtils::edgeSetVisualization(rootSpanningTree, "\t").c_str());
@@ -226,7 +227,16 @@ NeighborSolution TabuSearch::findMinimumInNeighborhood(
 
 			if (isMoveAllowed(dropEdgeIdx, addEdgeIdx)
 					|| isAspirationCriteriaMet(neighborCost, tmpSolutionCost)) {
-				if (neighborCost < bestNeighbourCost) {
+				newSolutionCost = neighborCost;
+				newMval = calculateMoveValue(oldSolutionCost, newSolutionCost,
+						noMSTedge->getSourceVertex()->getVertexIdx(),
+						noMSTedge->getTargetVertex()->getVertexIdx(),
+						pathEdge->getSourceVertex()->getVertexIdx(),
+						pathEdge->getTargetVertex()->getVertexIdx(),
+						globalIterationCount);
+
+				if (oldMVal < newMval) {
+					oldMVal = newMval;
 					INFO(logger,
 							LogBundleKey::TS_FIND_NEIGHBORHOOD_BETTER_MOVE_FOUND,
 							dropEdgeIdx, addEdgeIdx,
@@ -260,6 +270,18 @@ NeighborSolution TabuSearch::findMinimumInNeighborhood(
 			LogStringUtils::edgeSetVisualization(bestNeighbourEdgeSet, "\t").c_str(),
 			bestNeighbourCost);
 	return neighbor;
+}
+
+TabuMoveValue TabuSearch::calculateMoveValue(EdgeCost& oldSolutionCost,
+		EdgeCost& newSolutionCost, const VertexIdx& addEdgeIdxI,
+		const VertexIdx& addEdgeIdxJ, const VertexIdx& dropEdgeIdxK,
+		const VertexIdx& dropEdgeIdxL,
+		const TabuIterationCount& globalIterationCount) {
+	return 0.1 * (oldSolutionCost - newSolutionCost)
+			+ 1.2 * r[addEdgeIdxI][addEdgeIdxJ] / globalIterationCount
+			+ 1.2 * r[dropEdgeIdxK][dropEdgeIdxL] / globalIterationCount
+			+ 0.1 * mr[addEdgeIdxI][addEdgeIdxJ]
+			+ 0.1 * mr[dropEdgeIdxK][dropEdgeIdxL];
 }
 
 void TabuSearch::insertIntoTabu(TabuMapEnum const tabuListType,
@@ -316,6 +338,25 @@ void TabuSearch::updateTabuList(SpanningTreeNeighbor && tabuMove) {
 			TabuSearchUtils::getInsertedEdge(tabuMove));
 }
 
+void TabuSearch::updateMValTables(EdgeSetIF*& spanningTree,
+		const EdgeCost spanningTreeCost) {
+	EdgeIF* edge { };
+	VertexIdx sourceVertexIdx { };
+	VertexIdx targetVertexIdx { };
+	IteratorId iter = spanningTree->getIterator();
+	spanningTree->begin(iter);
+	while (spanningTree->hasNext(iter)) {
+		edge = spanningTree->next(iter);
+		sourceVertexIdx = edge->getSourceVertex()->getVertexIdx();
+		targetVertexIdx = edge->getTargetVertex()->getVertexIdx();
+		r[sourceVertexIdx][targetVertexIdx] += 1;
+		sr[sourceVertexIdx][targetVertexIdx] += spanningTreeCost;
+		mr[sourceVertexIdx][targetVertexIdx] =
+				r[sourceVertexIdx][targetVertexIdx] * 1.0
+						/ sr[sourceVertexIdx][targetVertexIdx];
+	}
+}
+
 //*********************************** PROTECTED CONSTANT FIELDS ************************************//
 
 //************************************ PROTECTED CLASS FIELDS **************************************//
@@ -330,6 +371,9 @@ EdgeSetIF * TabuSearch::resolve() {
 	EdgeSetIF* bestNeighborSpanningTree { };
 	TabuIterationCount iterationCount { 0 };
 	TabuIterationCount globalIterationCount { 0 };
+
+	EdgeCost best = GraphUtils::MAX_EDGE_COST;
+	EdgeCost cost = 0;
 
 	INFO(logger, LogBundleKey::TS_RESOLVE_INIT,
 			LogStringUtils::graphDescription(graph, "\t").c_str());
@@ -356,13 +400,17 @@ EdgeSetIF * TabuSearch::resolve() {
 			solutionCost);
 
 	worstCaseScenario = getWorstCaseScenario(solution);
-	nextEdgeSet = getWorstCaseAlternative(worstCaseScenario);
+	nextEdgeSet = this->mstSolver->getMST(worstCaseScenario);
 
 	while (!stopCriterionMet(globalIterationCount)) {
-		bestNeighbor = findMinimumInNeighborhood(spanningTree, solutionCost);
+		bestNeighbor = findMinimumInNeighborhood(spanningTree, solutionCost,
+				globalIterationCount);
+
 		MemoryUtils::removeCollection(spanningTree, false);
 		spanningTree = TabuSearchUtils::getEdgeSet(bestNeighbor);
 		spanningTreeCost = TabuSearchUtils::getEdgeSetCost(bestNeighbor);
+
+		updateMValTables(spanningTree, spanningTreeCost);
 
 		INFO(logger, LogBundleKey::TS_RESOLVE_NEIGHBOR_SOL,
 				LogStringUtils::edgeSetVisualization(spanningTree, "\t").c_str(),
@@ -383,7 +431,7 @@ EdgeSetIF * TabuSearch::resolve() {
 			solutionCost = spanningTreeCost;
 			delete worstCaseScenario;
 			worstCaseScenario = getWorstCaseScenario(solution);
-			treeWorstCaseAlternative = getWorstCaseAlternative(
+			treeWorstCaseAlternative = this->mstSolver->getMST(
 					worstCaseScenario);
 			nextEdgeSet = EdgeSetUtils::getSetUnion(nextEdgeSet,
 					treeWorstCaseAlternative, true);
@@ -423,7 +471,7 @@ EdgeSetIF * TabuSearch::resolve() {
 			delete worstCaseScenario;
 			worstCaseScenario = getWorstCaseScenario(spanningTree);
 			MemoryUtils::removeCollection(nextEdgeSet, false);
-			nextEdgeSet = getWorstCaseAlternative(worstCaseScenario);
+			nextEdgeSet = this->mstSolver->getMST(worstCaseScenario);
 			iterationCount = 0;
 			continue;
 		} else {
@@ -456,9 +504,18 @@ TabuSearch::TabuSearch(AIMSTSolverEnum aimstSolverType,
 		TabuIterationCount numberOfIterations) :
 		RIMSTSolverIF(aimstSolverType, imstSolverType, mstSolverType,
 				innerMstSolverType, graph, adversarialScenarioSet, k) {
+	this->vertexCount = graph->getNumberOfVertices();
 	this->tabuPeriod = tabuPeriod;
 	this->numberOfPathIterations = numberOfPathIterations;
 	this->numberOfIterations = numberOfIterations;
+	this->r = new unsigned int*[vertexCount] { };
+	this->sr = new unsigned int*[vertexCount] { };
+	this->mr = new double*[vertexCount] { };
+	for (int i = 0; i < vertexCount; i += 1) {
+		this->r[i] = new unsigned int[vertexCount] { };
+		this->sr[i] = new unsigned int[vertexCount] { };
+		this->mr[i] = new double[vertexCount] { };
+	}
 }
 
 TabuSearch::TabuSearch(AIMSTSolverEnum aimstSolverType,
@@ -600,6 +657,17 @@ TabuSearch::TabuSearch(GraphIF * const graph,
 				TabuSearchUtils::TABU_ELEMENT_DEFAULT_PERIOD,
 				TabuSearchUtils::PATH_ITER_NUM_DEFAULT,
 				TabuSearchUtils::ITER_NUM_DEFAULT) {
+}
+
+TabuSearch::~TabuSearch() {
+	for (int i = 0; i < vertexCount; i += 1) {
+		delete[] this->r[i];
+		delete[] this->sr[i];
+		delete[] this->mr[i];
+	}
+	delete[] this->r;
+	delete[] this->sr;
+	delete[] this->mr;
 }
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//

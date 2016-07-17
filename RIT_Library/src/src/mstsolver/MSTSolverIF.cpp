@@ -57,6 +57,16 @@ EdgeSetIF * MSTSolverIF::getMST()
 	}
 }
 
+EdgeSetIF * MSTSolverIF::getMST(GraphEdgeCostsIF * graphScenario)
+		throw (GraphExceptions::DisconnectedGraphException) {
+	GraphEdgeCostsIF* graphEdgeCostsBackup = new GraphEdgeCostsImpl { graph };
+	GraphUtils::changeGraphCosts(graph, graphScenario);
+	EdgeSetIF * mstForScenario = this->getMST();
+	GraphUtils::changeGraphCosts(graph, graphEdgeCostsBackup);
+	delete graphEdgeCostsBackup;
+	return mstForScenario;
+}
+
 EdgeSetIF * MSTSolverIF::getMST(EdgeSetIF* visibleSet)
 		throw (GraphExceptions::DisconnectedGraphException) {
 	ConnectivityList connectivityList = GraphUtils::shrinkConnectivityToSet(

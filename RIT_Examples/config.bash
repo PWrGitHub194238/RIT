@@ -18,6 +18,7 @@ rapidJSONURL='https://github.com/miloyip/rapidjson.git'
 #		gTest
 #		rapidJSON
 #	initBuild			run Eclipse's headless build menager to recreate all makefiles and clean the project
+#	-p --path			path to Eclipse's workspace
 #	-d --defaults			set script not to prompt about any value which has a default one specified
 #	-f --force-yes			force every prompt to be skiped with 'y' value - use with caution
 #	--gtest-path <arg>		path where GTest project will be downloaded
@@ -57,6 +58,10 @@ function pasreBash() {
 			;;
 			initBuild)
 				ACTION='initBuild'
+			;;
+			-p|--path)
+				WORKSPACE_PATH=$(expandPath "$2")
+				shift # past argument
 			;;
 			-d|--defaults)
 				DEFAULT='y'
@@ -108,6 +113,7 @@ function printHelp() {
 			gTest
 			rapidJSON"
 	echo "	initBuild			run Eclipse's headless build menager to recreate all makefiles and clean the project"
+	echo "	-p --path			path to Eclipse's workspace"
 	echo "	-d --defaults			set script not to prompt about any value which has a default one specified"
 	echo "	-f --force-yes			force every prompt to be skiped with 'y' value - use with caution"
 	echo "	--gtest-path <arg>		path where GTest project will be downloaded"
@@ -590,8 +596,8 @@ function executeGraphvizCreation() {
 
 
 function loadBashAutocompletion() {
-	source "RIT_Example_bac"
-	sudo cp "./RIT_Example_bac" "/etc/bash_completion.d/"
+	source "RIT_Examples_bac"
+	sudo cp "./RIT_Examples_bac" "/etc/bash_completion.d/"
 }
 
 
@@ -645,11 +651,15 @@ elif [[ "$ACTION" == 'installAll' || "$ACTION" == 'install' ]]; then
 	fi
 	loadBashAutocompletion
 elif [[ "$ACTION" == 'initBuild' ]]; then
-	echo "WARNING: In order to Eclipse successfully generate project's makefiles, You have to run this script as Eclipse's owner."
-	eclipse -nosplash -application 'org.eclipse.cdt.managedbuilder.core.headlessbuild' -cleanBuild 'RIT_Examples'
-	bash clean.bash all
+	if [[ -n ${WORKSPACE_PATH+x} ]]; then
+		echo "WARNING: In order to Eclipse successfully generate project's makefiles, You have to run this script as Eclipse's owner."
+		eclipse -nosplash -application 'org.eclipse.cdt.managedbuilder.core.headlessbuild' -data "$WORKSPACE_PATH" -cleanBuild 'RIT_Examples'
+		bash clean.bash all
+	else
+		echo "You need to specify a path to Eclipse's workspace that contains RIT_Library project (-p|--path)."
+	fi;
 elif [[ "$ACTION" == 'help' ]]; then
 	printHelp
 else
-	echo -e "You have to specify at least one action from these:\n\tautocompletion\n\thelp\n\tinstall\n\tinitBuild"
+	echo -e "You have to specify at least one action from these:\n\tautocompletion\n\thelp\n\tinstall\n\tinitBuild -p|--path <arg>"
 fi

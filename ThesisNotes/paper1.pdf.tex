@@ -1,0 +1,125 @@
+\chapter{A tabu search algorithm for the minmax regret minimum spanning tree problem with interval data}
+\thispagestyle{chapterBeginStyle}
+
+Dobra, trochę porządku w oznaczeniach:
+
+\begin{itemize}
+	\item $G = \left( V, E \right)$, $\left| V \right| = n$ $\left| E \right| = m$, $E = \left\{ e_{i} : i \in \left\{ 1, \dots, m \right\} \right\}$
+	\item rozmyty koszt $c_{i} = c_{e_{i}} = \left[ \underline{c}_{e_{i}}, \overline{c}_{e_{i}} \right]$
+	\item Zbiór wszystkich scenariuszy $\Gamma \equiv c_{e_{1}} \prod c_{e_{2}} \prod \dots \prod c_{e_{m}}$, gdzie każdy scenariusz $S \in \Gamma$ jest wektorem $\left( c_{e}^{S} \right)_{e \in E}$.
+	\item $T \in \mathcal{T}$ - drzewo rozpinające $T$ należące do zbioru wszystkich acyklicznych podgrafów grafu $G$.
+	\item $s \in S$ - scenariusz $s$ w zbiorze scenariuszy $S$. Teraz $S \in \Gamma$ to scenariusz $S$ należący do zbioru scenariuszy $\Gamma$
+	\item $val \left( T, s \right) = F \left( T, S \right) = \sum_{e \in T} c_{e}^{S}$ - koszt drzewa rozpinającego $T$ w scenariuszu $S$
+	\item $val^{\ast}_{s} = F^{\ast} \left( S \right) = \min_{T \in \mathcal{T}} F \left( T, S \right)$ - optymalne rozwiązanie dla scenariusza $S$. Drzewo rozpinające o najmniejszym koszcie - minimalne drzewo rozpinające. Można policzyć Primem, Kraskalem lub Chazellem.
+	\item $R_{max} \left( T \right) = Z \left( T \right) = \max_{S \in \Gamma} \left\{ F \left( T, S \right) - F^{\ast} \left( S \right) \right\}$ - maksymalny żal dla danego drzewa rozpinającego (ile w najgorszym przypadku stracimy wybierając to rozwiązanie - najgorszy przypadek scenariusza dla drzewa rozpinającego $T$)
+	\item Alternatywa dla najgorszego przypadku - drzewo $T$ będące optymalnym rozwiązaniem dla najgorszego scenariusza.
+\end{itemize}
+
+
+\section{Minmax regret minimum spanning tree problem}
+
+Patrz propozycja 7 w Paper0 (Min–max and min–max regret versions of combinatorial optimization problems: A survey) - tutaj zdefiniowana ta sama propozycja, tylko dla drzew rozpinających. Tak więc i wniosek jest taki sam, że rozwiązując klasyczny problem dla najgorszego scenariusza zorientowanego na wybrane drzewo $T$:
+
+\begin{equation}
+c^{S_{T}} \left( x \right) =
+\left\{\begin{matrix}
+\overline{c}_{e}	&	\textrm{if}	&	e \in T, \\ 
+\underline{c}_{e}	&	\textrm{if}	&	e \in E \setminus T \equiv e \notin T
+\end{matrix}\right.
+\end{equation}
+
+dostajemy minimalne drzewo rozpinające $T$ dla tego scenariusza ($S_{T}$), które jednocześnie równa się $Z \left( T \right)$, czyli maksymlanemu żalowi dla drzewa $T$. Aby rozwiązać problem minmax regret minimum spanning tree wystarczy teraz wziąć $\min_{T \in \mathcal{T}} Z \left( T \right)$.
+
+Wzmianka o problemie centralnego drzewa rozpinającego jest chyba zbędna, bo nic nie wnosi, poza tym, że MINMAX dla MST jest silnie NP. $d \left( T_{1}, T_{2} \right) = \left| T_{1} \setminus T_{2} \right| = \left| T_{2} \setminus T_{1} \right|$. Np. $T_{1} = \left\{ e_{a}, e_{b}, e_{c} \right\}$, $T_{2} = \left\{ e_{a}, e_{b}, e_{d} \right\}$, $d \left( T_{1}, T_{2} \right) = \left| \left\{ e_{c} \right\} \right| = 1$.
+
+\section{Previous methods of solving the problem}
+
+
+"Fortunately, there exists a simple and efficient approximation algorithm for the
+problem, proposed in Kasperski and Zieliński" - mowa tu o propozycji 9 z Paper0 (Min–max and min–max regret versions of combinatorial optimization problems: A survey), tyle że dla MST.
+
+Aproksymacja problemu, którego rozwiązanie wynosi $OPT$ jest $f \left( n \right)$-aproksymacją, jeżeli rozwiązanie problemu aproksymacyjnego $x$ spełnia $x \leqslant f \left( n \right) \cdot OPT$.
+
+Jest to najlepszy algorytm aproksymacyjny do tej pory dla tego problemu, choć testy pokazują, że lepsze wyniki osiąga ten sam algorytm $AM$ z lekką modyfikacją - $AMU$, która polega na policzeniu także klasycznego problemu dla najgorszego scenariusza i wzięciu mniejszego wyniku (czyli $\min \left\{ R_{max} \left( x^{\ast} \right), R_{max} \left( y^{\ast} \right) \right\}$, gdzie $R_{max} \left( x^{\ast} \right) \leqslant 2 \cdot OPT$ a $x^{\ast}$ jest optymalnym rozwiązaniem dla problemu ze scenariuszem $S$, gdzie każdy $c_{e_{i}}^{S} = \frac{\underline{c}_{e_{i}} + \overline{c}_{e_{i}}}{2}$, a $y^{\ast}$ jest MST dla problemu ze scenariuszem najgorszym).
+
+\section{Solving the problem by local search}
+
+Algorytm sąsiadów w SP jest prosty. Bierzemy zbiór krawędzi, który nie należy do MSP i dla każdej z takich krawędzi $ \left( i, j \right)$ znajdujemy zbiór krawędzi $f = \left\{ f_{1}, \cdots, f_{k} \right\}$, który prowadzi inną drogą z jednego jej końca na drugi. Dodając tę krawędź możemy bezkarnie usunąć jedną z takich krawędzi na ścieżce z $i$ do $j$, bo właściwości drzewa rozpinającego będą zachowane.
+
+\subsection{Neighborhood function and local minimum}
+
+$N \left( T \right) = \left\{ T_{1} \in \mathcal{T} : \left| T \setminus T_{1} \right| = 1 \right\}$ - sąsiadami drzewa rozpinającego $T$ są wszystkie drzewa, które różnią się od $T$ dokładnie jedną krawędzią i nadal są ST. Lokalne minimum to takie $T_{min}$, że nie istnieje inne $T \in N \left( T_{min} \right)$ takie, że $Z \left( T \right) < Z \left( T_{min} \right)$ - $Z \left( T_{min} \right) = \min_{T \in N \left( T_{min} \right)} Z \left( T \right)$. Pokażemy teraz, że $Z \left( T_{min} \right) = 2 \cdot OPT$, więc że nie jest ono lepsze od rozwiązania dawanego przez AM lub AMU (gdzie rozwiązanie $T^{\ast}$: $Z \left( T^{\ast} \right) \leqslant 2 \cdot OPT$). Graf $G = \left( V, E \right)$ na Fig. 4 jest kompletny, ma $2 \cdot m - 2$ wierzchołki (to 6, 6', k, k', m, m' symbolizuje, że jest ich tam więcej, od 6 do m i od 6' do m', tyle że już ktoś zapomniał uzupełnić środek, żeby to nadal był graf pełny). Każda krawędź ma koszt $\left[ 0, 1 \right]$. Pogrubione linie oznaczają wybrane rozwiązanie lokalne $T$, składające się z $2m - 3$ węzłów. W związku z tym $F \left( T, S_{T} \right) = \sum_{e \in T} c_{e}^{S_{T}} = \sum_{e \in T} \overline{c}_{e} = \sum_{e \in T} 1 = 2 \cdot m - 3$. Przypominam:
+
+\begin{equation}
+c^{S_{T}} \left( x \right) =
+\left\{\begin{matrix}
+\overline{c}_{e}	&	\textrm{if}	&	e \in T, \\ 
+\underline{c}_{e}	&	\textrm{if}	&	e \in E \setminus T \equiv e \notin T
+\end{matrix}\right.
+\end{equation}
+
+zaś w tym przypadku $\overline{c}_{e} = 1$, $\underline{c}_{e} = 0$. Teraz skonstruujmy dla scenariusza $S_{T}$ alternatywne drzewo rozpinające $T^{*}$ dla najgorszego scenariusza $S_{T}$. Zauważyć można, że jeśli skonstruujemy je z podzbioru krawędzi, które nie należą do $T$ (a możemy to zrobić, bo - jak widać na Fig. 4b - bez krawędzi należących do $T$ graf nadal jest spójny i istnieje drzewo go rozpinające) to $F \left( T^{\ast} , S_{T} \right) = \sum_{e \in T^{\ast}} c_{e}^{S_{T}} = \sum_{e \in T^{\ast} \setminus T } c_{e}^{S_{T}} = \sum_{e \in T^{\ast} \setminus T } \underline{c}_{e} = \sum_{e \in T^{\ast} \setminus T } 0 = 0$. Dlatego też oznaczyliśmy to drzewo rozpinające jako optymalne $T_{\ast}$. Widać stąd bezpośrednio, że żal dla scenariusza $S_{T}$ wynosi $F \left( T^{\ast} , S_{T} \right) - 0 = 2 \cdot m - 3$ a zatem dla wszystkich scenariuszy $Z \left( T \right) = 2 \cdot m - 3$. Na pewno nie jest większy, bo koszt drzewa nie może być mniejszy od zera (współczynniki kosztów wynoszą co najmniej $0$), ani też większy od $2 \cdot m - 3$ (bo drzewo rozpinające składa się DOKŁADNIE z $\left| V \right| - 1 = \left( 2 \cdot m - 2 \right) - 1 = 2 \cdot m - 3$ krawędzi, zaś koszt każdej wynosi maksymalnie $1$). Krótko mówiąć nie musimy sprawdzać innych scenariuszy, bo na pewno maksymalna wartość $Z \left( T \right) = \max_{S \in \Gamma} \left\{ F \left( T, S \right) - F^{\ast} \left( S \right) \right\} = F \left( T, S_{T} \right) - F^{\ast} \left( S \right) = F \left( T, S_{T} \right) - 0 = 2 \cdot m - 3$. Musimy teraz pokazać, że jest to lokalne minimum, czyli że nie istnieje inne drzewo $T_{1}$ w sąsiedztwie, które miałoby lepszą/mniejszą wartość $Z \left\{ T_{1} \right\}$ od $Z \left( T \right)$. Stwórzmy zatem drzewo $T_{1}$ poprzez usunięcie jednej dowolnej krawędzi $f \in  T$ i dodanie do niego dowolnej innej krawędzi $e \in E \setminus T$ (zgodnie z definicją sąsiedztwa $N \left( T \right)$). Pokażemy, że $Z \left( T_{1} \right) = Z \left( T \right) = 2 \cdot m - 3$. Tym samym pokażemy, że nie istnieje w  sąsiedztwie drzewa $T$ inne drzewo, które by miało mniejszą wartość od $Z \left( T \right)$ i że $T$ jest faktycznie lokalnym optimum. Aby to pokazać, wystarczy zauważyć, że aby rozerwać graf z Fig. 4a należy usunąć więcej niż jedną krawędź. Każde inne MTS ma oczywiście $\left| V \right| - 1$ krawędzi, generalnie dla każdego $T^{\prime}$, nie tylko $T_{1}$ zachodzi $ F \left( T^{\prime} , S_{T^{\prime}} \right) = 2 \cdot m - 3$. Z kolei z faktu, że aby rozerwać graf należy usunąć więcej niż 1 krawędź wynika, że zawsze $F^{\ast} \left( S_{T^{\prime}} \right) = 0$ (zawsze znajdziemy takie drzewo $T^{\prime\prime}$, że $T^{\prime\prime} = \left\{ e : e \notin T^{\prime} \right\}$, a zamienioną krawędź $T$ --> $T_{1}$ możemy zastąpić taką, która nie należy do $T_{1}$). Zatem w szczególności $F^{\ast} \left( S_{S_{1}} \right) = 0$, a z tego wynika, że $Z \left( T_{1} \right) = Z \left( T \right) = 2 \cdot m - 3$. Stąd drzewo $T$ jest lokalnym minimum.
+
+Znajdźmy teraz globalne optymalne rozwiązanie dla tego grafu. Chcemy zatem spełnić $\min_{T \in \mathcal{T}} \max_{S \in \Gamma} F \left( \left( T, S \right) - F^{\ast} \left( S \right) \right)$. Z propozycji 7 z Paper0 (Min–max and min–max regret versions of combinatorial optimization problems: A survey) wiemy, że masymalny regret otrzymamy dla najgorszego scenariusza. Znajdźmy teraz takie drzewo rozpinające $R$, że dla scenariusza $S_{R}$ (najgorszy scenariusz dla drzewa $R$) max regret jest namniejszy z możliwych. Pokazaliśmy już wcześniej, że dla dowolnego drzewa rozpinającego $T^{\prime\prime}$ i dla odpowiadającemu mu najgorszego scenariusza $S_{T^{\prime\prime}}$ zdefiniowanego wyżej $F \left( T^{\prime\prime} , S_{T^{\prime\prime}} \right) = \left| V \right| - 1$. Tak więc szukamy. Nasze zadanie sprowadza się do znalezienia $\min_{T \in \mathcal{T}} \left( \left( \left| V \right| - 1 \right) - F^{\ast} \left( S_{R} \right) \right) = \min_{T \in \mathcal{T}} \left( 2 \cdot m - 3 - F \left( R^{\ast}, S_{R} \right) \right)$, czyli takiego drzewa $R$, że $F \left( R^{\ast}, S_{R} \right)$ ma największą wartość. Skoro zaś współczynniki $S_{R}$ dla rozwiązania $R^{\ast}$ przyjmują wartość $1$ tylko wtedy, gdy $e \in R^{\ast}$ należą także do $R$, zaś dla innych przyjmują wartość $0$, dochodzimy do wniosku, że $F \left( R^{\ast}, S_{R} \right) = \left| R^{\ast} \cap R \right|$. Zatem jedynym sensownym wyborem $R$ jest takie drzewo, które zawiera jak największą liczbę krawędzi będącymi koniecznymi do zachowania spójności grafu (tak, że $R^{\ast} $ musi zawierać jak największą liczbę wspólnych krawędzi z $R$). Z rysunku odczytamy, że $F \left( R^{\ast}, S_{R} \right) = m - 2$. Stąd $Z \left( R \right) = 2 \cdot m - 3 - \left( m - 2 \right) = m - 1$. Jest to globalne optimum. Dzieląc otrzymane wcześniej maksymalne lokalne optimum przez globalne optimum otrzymujemy $~2$. No i mamy bezpieczną twierdzenie, że $Z \left( T_{min} \geqslant \left( 2 - \epsilon \right) \cdot OPT \right)$.
+
+Dla problemu MINMAX spaning tree tak zdefiniowane otoczenie NIE jest dokładne (stąd też mamy taką nierówność, a nie $ = OPT$).
+
+\subsection{Iterative improvement algorithm}
+
+Local search i Tabu Search. Wymaga doczytania o słabych i silnych krawędziach - jeśli jakaś krawędź jest silna to wtedy należy do drzewa rozpinającego bez względu na scenariusz, więc na pewno należy do rozwiązania optymalnego. Co więcej, takie rozwiązanie zawiera wszystkie takie krawędzie, zaś nie zawiera słabych. Wstępne rozwiazanie, od którego zaczynamy algorytm może być losowe, podane przez AMU lub zaburzony AMU (PMU) - i tak ponoć najlepiej jest wybrać losowe rozwiązanie. Tabu list i kryterium aspiracji - wiadomo. Pamięć długotrwała - za każdym restartem algorytmu bierzemy inny graf $G = \left( V, e^{\ast} \right)$, gdzie $E^{\ast}$ składa się z łuków należących do najlepszej alternatywy dla najgorszego przypadku drzewa $T$, które polepsza obecne najlepsze rozwiązanie. Czyli:
+
+\begin{itemize}
+	\item na początku dla wstępnego rozwiązania $T$ liczymy $T^{\ast}$ (najlepszą alternatywę dla najgorszego przypadku dla $T$ - generujemy najgorszy scenariusz dla $T$, czyli (CHYBA?)
+	\begin{equation}
+	c^{S_{T}} \left( x \right) =
+	\left\{\begin{matrix}
+	\overline{c}_{e}	&	\textrm{if}	&	e \in T, \\ 
+	\underline{c}_{e}	&	\textrm{if}	&	e \in E \setminus T \equiv e \notin T
+	\end{matrix}\right.
+	\end{equation}
+	i znajdujemy dla tego scenariusza najlepsze drzewo rozpinające, które pewnie składa się z jak najmniejszej liczby wspólnych krawędzi z $T$) i dodajemy zbiór krawędzi należących do $T^{\ast}$ do $E^{\ast}$, który jest na początku pusty,
+	\item potem, już w pętli, znajdujemy najlepsze rozwiązanie w sąsiedztwie $Z \left( T_{1} \right)$ (dla przypomnienia - $Z \left( T_{1} \right) = \max_{S \in \Gamma} \left( F \left( T_{1}, S \right) - F^{\ast} \left( S \right) \right) = F \left( T_{1}, S_{T_{1}} \right) - F^{\ast} \left( S_{T_{1}} \right)$, zaś pamiętać należy, że  nie dla każdego $i$ musi zachodzić $c_{i} = \left[ 0, 1 \right]$. Inaczej bezcelowe byłoby liczenie za każdym razem $F \left( T_{1}, S_{T_{1}} \right) = \left| e : e \in T_{1} \right|$.)
+	\item jeżeli okazuje się ono lepsze od obecnego $Z_{best}$ wtedy aktualizujemy rozwiązanie oraz dodatejmy do zbioru $E_{\ast}$ krawędzie należące do $T_{\ast}$, które generujemy tak samo jak w punkcie 1.
+\end{itemize}
+
+to nam gwarantuje dwie rzeczy:
+
+\begin{itemize}
+	\item graf $G^{\ast} = \left( V, E^{\ast} \right)$ na pewno jest spójny (bo zawiera krawędzie dopuszczalnych rozwiązań),
+	\item graf zawiera maksymalnie różne krawędzie od tych, które należały do znajdowanych rozwiązań, które polepszały ogólne rozwiązanie (sam sposób generowania $T_{\ast}$ z $T$ wymusza ażeby rozwiązanie $T_{\ast}$ było jak najbardziej odległe od $T$ i tym samym by $\left| T \setminus T^{\ast} \right|$ była jak największa). Stąd też, restartując algorytm szukamy rozwiązań w potencjalnie innym lokalnym kawałku.
+\end{itemize}
+
+Najcięższym kawałkiem chleba jest policzenie $Z \left( T_{i} \right)$ dla każdego $T_{i} \in \overline{N} \left( T \right)$ by z kolei wybrać z tego minimum. W najprostszym podejściu możemy wziąć najgorszy scenariusz $\overline{c} = \left( \overline{c}_{e} \right)_{e \in E}$ i policzenie dla każdego sąsiedniego drzewa $T_{i}$ wartości $Z \left( T_{i} \right)$ i wybrać z tego najlepsze drzewo.
+
+Istnieje lepsza metoda, choć według mnie jest nieco wydumana. No ale OK. Weźmy drzewo $T$, będące aktualnym drzewem rozpinającym. $T^{\ast}$ jest alternatywą dla najgorszego przypadku dla $T$, czyli optymalnym rozwiązaniem dla scenariusza $S_{T}$. Weźmy ze zbioru $\overline{N} \left( T \right) \subseteq N \left( T \right)$ dowolne drzewo $T_{1}$. $T_{1}$ powstało z usunięcia z $T$ krawędzi $f \in T$ i dodaniu $e \in E \setminus T$. Jasnym jest zatem, że $T_{1} = T \cup \left\{ e \right\} \setminus \left\{ f \right\}$ i to samo można powiedzieć o wartości funkcji celu: $F \left( T_{1}, S_{T_{1}} \right) = F \left( T, S_{T} \right) + \overline{c}_{e} - \overline{c}_{f}$.
+
+\begin{equation}
+c^{S_{T}} \left( x \right) =
+\left\{\begin{matrix}
+\overline{c}_{e}	&	\textrm{if}	&	e \in T, \\ 
+\underline{c}_{e}	&	\textrm{if}	&	e \in T_{1} \setminus T \equiv e \notin T_{1}
+\end{matrix}\right.
+\end{equation}
+
+\begin{equation}
+	c^{S_{T_{1}}} \left( x \right) =
+	\left\{\begin{matrix}
+	c^{S_{T}}	&	\textrm{if}	&	e \in T \cap T_{1} \\ 
+	\overline{c}_{e}	&	\textrm{if}	&	e \in T_{1} \setminus T \\
+	\underline{c}_{e}	&	\textrm{if}	&	e \in T \setminus T_{1}
+	\end{matrix}\right.
+\end{equation}
+
+$F \left( T_{1}, S_{T_{1}} \right) = \sum_{e \in T_{1}} c^{S_{T_{1}}}_{i} = \sum_{e \in T_{1} \cap T} c^{S_{T_{1}}}_{i} + \sum_{e \in T_{1} \setminus T} c^{S_{T_{1}}}_{i} = \sum_{e \in T_{1} \cap T} c^{S_{T}}_{i} + \sum_{e \in T_{1} \setminus T} \overline{c}_{e_{i}} = \sum_{e \in T_{i} \cap T} c^{S_{T}}_{i} + \overline{c}_{e} = \left[ \sum_{e \in T \cap T_{i}} c^{S_{T}}_{i} + \overline{c}_{f} \right] - \overline{c}_{f} + \overline{c}_{e} = \left[ \sum_{e \in T \cap T_{i}} c^{S_{T}}_{i} + \sum_{e \in T \setminus T_{i}} c^{S_{T}}_{i} \right] + \overline{c}_{e} - \overline{c}_{f} = F \left( T, S_{T} \right) + \overline{c}_{e} - \overline{c}_{f}$
+
+Naszym celem jest szybkie policzenie $Z \left( T_{1} \right)$ na na podstawie $T^{\ast}$. $Z \left( T_{1} \right) = F \left( T_{1}, S_{T_{1}} \right) - F \left( T_{1}^{\ast}, S_{T_{1}} \right)$, zależność między poszczególnymi $F \left( T_{i}, S_{T_{i}} \right)$ a $F \left( T, S_{T} \right)$ pokazaliśmy wyżej, więc naszym celem jest szybkie wyliczenie $F^{\ast} \left( S_{T_{1}} \right)$. Aby to zrobić, chcemy umieć najpierw szybko generować optymalne rozwiązanie dla $S_{T_{1}}$ na podstawie danego $T^{\ast}$, by móc wyliczyć $\sum_{e \in T_{1}^{\ast}} c^{S_{T_{1}}}_{e} = F \left( T_{i}^{\ast}, S_{T_{1}} \right) = F^{\ast} \left( S_{T_{1}} \right)$. Drzewo $T^{\ast}$ otrzymaliśmy wcześniej z jakiegoś algorytmu np. zachłannego. W celu jego policzenia musieliśmy uporządkować koszty wierzchołków niemalejąco - zbiór $\sigma$. Budujemy najgorszy scenariusz dla $T_{1}$. W tym celu koszt krawędzi dodawanej do $T_{1}$ w scenariuszu $S_{T_{1}}$ rośnie z $\underline{c}_{e}$ (taki koszt miała w scenariuszu $S_{T}$) do $\overline{c}_{e}$, zaś koszt krawędzi usuwanej $f$ z $T$ zmieniamy z $\overline{c}_{f}$ na $\underline{c}_{f}$. W związku z tą zmianą kosztów krawędzi, aby otrzymać nowy niemalejący porządek $\sigma^{\prime}$ musimy przesunąć koszt krawędzi $f$ w lewo ku początkowi ciągu, jako że jej koszt się zmniejszył (bądź pozostał w skrajnym przypadku taki sam), zaś koszt krawędzi $e$ - w prawo ku końcowi ciągu. Teraz możemy policzyć minimalne drzewo rozpinające dla scenariusza $S_{T{1}}$ przy pomocy alg. zachłannego i ciągu $\sigma^{\prime}$, otrzymując $T_{1}^{\ast}$. Skoro w ciągu $\sigma^{\prime}$ przesunęliśmy koszt krawędzi $e$ prawo o $0$ lub więcej pozycji, znaczy to, że krawędzi o mniejszym lub równym koszcie od $c_{e}$ jest w nowym ciągu więcej lub tyle samo co w starym $\sigma$. Z jakiegośtam twierdzenia mamy zatem, że jeśli zachodzi $pred \left( \sigma, e \right) \subseteq pred \left( \sigma^{\prime}, e \right)$ ($pred \left( \sigma, e \right)$ właśnie oznacza zbiór elementów w $\sigma$ które poprzedzają - mają mniejszą lub ~równą~ wartość - $e$) to jeśli $e \notin T_{1}^{\ast}$ (ciąg $\sigma^{\prime}$) to wtedy także $e \notin T^{\ast}$. To prowadzi do następującego rozumowania:
+
+\begin{itemize}
+	\item $T$ i $T_{1}$ różnią się dwoma węzłami: $e \notin T$, $e \in T_{1}$, $f \in T$, $f \notin T_{1}$. Załóżmy, że $e \notin T_{1}^{\ast}$ zatem i $e \notin T^{\ast}$. Wówczas koszty w scenariuszach $S_{T}$ i $S_{T{1}}$ dla ścieżek $T^{\ast}$ i $T_{i}^{\ast}$ mogą różnić się tylko kosztem $c_{f}$ (gdyż w obydwu nie ma krawędzi $e$, więc inny jej koszt w tych scenariuszach nie ma żadnego znaczenia). $c^{S_{T}}_{f} \geqslant c^{S_{T_{1}}}_{f}$ (zmniejszaliśmy koszt $c_{f}$ w scenariuszu $S_{T_{1}}$). Jeżeli zatem $f \in T^{\ast}$ (nie było innej ścieżki $g$ o mniejszym koszcie od $f$, którą można by było ją zastąpić i jeszcze zmniejszyć koszt rozwiązania $T^{\ast}$) to $f$ na pewno $\in T_{1}^{\ast}$, jako, że kosz ścieżki $f$ w scenariuszu $S_{T_{1}}$ jest jeszcze mniejszy. Zatem otrzymujemy, że $T_{1}^{\ast} = T^{\ast}$, jako że jedyne krawędzie o zmienionych kosztach zgodnie należą ($f \in T^{\ast} \cap T_{1}^{\ast}$) lub nie należą ($e \notin T^{\ast}, e \notin T_{1}^{\ast}$) do obu z tych zbiorów. Koszt reszty się nie zmienia, więc musieliśmy rozpatrzyć tylko te 2 krawędzie.
+	\item W przeciwnym wypadku, jeżeli $f \notin T^{\ast}$ (przy założeniu, że $e \notin T_{1}^{\ast}$ i $e \notin T^{\ast}$) to znaczy, że $T^{\ast} \cup \left\{ f \right\}$ zawiera cykl: $\left\{ f, g_{1}, \dots, g_{k} \right\}$. Jeżeli wśród tego cyklu znajduje się krawędź $g_{i}$, która w scenariuszu $S_{T{1}}$ ma większy koszt niż $\underline{c}_{f}$, wtedy zmiana krawędzi w $T_{1}^{\ast}$ z $g_{i}$ na $f$ prowadzi do jeszcze mniejszej wartości funkcji celu (jako, że w $T^{\ast}$ krawędź $g_{i}$ była optymalna, bo należała do optymalnego rozwiązania, a nic nie zmienialiśmy poza kosztami $e$ i $f$ to należała także do $T_{1}^{\ast}$. Jako, że w wyniku zmniejszenia kosztu krawędzi $f$ w scenariuszu $S_{T_{1}}$ krawędź $g_{i}$ przewyższyła ją kosztami, wtedy nie należy już ona do optymalnego rozwiązania, zaś $T_{1}^{\ast} = T^{\ast} \cup \left( f \right) \setminus \left\{ g_{i} \right\}$ nadal tworzy drzewo rozpinające, jako że i $f$ i $g_{i}$ należały do cyklu i usunięcie jednej z nich nie spowodowało rozerwania grafu.) Obliczymy wtedy $T_{1}^{\ast} \longleftarrow F^{\ast} \left( S_{T_{1}} \right) \longleftarrow Z \left( T_{1} \right)$ w czasie $O \left( \left| V \right| \right)$, który jest wymagany do odnalezienia wspomnianego cyklu. Policzenie sumy $F^{\ast} \left( S_{T_{1}} \right)$ też w takim samym czasie, $Z \left( T_{1} \right)$ też.
+	\item Jeśli w cyklu $\left\{ f, g_{1}, \dots, g_{k} \right\}$, pomimo zmniejszenia kosztu krawędzi $f$ w scenariuszu $S_{T_{1}}$ względem $S_{T}$, nadal $f$ ma najwyższy koszt spośród nich wszystkich (a $e \notin T_{1}^{\ast}$ i $e \notin T^{\ast}$), to nadal nie należy ono do optymalnego rozwiązania - $T_{1}^{\ast}$ by być drzewem rozpinającym weźmie jeden z węzłów $g$, zatem $f \notin T_{1}^{\ast}$. W związku z tym, skoro $e \notin T_{1}^{\ast}$ i $e \notin T^{\ast}$ oraz $f \notin T_{1}^{\ast}$ i $f \notin T^{\ast}$, reszta kosztów jest taka sama, a oczywiście $\left| T_{1}^{\ast} \right| = \left| T^{\ast} \right|$ to oczywiście $T_{1}^{\ast} = T^{\ast}$.
+	\item Gdy $e \in T_{1}^{\ast}$ to musimy rozwiązać klasyczny problem z najgorszym scenariuszem by otrzymać $T_{1}^{\ast}$.
+\end{itemize}
+
+Zatem w 3/4 przypadków jesteśmy w stanie przyspieszyć z czasu potrzebnego na algorytm zachłanny $O \left( V \cdot E \right)$ do $O \left( \left| V \right| \right)$ lub nawet $O \left( \left| T_{i}^{\ast} \right| \right)$.
+

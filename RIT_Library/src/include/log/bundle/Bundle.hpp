@@ -92,6 +92,46 @@ enum LogBundleKey {
 	//**************** Error ****************//
 	//**************** Fatal ****************//
 
+	//*********************************** CPLEX_LP_IMSTSolver_v3.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	CPLPIMST3_BUILD_MODEL,
+	CPLPIMST3_BUILD_MODEL_MOVES_SRC,
+	CPLPIMST3_BUILD_MODEL_MOVES_SRC1,
+	CPLPIMST3_BUILD_MODEL_MOVES_OUT_TO_SRC,
+	CPLPIMST3_BUILD_MODEL_MOVES_FROM_SRC_OUT,
+	CPLPIMST3_BUILD_MODEL_PASS_MOVES,
+	CPLPIMST3_BUILD_MODEL_PASS_MOVES1,
+	CPLPIMST3_BUILD_MODEL_PASS_IN_NODE,
+	CPLPIMST3_BUILD_MODEL_PASS_IN_TO_NODE,
+	CPLPIMST3_BUILD_MODEL_PASS_FROM_NODE_OUT,
+	CPLPIMST3_BUILD_MODEL_STORE,
+	CPLPIMST3_BUILD_MODEL_STORE1,
+	CPLPIMST3_BUILD_MODEL_STORE_TO_NODE,
+	CPLPIMST3_BUILD_MODEL_STORE_FROM_NODE,
+	CPLPIMST3_BUILD_MODEL_FLOW_CONSTRAINTS,
+	CPLPIMST3_BUILD_MODEL_FLOW_CONSTRAINTS1,
+	CPLPIMST3_BUILD_MODEL_MST_CONSTRAINT,
+	CPLPIMST3_BUILD_MODEL_INC_CONSTRTAINT,
+	CPLPIMST3_BUILD_MODEL_GOAL_INCR_CONSTRAINT,
+	CPLPIMST3_BUILD_MODEL_GOAL_INCR_ADD,
+	CPLPIMST3_EDGE_VAR_GEN,
+	CPLPIMST3_EDGE_VAR_ADD,
+	CPLPIMST3_SOLVE_INIT,
+	CPLPIMST3_SOLUTION_FOUND,
+	CPLPIMST3_FLOW_GEN,
+	CPLPIMST3_FLOW_GEN_INIT_NODE,
+	CPLPIMST3_FLOW_GEN_COMMODITY,
+	CPLPIMST3_FLOW_GEN_COMMODITY_VAR,
+
+	//**************** Warn *****************//
+	CPLPIMST3_SOLVE_NO_SOLUTION,
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+
 	//*********************************** CPLEX_LP_MSTSolverIF.cpp ***********************************//
 	//**************** Trace ****************//
 	CPLPMSTIF_INIT,

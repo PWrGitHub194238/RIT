@@ -1,0 +1,191 @@
+\chapter{Min–max and min–max regret versions of combinatorial optimization problems: A survey}
+\thispagestyle{chapterBeginStyle}
+
+
+\begin{itemize}
+	\item Paramatry (współczynniki) funkcji celu mogą być niepewne, podchodzimy do tego problemu z pomysłem scenariuszy: albo dyskretnych albo ciągłych (interval scenario case) na przedziałach, gdzie każdy parametr jest określony przez LB i UB.
+	\item Mamy dwa główne modele: ostrożnej |(min-maxowej optymalizacji) i ostrożnej optymalizacji z kryterium żalu (regret criterion):
+	\begin{itemize}
+		\item W przypadku dyskretnym mamy $|S| = m$ scenariuszy $s$, każdy jest reprezentowany wektorem współczynników funkcji celu $c^{s} = (c_1^s , ... c_n^s)$, gdzie każdy współczynnik jest naturalny (w przypadku problemu 0-1) $\forall s \in S c_i^s \in N, i \in 1, ..., n$.
+		\item W przypadku scenariuszy ciągłych (opartych na przedziałach) każdy współczynnik $c_i$ może przyjąć wartość z przedziału $[\underline{x_i}, \overline{c_i}]$, gdzie $ 0 \leqslant \underline{c_i} \leqslant \overline{c_i}$ a zbiór scenariuszy jest produktem kartezjańskim wszystkich z nich.
+		\item Ekstremalne (krytyczne) scenariusze (extreme scenario) to oczywiście: $\underline{s} = ( \underline{c_1}, ..., \underline{c_n})$ i $\overline{s}$, gdzie dla każdego $i \in 1, ..., n$ $c_i = \overline{c_i}$.
+		\item $c_s(x)$ --- wartość rozwiązania dla wektora zmiennych decyzyjnych $x \in X$ dla danego scenariusza $s \in S$.
+		\item $c_s^\ast$ --- wartość optymalnego rozwiązania dla danego scenariusza $s$.
+		\item $x^\ast_{\left( s \right)}$ --- wektor wartości zmiennych decyzyjnych dla optymalnego rozwiązania dla scenariusza $s$ i ${c_s^\ast} = c_s(x^\ast_{\left( s \right)})$.
+		\item W pierwszym przypadku dla dyskretnych scenariuszy po prostu liczymy każdy scenariusz i wybieramy takie rozwiązanie, które da nam minimalną wartość dla najgorszego z możliwych scenariuszy spośród optymalnych rozwiązań ($c(x^\ast) = \min_{x \in X} max_{s \in S} c_{s}(x)$). Bez optymalizacji musimy wziąć każde możliwe rozwiązanie $x \in X$, wyliczyć dla wszystkich sceniariuszy $s \in S$ wartości $c_s(x)$, wybrać z tak powstałych grup ($C_S^x = (c_{s_1}(x), ..., c_{s_m}(x))$ - $m$ scenariuszy) max i z tak powstałej grupy: $C_X^{max} = (\max{C_S^{x_1}}, ..., \max{C_S^{x_{2^k}}})$ ($k$ binarnych zmiennych decyzyjnych dla problemu $\mathscr{P} \in \mathscr{C}$) wybrać taki $x \in X$, że $c(x) = \min{C_X^{max}}$. Czyli po polsku liczymy dla wszystkich możliwych $x \in X$ dla którego scenariusza $s \in S$ $c_s(x)$ osiągnie największą wartość a potem wybieramy takiego $x$, dla którego ta wartość maksymalna jest najmniejsza spośród pozostałych. Czyli chcemy zminimalizować straty w najbardziej pesymistycznym przypadku
+		\item W przypadku min-max regret criteria nie chcemy minimalizować strat bez względu na dziejący się sceiariusz, lecz jesteśmy zainteresowani wyborem takiego rozwiązania, które sprawi, że będziemy jak najmniej stratni w przypadku wystąpienia dowolnego scenariusza. Np. mając dane rozwiązanie $x$, jeżeli jest ono dobrane pod dany scenariusz $s$ to regret wyniesie 0. W przeciwnym przypadku najprawdopodobniej istnieje lepsze rozwiązanie dla danego scenariusza $s^{\prime}$. Naszym celem jest wybranie takiego rozwiązania, które będzie tracić jak najmniej do optymalnego rozwiązania w przypadku scenariusza, w którym to dane rozwiązanie traci do optimum dla tego scenariusza najwięcej.
+		\item $r_s(x) = c_s(x) - c_s^\ast$ --- straty poniesione w wyniku wyboru danego rozwiązania $x \in X$ w przypadku wystąpienia sceniariusza $s \in S$ względem wyboru optymalnego rozwiązania pod dany scenariusz. Liczymy min-max, więc wartość optymalna dla problemu $c_s^\ast$ będzie wartością najmniejszą: $\forall x \in X c_s(x) \geqslant c_s(x_s^\ast)$ dla każdego scenariusza (przez $c_s(x^\ast)$ często będziemy rozumieć $c_s(x^\ast_{\left( s \right)})$, gdyż w takim kontekście stosowanie $x_{\left( s \right)}$ jest zbędne) --- stąd też w $r_{max}(x) = \max{s \in S} c_s(x) - c_s^\ast$ dla każdego $s \in S$ $c_s(x) \geqslant c_s^\ast$. Im gorszy rezultat, tym różnica między tymi wartościami będzie większa.
+		\item $r_{max}(x) = \max{s \in S} r_s(x)$ --- maksymalna strata jaką poniesiemy w przypadku wyboru rozwiązania $x$ względem wartości optymalnych dla poszczególnych scenariuszy.
+		\item $\min{x \in X} r_{max}(x) = \min{x \in X} \max{s \in S} (c_s(x) - c_s^\ast)$ --- chcemy zawsze być jak najbliżej optymalnego rozwiązania (czyli chcemy zminimalizować różnicę w stratach pomiędzy tym przypadkiem a przypadkiem gdybyśmy zawczasu znali mające wydarzyć się scenariusze i odpowiednio wybierali rozwiązania).
+		\item Problemy max-min:
+		\begin{itemize}
+			\item max-min --- chcemy zmaksymalizować zysk bez względu na to jaki scenariusz się pojawi i jak źle mógłby on wpłynąć na przychody: $\max{x \in X} \min{s \in S} c_s(x)$,
+			\item max-min z żalem to NADAL min-max (bo chcemy minimalizować różnicę między rozwiązaniami optymalnymi a regret, jedyne co się zatem zmienia to sposób liczenia $r_s(x)$ z $r_s(x) = c_s(x) - c_s^\ast$ na $r_s(x) = c_s^\ast - c_s(x)$, bo chcemy zyski maksymalizować --- w związku z tym wartość optymalna $x_s^\ast$ zawsze będzie większa bądź równa $c_s(x)$, $r_{max}(x)$ wyznacza nam najgorsze możliwe przypadki dla wektora $x \in X$ niezależnie od scenariusza, tak więc im gorsze dobranie wektora i scenariusza, tym większa różnica pomiędzy $c_s^\ast$ i $c_s(x)$, tym mniejsza wartość $c_s(x)$ względem $c_s^\ast$, tym większa wartość  $r_{max}(x)$. Czyli  \textsc{MAX-MIN} dla regret to: $\min{x \in X} r_{max}(x) = \min{x \in X} \max{s \in S} c_s^\ast - c_s(x)$.
+			\item Dla rozróżnienia możemy wprowadzić oznaczenia funkcji $r_{max}(x)$ dla problemów min-max i max-min:
+			\begin{itemize}
+				\item \textsc{MIN-MAX}: $r_{max}^{\ast_{min}} = c_s(x) - c_s^\ast$,
+				\item \textsc{MAX-MIN}: $r_{max}^{\ast_{max}} = c_s^\ast - c_s(x)$.
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+	\item min-max z relatywnym żalem zmienia tylko sposób liczenia $r_{max}^{\ast_{min}}$ i $r_{max}^{\ast_{max}}$:
+	\begin{itemize}
+		\item \textsc{MIN-MAX}: $r_{max}^{\frac{\ast_{min}}{\ast}} = \frac{r_{max}^{\ast_{min}}}{c_s^\ast} = \frac{c_s(x) - c_s^\ast}{c_s^\ast}$,
+		\item \textsc{MAX-MIN}: $r_{max}^{\frac{\ast_{max}}{\ast}} = \frac{r_{max}^{\ast_{max}}}{c_s^\ast} = \frac{c_s^\ast - c_s(x)}{c_s^\ast}$.
+	\end{itemize}
+	\item Można zauważyć, że jeżeli weźmiemy $\hat{r_{min}} = r_{max}^{\frac{\ast_{min}}{\ast}} + 1$ to $\max{s \in S} \hat{r_{min}} = \frac{c_s(x) - c_s^\ast}{c_s^\ast} + \frac{c_s^\ast}{c_s^\ast} = \max{s \in S} \frac{c_s(x)}{c_s^\ast} = \max_{s \in S} \frac{c_s(x)}{\min_{y \in X} c_s(y)} = \max_{s \in S} \max_{y \in X} \frac{c_s(x)}{c_s(y)}$
+	\item W przypadku min-max/max-min ze scenariuszami o rozmytych parametrach (przedziały) liczymy po prostu min/max po scenariuszu $\overline{s}$/$\underline{s}$, gdyż w przypadku min-max ($\min_{x \in X} \max_{s \in S} c_s(x)$) mamy pewność, że $\forall_{s \in S} c_{\overline{s}}(x) \geqslant c_s(x)$ (jako, że $\forall_{c_i \in \overline{s}} \forall_{s \neq \overline{s}} \forall_{c^\prime_i \in s} c^\prime_i \leqslant c_i$), więc $\min_{x \in X} \max_{s \in S} c_s(x) = \min_{x \in X} c_{\overline{s}}(x)$. Analogicznie w przypadku max-min.
+	\item W przypadku min-max regret sytuacja też nie za wiele się zmienia
+\end{itemize}
+
+
+
+\section{Przykłady}
+
+\begin{figure}[!htbp]
+	\null\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+			\begin{tabular}{ccc}
+				\hline
+				$i$		& $w_{i}$	& $x_{i}$	\\
+				\hline
+				$1$		& $3$		& $0$--$1$	\\
+				$2$		& $5$		& $0$--$1$	\\
+				$3$		& $2$		& $0$--$1$	\\
+				$4$		& $4$		& $0$--$1$	\\
+				$5$		& $5$		& $0$--$1$	\\
+				$6$		& $3$ 		& $0$--$1$	\\
+				\hline
+			\end{tabular}
+		\caption{}
+		\label{fig:graphViz:a}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\begin{tabular}{ccc}
+			\cline{2-3}
+					& $\underline{s}$	& $\overline{s}$	\\
+			\hline
+			$c_{1}$ & $3$				& $5$				\\
+			$c_{2}$ & $2$				& $6$				\\
+			$c_{3}$ & $2$				& $5$				\\
+			$c_{4}$ & $2$				& $3$				\\
+			$c_{5}$ & $3$				& $9$				\\
+			$c_{6}$ & $1$				& $6$				\\
+			\hline
+		\end{tabular}
+		\caption{}
+		\label{fig:graphViz:b}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\begin{tabular}{cccc}
+			\cline{2-4}
+			& $s_{1}$ 	& $s_{2}$	& $s_{3}$	\\
+			\hline
+			$c_{1}$ & $4$		& $3$		& $3$		\\
+			$c_{2}$	& $8$		& $4$		& $6$		\\
+			$c_{3}$ & $5$		& $3$		& $3$		\\
+			$c_{4}$	& $3$		& $2$		& $4$		\\
+			$c_{5}$	& $2$		& $8$		& $2$		\\
+			$c_{6}$	& $4$		& $6$		& $2$		\\
+			\hline
+		\end{tabular}
+		\caption{}
+		\label{fig:graphViz:c}
+	\end{subfigure}
+	\hfill\null
+	\caption{
+		Wygenerowana ilustracja grafu przez skrypt \textsc{makeGraphViz.bash}.
+		\textbf{(a)}~Kod pośredni pomiędzy danymi wejściowymi w standardowym formacie \textsc{DIMACS Implementation Challenge} a finalnym rysunkiem. Kod pośredni jest zapisany w języku \textsc{DOT}.
+		\textbf{(b)}~Rysunek grafu wygenerowany przez program \textsc{GraphViz}.
+	}
+	\label{fig:graphViz}
+\end{figure}
+
+
+
+
+
+.... jaka jest różnica między klasycznym podejściem do problemu a minimaxowym? A weźmy sobie graf z $2n$ wierzchołkami, tak jak na rysunku Fig. 1. W klasycznym podejściu (w przypadku jednego scenariusza) odnaleźlibyśmy optymalne rozwiązanie dla tego scenariusza i zwrócili rozwiązanie. W przypadku kilku scenariuszy sam nasuwa się pomysł policzenia optymalnego rizwiązania dla każdego ze scenariuszy osobno i wybranie najlepszego z nich (o najmniejszej wartości). Jest to duży błąd, bo w takim przypadku dla 1 scenariusza (lewe wartości etykiet krawędzi) optymalnym rozwiązaniem jest ścieżka $1$, $n+1$, ... $2n$, której długość wynosi $0$. Dla drugiego scenariusza mamy sytuację taką samą - optymalnym rozwiązaniem w tym przypadku jest górna ścieżka, która także ma łączną długość $0$.
+
+Dla problemu minimaxowego natychmiast otrzymujemy, że dla każdego możliwego rozwiązania $x \in X$ ($|X| = 3$ - albo górą, albo dołem, albo środkiem) dla pierwszych dwóch przypadków (rozwiązań optymalnych dla osobnych scenariuszy) natychmiast otrzymujemy, że $max_{s\in S} c_{s} \left( x^{\ast}_{\left( 1 \right)} \right) =  max \left\{ 0, \sum_{i=0}^{n-1} 2^{n-1} \right\} = 2^{n} - 1$ oraz $max_{s\in S} c_{s} \left( x^{\ast}_{{\left( 2 \right)}} \right) =  max \left\{ \sum_{i=0}^{n-1} 2^{n-1}, 0 \right\} = 2^{n} - 1$ (gdzie $x^{\ast}_{\left( 1 \right)}$ i $x^{\ast}_{\left( 2 \right)}$ to optymalne rozwiązania odpowiednio dla scenariusza $1$ i $2$.), więc $min_{x \in \left\{  x^{\ast}_{\left( 1 \right)}, x^{\ast}_{\left( 2 \right)} \right\}} \left\{ 2^{n} - 1, 2^{n} - 1 \right\} = 2^{n} - 1$. Celowo nie uwzględniliśmy trzeciej możliwości: przejścia przez środek o wartościach $\left( 1, 1 \right)$. Tutaj, niezależnie od scenariusza maximum po trzecim rozwiązaniu ($x_3$) będzie wynosić $1$, stąd $min_{x \in \left\{  x^{\ast}_{\left( 1 \right)}, x^{\ast}_{\left( 2 \right)}, x_3 \right\}} \left\{ 2^{n} - 1, 2^{n} - 1, 1 \right\} = 1$. Stąd widzimy, że dla rozpatrywanych osobno scenariuszy różnica pomiędzy najlepszą ($0$) a najgorszą wartością (jeżeli zmieniłby się nagle scenariusz na przeciwny) wynosi aż $2^n - 2$. Za to w przypadku minimaxowym koszt podjęcia innej decyzji niż optymalna dla scenariusza (żal) wynosi co najwyżej $1$. Różnica między tymi wartościami jest wykładnicza i wynosi $2^n - 2$. Podejście minimaxowe wydaje sie zatem o niebo lepsze.
+
+Co z innym podejściem? Na przykład możemy przypuszczać, że zamiast rozpatrywać każdy scenariusz osobno, możemy wziąć ,,uśredniony'' scenariusz tzn. taki, że każdy współczynnik będzie średnią arytmetyczną tego współczynnika ze wszystkich scenariuszy. Pokazać można niestety nierówność, która nie gwarantuje nam, że dla optymalnego rozwiązania dla problemu $I^{\prime}$, w przypadku dobrania najgorszego scenariusza, otrzymane rozwiązanie będzie równe optymalnemu rozwiązaniu problemu minimaxowego - będzie ono co najwyżej mniejsze od $k$ krotności wartości tego rozwiązania, co dopuszcza otrzymywanie nawet $k$ krotnie gorszych rozwiązań niż w przypadku minimaxowym. Dowód Propozycji 1 jest prosty. $val'(x,s) = \sum_{i=1}^{|X|} x_i * c_i^{\prime}$, a skoro każde $c_{i}^{\prime}$ jest średnią arytmetyczną: $\sum_{s=1}^{k} \frac{c_{i}^{s}}{k}$ to $\frac{1}{k}$ możemy wyciągnąć przed $val(x,s)$, podobnie jak sumę ($\sum_{s \in S} \frac{1}{k} val \left( x, s \right) = val'(x,s)$). Wystarczy rozpisać. $L = \min_{x \in X} \left( \frac{1}{k} \sum_{s \in S} val \left( x, s \right) \right)$ (chcemy minimalizować) oczywiście jest $\leqslant \min_{x \in X} \left( \frac{1}{k} \cdot k \cdot \max_{s \in S} val \left( x, s \right) \right) = opt \left( I \right)$.
+
+Kolejnym pomysłem jest zastąpienie ,,średniego'' scenariusza przez najgorszy scenariusz. Tutaj także pokażemy, że rozwiązanie optymalne dla instacji problemu z tak zdefiniowanym scenariuszem nie jest dobre, bo dla wyliczonego optymalnego rozwiązania $x^{\prime}$, wartość takiego rozwiązania w przypadku wzięcia najgorszego scenariusza ze zbioru scenariuszy problemu $I$ ($\max_{s \in S} val \left( x^{\prime}, s \right)$) może być nawet $k$ razy gorsza w porównaniu z optymalnym rozwiązaniem problemu minimaxowego. Skorzystamy tu z szeregu przekształceń: $\max_{s \in S} \sum_{i=1}^{n} c_{i}^{s} \cdot x_{i}^{\prime}$ (bierzemy TYLKO wektor $x_{i}$ jako optymalne rozwiązanie naszego wydumanego problemu). To jest oczywiście mniejsze od tego, gdy faktycznie weźmiemy współczynniki  ,,najgorszego'' scenariusza. $\sum_{i=1}^{n} c_{i}^{\prime} \cdot x_{i}^{\prime}$ jest optymalną wartością dla problemu z ,,najgorszym'' scenariuszem, więc dla każdego innego $x$'a ta suma będzie lepsza lub taka sama (w szczególności dla $x^{\ast}$): $\leqslant \sum_{i=1}^{n} c_{i}^{\prime} \cdot x_{i}^{\ast}$. To jest oczywiście mniejsze od $\sum_{i=1}^{n} \sum_{s \in S} c_{i}^{s} \cdot x_{i}^{\ast} = \sum_{s \in S} \sum_{i=1}^{n} c_{i}^{s} \cdot x_{i}^{\ast}$ (każde $c_{i}^{\prime} = \max_{s \in S} c_{i}^{s}$, więc jest na pewno mniejsze od sumy tych współczynników z wszystkich scenariuszy), a to z kolei jest mniejsze od $k$ krotnej wielokrotności maxa po scenariuszach: $k \cdot \max_{s \in S} \sum_{i=1}^{n} c_{i}^{s} \cdot x_{i}^{\ast}$. Tutaj mamy już wartość optymalną problemu $I$ - $\min_{x \in X} \max_{s \in S} \sum_{i=1}^{n} c_{i}^{s} \cdot x_{i} = \max_{s \in S} \sum_{i=1}^{n} c_{i}^{s} \cdot x_{i}^{\ast}$
+
+Ta nierówność nie obowiązuje przy minimax regret, jak pokazano na Fig. 2. W myśl tego rysunku mamy dwa scenariusze + trzeci - pesymistyczny. W dwóch pierwszych przypadkach optymalnym rozwiązaniem jest ścieżka dolna - oczywistym jest, że $0 + 2^n < 2^n + 2^n$ (dla pierwszego scenariusza) oraz, że $2^n + 1 + 0 < 2^n + 2^n$ (dla drugiego). W związku z tym, że dla obydwu scenariuszy mamy to samo rozwiązanie, regret wynosi $0$ ($min_{x \in X} \max_{s \in S} \left( val \left( x, s \right) - val^{\ast}_{s} \right) = min_{x \in X} \max_{s \in S} \left( c_{s} \left( x \right) - c^{\ast}_{s} \right) = \max_{s \in S} \left( c_{s} \left( x^{\ast} \right) - c^{\ast}_{s} \right) = \max_{s \in S} \left\{ \left( 2^n + 1 + 0 \right) - \left( 2^n + 1 + 0 \right), \left( 0 + 2^n \right) - \left( 0 + 2^n \right) \right\} = \max_{s \in S} \left\{ 0, 0 \right\} = 0$ W przypadku zaś ,,pesymistycznego'' scenariusza koszt dolnej ścieżki jest większy niż górnej ($2^n + 1 + 2^n > 2 \cdot 2^n$) w związku z czym optymalnym rozwiązaniem będzie ścieżka górna. Jedna w przypadku tego rozwiązania )optymalnego dla pesymistycznego scenariusza), dla pozostałych przypadków to rozwiązanie będzie traciło do optimum $2 \cdot 2^n - \left( 2^n + 1 \right)$ i $ 2 \cdot 2^n - 2^n$, odpowiednio dla pierwszego oraz drugiego scenariusza. Zatem max regret wyniesie w tym przypadku $2^n$ (co jest znacznie gorszym wynikiem niż $k$ razy).
+
+Co ciekawe, można zauważyć, że optymalne rozwiązanie problemu z ,,pesymistycznym'' scenariuszem jest rozwiązaniem problemu z wąskim gardłem tzn. zamiast fuckje celu definiować jako sumę i minimalizować $\min_{x \in X} \sum_{i=1}^{n} c_{i} \cdot x_{i}$ to minimalizuje się $\max_{i \in \left\{ 1, \dots, n \right\}} c_{i} \cdot x_{i}$ - wynik nie zależy od całości tylko od najbardziej obiążającej wynik pary współczynnik-wartość zmiennej - słowem od wąskiego gardła danego problemu. Stąd też klasy problemów: DISCRETE MIN–MAX (REGRET) BOTTLENECK $\mathscr{P}$ i INTERVAL MIN–MAX (REGRET) BOTTLENECK $\mathscr{P}$ od swoich standardowych odpowiedników różnią się tylko wartością $val \left( x, s \right) = c_{s} \left( x \right)$ ($\max_{i \in \left\{ 1, \dots, n \right\}} c_{i} \cdot x_{i}$ zamiast $\sum_{i=1}^{n} c_{i} \cdot x_{i}$). Łatwo to dowieść, gdyż: optymalna wartość problemu DISCRETE MIN–MAX (REGRET) BOTTLENECK $\mathscr{P}$ $x^{\ast} = \min_{x \in X} \max_{s \in S} val \left( x, s \right) = \min_{x \in X} \max_{s \in S} \left( \max_{i \in \left\{ 1, \dots, n \right\}} c^{s}_{i} \cdot x_{i} \right)$. Po zamienieniu kolejności maxowania i podstawieniu pod $max_{s \in S} c_{i}^{s} = c_{i}^{\prime}$ (zgodnie z definicją współczynników dla ,,pesymistycznego'' scenariusza) otrzymamy $\min_{x \in X} \max_{i \in \left\{ 1, \dots, n \right\}} c_{i}^{\prime} \cdot x_{i} = \max_{i \in \left\{ 1, \dots, n \right\}} c_{i}^{\prime} \cdot x^{\ast}_{i}$, co jest dokładnie wartością funkcji celu dla optymalnego rozwiązania problemu z ,,pesymistycznym'' scenariuszem.
+
+Proposition 4 pokazuje jak redukować przypadek z regret. Analogicznie. Raczej powinno być $\overline{c}_{i}^{s}= \max \left\{ c_{i}^{s} - \frac{val^{\ast}_{s}}{x_{i}}, 0 \right\}$, bo inaczej ten dowód się sypie.
+
+Jest także naturalna pokusa myśleć o scenariuszu jak o specjalnym przypadku funkcji celu i chęci porównania minimaxa z problemem o wielu funkcjach celu. W tym wypadku, dla problemu P z $k$ scenariuszami mamy $k$ funkcji celu ze współczynnikami $c_{1}^{h}, \cdots c_{n}^{h}$ dla scenariusza/funkcji celu $h$. Wartość $h$tej funkcji celu dla rozwiązania $x$: $val \left( x, h \right) = \sum_{i=1}^{n} c_{i}^{h} \cdot x_{i}$. Możemy przyjąć, że wszystkie f. celu są zorientowane na minimalizację. Mówimy, że rozwiązanie $x$ jest słabo zdominowane przez strategię (rozwiązanie) $y$, jeżeli dla każdego scenariusza $h = 1, ..., k$ zachodzi $val \left( y, h \right) \geqslant val \left( x, h \right)$ i przynajmniej w 1 przypadku jest to ostra nierówność. Mówimy, że $x$ jest mocno zdominowane przez $y$ jeżeli dla każdego scenariusza wartość funkcji celu dla $x$ jest ostro mniejsza od wartości tej funkcji dla tego samego scenariusza dla rozwiązania $y$. Efektywnymi rozwiązaniami tego problemu są osiągalne rozwiązania dla których nie istnieje już inne osiągalne rozwiązanie, które by je dominowało. 
+
+Propozycja 5 sugeruje, że jeśli $x$ dominuje $y$ to oczywiście $\max_{s \in S} val \left( x, s \right) \leqslant \max_{s \in S} val \left( y, s \right)$ (minimalizujemy). Jako że $x$ dominuje $y$ to dla każdego scenariusza $h$ zachodzi $val \left( x, h \right) \leqslant val \left( y, h \right) \leqslant \max_{s \in S} val \left( y, s \right)$. Zatem wartość funkcji celu dla strategii $x$ dla dowolnego scenariusza jest mniejsza od $\max_{s \in S} val \left( y, s \right)$ (jako, że każda z osobna jest od tego wyrażenia mniejsza). W szczególności $\forall h \in \left\{ 1, \cdots, k \right\} \; val \left( x, h \right) \leqslant \max_{s \in S} val \left( x, s \right) \leqslant \max_{s \in S} val \left( y, s \right)$. Propozycja jest teraz taka, że jeśli jest choć jedno optymalne rozwiązanie dla DISCRETE MIN–MAX to jest ono efektywnym rozwiązaniem problemu z wieloma funkcjami celu, co pokazuje Fig. 3., na którym punkty przedstawiają rozwiązania $x$ oraz wartości poszczególnych funkcji celu dla scenariuszy $s_{1}$ oraz $s_{2}$. Wartość optymalna dla DISCRETE MIN–MAX to oczywiście takie $x$, że minimalizuje ono wyrażenie $\max_{s \in S} val \left( x, s \right)$ (wynika bezpośrednio z definicji). Prowadząc zatem prostopadłe linie do obu osi współrzędnych, a przecinające się w punkcie gdzie $val \left( x, s_{1} \right) = val \left( x, s_{2} \right)$, zaczynając od początku ukłdu współrzędnych, znajdujemy pierwsze takie rozwiązanie. Daje ono nam najmniejszą wartość dla scenariusza $s_{2}$. Wszystkie punkty poza kwadratem dają większą wartość funkcji celu (dla obu bądź tylko jednego scenariusza - jakiś punkt może dla 1 scenariusza przyjmować mniejszą od znalezionej wartość, ale że nas interesuje $\max_{s \in S} val \left( x, s \right)$), to ten sam punkt dla 2 scenariusza daje nam ostatecznie gorszy wynik). Zaznaczone trójkątami punkty symbolizują efektywne rozwiązania - dla żadnego z tych punktów nie istnieje inne rozwiązanie, które dawałoby mniejszą wartość funkcji celu dla WSZYSTKICH scenariuszy - co najwyżej może dominować dla jednego z dwóch scenariuszy lub dla żadnego.
+
+Podobnie propozycja 6. sugeruje, że jeśli mamy przynajmniej jedno rozwiązanie optymalne dla DISCRETE MIN–MAX REGRET, to na pewno jest ono jednym z rozwiązań efektywnych dla problemu z wieloma funkcjami celu. Oczywistym jest, że jeśli $x \in X$ dominuje $y \in X$ to z tego, że dla każdego $s \in S$ zachodzi $val \left( x, s \right) \leqslant val \left( y, s \right)$ to dla każdego $s \in S$ zachodzi $r_{\left( s \right) } \left( x \right) = val \left( x, s \right) - val^{\ast}_{s} \leqslant val \left( y, s \right) - val^{\ast}_{s} = r_{\left( s \right) } \left( y \right)$. Z rozumowania z poprzedniej propozycji mamy, że także zachodzi $\max_{s \in S} val \left( x, s \right) \leqslant \max_{s \in S} val \left( y, s \right)$, a więc i $R_{max} \left( x \right) = \max_{s \in S} \left( val \left( x, s \right) - val^{\ast}_{s} \right) \leqslant \max_{s \in S} \left( val \left( y, s \right) - val^{\ast}_{s} \right) = R_{max} \left( y \right)$. Tutaj także trzeba doprecyzować, że skoro dla każdego $s \in S$ zachodzi $r_{\left( s \right) } \left( x \right) \leqslant r_{\left( s \right) } \left( y \right)$ to szczególnie też zachodzi $r_{\left( s \right) } \left( x \right) \leqslant \max_{d \in S} r_{\left( s \right) } \left( y \right) = R_{max} \left( y \right)$. Skoro dla każdego $s \in S$ zachodzi $r_{\left( s \right) } \left( x \right) \leqslant R_{max} \left( y \right)$ to w szczególności dla $\max _{s \in S} r_{\left( s \right) } \left( x \right) = R_{max} \left( x \right)$ równanie to też jest prawdziwe. Czyli $R_{max} \left( x \right) \leqslant R_{max} \left( y \right)$. W związku z tym rozwiązaniem problemu DISCRETE MIN–MAX REGRET jest na pewno jedno z efektywnych rozwiązań problemu z wieloma funkcjami celu (czyli takie rozwiązania $x$ dla których nie istnieje takie $y$, że $R_{max} \left( y \right)$ byłoby lepsze/mniejsze od $R_{max} \left( x \right)$). Pozostaje nam więc tylko znaleźć spośród tych rozwiązań efektywnych takie, które jest minimalne ($\min_{x \in X} R_{max} \left( x \right) = \min_{x \in X} \max_{s \in S} \left( val \left( x, s \right) - val^{\ast}_{s} \right)$).
+
+Pokazuje to rysunek Fig. 4, gdzie nowym układem odniesienia jest układ rozpoczynający się w punkcie będącym odpowiednikiem optymalnych rozwiązań dla obu scenariuszy. Szukamy takiego rozwiązania, które minimalizuje nam $\max_{s \in \left\{ s_{1}, s_{2} \right\}} \left( val \left( x, s \right) - val^{\ast}_{s} \right)$ (czyli rozwiązania będącego najbliżej zarówno jednej jak i drugiej niebieskiej osi). Widzimy także, że rozwiązania efektywne nie są dominowane przez żadne z pozostałych punktów dla obu scenariuszy naraz.
+
+
+\subsection{Interval scenario case}
+
+Dla INTERVAL MIN–MAX dla minimalizacji rozwiązaniem optymalnym było rozwiązanie scenariusza najgorszego (o najwyższych kosztach: $\overline{c} = \left\{ \overline{c_{i}}, \cdots, \overline{c_{n}}\right\}$), a dla maksymalizacji - o najmniejszych.
+
+Dla INTERVAL MIN–MAX REGRET propozycja 7 sugeruje, że aby policzyć maksymalny żal rozwiązania $x \in X$ problemu P, wystarczy rozpatrzyć najgorszy z dwóch skrajnych scenariuszy (odpowiednio $\overline{c}$ dla problemu minimalizacyjnego oraz $\underline{c}$ dla maksymalizacji).
+
+Proponuje wziąć najgorszy scenariusz:
+
+\begin{equation}
+	c_{i}^{\_} \left( x \right) =
+	\left\{\begin{matrix}
+		\overline{c_{i}}	&	\textrm{if}	&	x_{i} = 1, \\ 
+		\underline{c_{i}}	&	\textrm{if}	&	x_{i} = 0,
+	\end{matrix}\right.
+	\; i = 1, \cdots, n.
+\end{equation}
+
+Mając rozwiązanie $x \in X$ niech $\mathbbm{1} \left( x \right) = \left\{ i \in \left\{ 1, \cdots, n \right\} : x_{i} = 1 \right\}$. Teraz dla każdego scenariusza pokażemy, że zachodzi $R \left( x, s \right) \leqslant R \left( x, c_{i}^{\_} \left( x \right) \right)$, czyli, że wartość regret jest największa dla najgorszego scenariusza. Innymi słowy, że dla tego scenariusza, $R \left( x, c_{i}^{\_} \left( x \right) \right) = R_{max} \left( x \right)$. Optymalne rozwiązanie $x$ zatem będzie to takie rozwiązanie, które spełni $\min_{x \in X} R_{max} \left( x \right)$, czyli będzie rozwiązaniem optymalnym problemu INTERVAL MIN–MAX REGRET.
+
+$\forall s \in S R \left( x, s \right) = val \left( x, s \right) - val^{\ast}_{s} = val \left( x, s \right) - val \left( x_{s}^{\ast}, s \right)$. W propozycji 7 rozpatrujemy (tak jak i w całym dokumencie) problem binarny, gdzie $\forall i x_{i} \in \left\{ 0, 1 \right\}$ zatem $val \left( x, s \right) = \sum_{i : x_{i} = 1} c_{i} \cdot 1 + \sum_{i : x_{i} = 0} c_{i} \cdot 0 = \sum_{i : x_{i} = 1} c_{i}$. Możemy zatem napisać, że $val \left( x, s \right) - val \left( x_{s}^{\ast}, s \right) = \sum_{i \in \mathbbm{1} \left( x \right)} c_{i}^{s} - \sum_{i \in \mathbbm{1} \left( x_{s}^{\ast} \right)} c_{i}^{s}$. Każdy współczynnik, który pojawił się w sumie miał przyporządkowanego $x_{i} = 1$, zgodnie z definicją $\mathbbm{1} \left( x \right)$. Możemy zauważyć, że takie $c_{i}^{s}$, dla którego $i \in \mathbbm{1} \left( x \right)$ oraz $i \in \mathbbm{1} \left( x_{s}^{\ast} \right)$ skrócą się, więc możemy zapisać równoważnie: $\sum_{i \in \mathbbm{1} \left( x \right)} c_{i}^{s} - \sum_{i \in \mathbbm{1} \left( x_{s}^{\ast} \right)} c_{i}^{s} = \sum_{i \in \mathbbm{1} \left( x \right) \setminus \mathbbm{1} \left( x_{s}^{\ast} \right)} c_{i}^{s} - \sum_{i \in \mathbbm{1} \left( x_{s}^{\ast} \setminus \mathbbm{1} \left( x \right) \right)} c_{i}^{s}$. To zaś na pewno jest mniejsze od $\sum_{i \in \mathbbm{1} \left( x \right) \setminus \mathbbm{1} \left( x_{s}^{\ast} \right)} \overline{c_{i}} - \sum_{i \in \mathbbm{1} \left( x_{s}^{\ast}  \right) \setminus \mathbbm{1} \left( x \right)} \underline{c_{i}}$, jako że $\overline{c_{i}}$ to największe wartości spośród scenariuszy dla $i$, a $\underline{c_{i}}$ - najmniejsze, zaś zbiór po którym sumujemy się nie zmienia. Teraz zauważyć trzeba, że $\sum_{i \in \mathbbm{1} \left( x \right) \setminus \mathbbm{1} \left( x_{s}^{\ast} \right)} \overline{c_{i}} - \sum_{i \in \mathbbm{1} \left( x_{s}^{\ast}  \right) \setminus \mathbbm{1} \left( x \right)} \underline{c_{i}} = val \left( x, c_{i}^{\_} \left( x \right) \right) - val \left( x_{s}^{\ast}, c_{i}^{\_} \left( x \right) \right)$.
+
+$val \left( x, c_{i}^{\_} \left( x \right) \right) = \sum_{i \in \mathbbm{1} \left( x \right)} c_{i}^{\_} \left( x \right) + \sum_{i \notin \mathbbm{1} \left( x \right)} 0 = \sum_{i \in \mathbbm{1} \left( x \right)} \overline{c}_{i} = \sum_{i \in \mathbbm{1} \left( x \right) \setminus \mathbbm{1} \left( x_{s}^{\ast} \right)} \overline{c}_{i} + \sum_{i \in \mathbbm{1} \left( x_{s}^{\ast} \right)} \overline{c}_{i}$. Przy czym część $\sum_{i \in \mathbbm{1} \left( x_{s}^{\ast} \right)} \overline{c}_{i}$ odnosi się do tych elementów, które są częścią wspólną $\mathbbm{1} \left( x \right)$ oraz $\mathbbm{1} \left( x_{s}^{\ast} \right)$
+
+$val \left( x_{s}^{\ast}, c_{i}^{\_} \left( x \right) \right) = \sum_{i \in \mathbbm{1} \left( x_{s}^{\ast} \right)} c_{i}^{\_} \left( x \right) = \sum_{i \in \mathbbm{1} \left( x_{s}^{\ast} \right) \setminus \mathbbm{1} \left( x \right) } c_{i}^{\_} \left( x \right) +  \sum_{i \in \mathbbm{1} \left( x \right) } c_{i}^{\_} \left( x \right) = \sum_{i \in \mathbbm{1} \left( x_{s}^{\ast} \right) \setminus \mathbbm{1} \left( x \right) } \underline{c}_{i} + \sum_{i \in \mathbbm{1} \left( x \right) } \overline{c}_{i}$. Przy czym część $\sum_{i \in \mathbbm{1} \left( x \right)} \overline{c}_{i}$ odnosi się do tych elementów, które są częścią wspólną $\mathbbm{1} \left( x \right)$ oraz $\mathbbm{1} \left( x_{s}^{\ast} \right)$.
+
+Zatem suma $val \left( x, c_{i}^{\_} \left( x \right) \right) + val \left( x_{s}^{\ast}, c_{i}^{\_} \left( x \right) \right) = \left[ \sum_{i \in \mathbbm{1} \left( x \right) \setminus \mathbbm{1} \left( x_{s}^{\ast} \right)} \overline{c}_{i} + \sum_{i \in \mathbbm{1} \left( x_{s}^{\ast} \right)} \overline{c}_{i} \right] + \left[ \sum_{i \in \mathbbm{1} \left( x_{s}^{\ast} \right) \setminus \mathbbm{1} \left( x \right) } \underline{c}_{i} + \sum_{i \in \mathbbm{1} \left( x \right) } \overline{c}_{i} \right] = \sum_{i \in \mathbbm{1} \left( x \right) \setminus \mathbbm{1} \left( x_{s}^{\ast} \right)} \overline{c_{i}} - \sum_{i \in \mathbbm{1} \left( x_{s}^{\ast}  \right) \setminus \mathbbm{1} \left( x \right)} \underline{c_{i}}$, ponieważ $\sum_{i \in \mathbbm{1} \left( x_{s}^{\ast} \right)} \overline{c}_{i} = \sum_{i \in \mathbbm{1} \left( x \right)} \overline{c}_{i}$.
+
+Stąd dostajemy ostatecznie $R \left( x, s \right) \leqslant val \left( x, c_{i}^{\_} \left( x \right) \right) + val \left( x_{s}^{\ast}, c_{i}^{\_} \left( x \right) \right)$. Oczywiście $val \left( x, c_{i}^{\_} \left( x \right) \right) + val \left( x_{s}^{\ast}, c_{i}^{\_} \left( x \right) \right) \leqslant val \left( x, c_{i}^{\_} \left( x \right) \right) + val \left( x_{c_{i}^{\_} \left( x \right)}^{\ast}, c_{i}^{\_} \left( x \right) \right)$, jako że $ val \left( x_{c_{i}^{\_} \left( x \right)}^{\ast}, c_{i}^{\_} \left( x \right) \right) = val^{\ast}_{c_{i}^{\_} \left( x \right)}$ (minimalizujemy), a to z kolei równa się już $R \left(x, c_{i}^{\_} \left( x \right) \right)$.
+
+Pokazaliśmy zatem, że optymalne problemu INTERVAL MIN-MAX P ($\min_{x \in X} \max_{s \in S} R \left( x, s \right)$) jest optymalnym rozwiązaniem dla problemu minimalizacyjnego z najgorszym scenariuszem ($ \min_{x \in X} R \left( x, c_{i}^{\_} \left( x \right) \right) = \min_{x \in X} \max_{s \in S} R \left( x, s \right)$), bo pokazliśmy, że dla każdego $s \in S R \left( x, s \right) \leqslant R \left( x, c_{i}^{\_} \left( x \right) \right)$, czyli, że $R \left( x, c_{i}^{\_} \left( x \right) \right) = \max_{s \in S } R \left( x, s \right)$.
+
+Propozycja 8 teraz sugeruje, że optymlane rozwiązanie $x^{\ast}$ dla problemu INTERVAL MIN–MAX REGRET odpowiada rozwiązaniu problemu minimalizacyjnego dla choć jednego ekstremalnego scenariusza, w szczególności dla najlepszego, zdefiniowanego następująco:
+
+\begin{equation}
+c_{i}^{+} \left( x^{\ast} \right) =
+\left\{\begin{matrix}
+\underline{c}_{i}	&	\textrm{if}	&	x^{\ast}_{i} = 1, \\ 
+\overline{c}_{i}	&	\textrm{if}	&	x^{\ast}_{i} = 0,
+\end{matrix}\right.
+\; i = 1, \cdots, n.
+\end{equation}
+
+Weźmy optymalne rozwiązanie $x^{\ast}$ dla problemu INTERVAL MIN–MAX REGRET. Według propozycji jest ono także optymalnym rozwiązaniem dla problemu z ekstremalnym scenariuszem. Weźmy także zbiór $\mathbbm{1} \left( x \right) = \left\{ i \in \left\{ 1, \cdots, n \right\} : x_{i} = 1 \right\}$, tak jak w poprzedniej propozycji. Analogicznie do przypadku 7 możemy wyprowadzić ciąg nierówności, które doprowadzą nas do: $val \left( x^{\ast}, s \right) - val \left( x^{\ast}_{c^{+} \left( x^{\ast} \right)}, s \right) = ... \geqslant val \left( x^{\ast}, c^{+} \left( x^{\ast} \right) \right) - val \left( x^{\ast}_{c^{+} \left( x^{\ast} \right)}, c^{+} \left( x^{\ast} \right) \right)$. Zauważmy, że w założeniu rozwiązanie optymalne problemu INTERVAL MIN–MAX REGRET odpowiada rozwiązaniu problemu dla scenariusza $c^{+} \left( x^{\ast}\right)$ tak więc $val \left( x^{\ast}, c^{+} \left( x^{\ast} \right) \right) = val^{*}_{c^{+} \left( x^{\ast} \right)} = val \left( x^{\ast}_{c^{+} \left( x^{\ast} \right)}, c^{+} \left( x^{\ast} \right) \right)$. Załóżmy teraz, że tak nie jest i optymalne rozwiązanie dla INTERVAL MIN–MAX REGRET nie jest opt. dla problemu z ekstremalnym scenariuszem. Wtedy $val \left( x^{\ast}, c^{+} \left( x^{\ast} \right) \right) \neq val^{*}_{c^{+} \left( x^{\ast} \right)}$. Teraz wracamy do $val \left( x^{\ast}, s \right) - val \left( x^{\ast}_{c^{+} \left( x^{\ast} \right)}, s \right) = ... \geqslant val \left( x^{\ast}, c^{+} \left( x^{\ast} \right) \right) - val \left( x^{\ast}_{c^{+} \left( x^{\ast} \right)}, c^{+} \left( x^{\ast} \right) \right)$.
+
+$val \left( x^{\ast}, s \right) \geqslant  val \left( x^{\ast}_{c^{+} \left( x^{\ast} \right)}, s \right) + \left[ val \left( x^{\ast}, c^{+} \left( x^{\ast} \right) \right) - val \left( x^{\ast}_{c^{+} \left( x^{\ast} \right)}, c^{+} \left( x^{\ast} \right) \right) \right] > val \left( x^{\ast}_{c^{+} \left( x^{\ast} \right)}, s \right)$
+
+$val \left( x^{\ast}, s \right) > val \left( x^{\ast}_{c^{+} \left( x^{\ast} \right)}, s \right)$
+
+$val \left( x^{\ast}, s \right) - val^{\ast}_{s} > val \left( x^{\ast}_{c^{+} \left( x^{\ast} \right)}, s \right) - val^{\ast}_{s}$ dla każdego $s \in S$. Zatem $\max_{s \in S} val \left( x^{\ast}, s \right) - val^{\ast}_{s} > \max_{s \in S} val \left( x^{\ast}_{c^{+} \left( x^{\ast} \right)}, s \right) - val^{\ast}_{s}$, co stoi w sprzeczności z tym, żr $x^{\ast}$ jest optymalnym rozwiązaniem dla INTERVAL MIN–MAX REGRET (nie istnieje mniejszy max dla innego rozwiązania).
+
+Mamy zatem prosty przepis na rozwiązanie problemu INTERVAL MIN–MAX REGRET. Znajdujemy optymalne rozwiązania dla wszystkich scenariuszów ekstremalnych, liczymy $R_{max} \left( x_{s}^{\ast} \right)$, korzystając z właściwości udowodnionych w propozycji 7, a następnie wybieramy spośród nich minimum z tych maximów. Nie jest to jednak genialne rozwiązanie, bo takich ekstremalnych scenariuszy jest $2^{n}$ (ekstremalny scenariusz to taki, dla którego każde $c_{i} = \overline{c}_{i}$ lub $c_{i} = \underline{c}_{i}$ dla każdego $i \in \left\{ 1, \cdots, n \right\}$).
+No chyba, że większa liczba z wszystkich współczynników jest ustalona/znana ($\underline{c}_{i} = \overline{c}_{i}$) (niezdegenerowana) co efektywnie zmniejsza nam liczbę scenariuszy ekstremalnych.
+
+W praktyce rozwiązanie problemu INTERVAL MIN–MAX ma max regret blisko optymalnej jego wartości/rozwiązania dla INTERVAL MIN–MAX REGRET, jednak są zadania, w których te wyniki są od siebie zupełnie różne. Np. Fig. 5, gdzie mamy przejść z węzła $1$ do $n$. Mamy 2 rozwiązania: $x_{1}$, przechodzący bezpośrednio z $1$ do $n$ oraz $x_{2}$, który idzie na około. Mamy dwa scenariusze. $\max_{s \in S} val \left( x_{1}, s \right) = 2^{n}$, $\max_{s \in S} val \left( x_{2}, s \right) = 2^{n} + 1$, rozwiązaniem optymalnym jest zatem $x_{1}$. Żal wynosi $2^{n}$ (dla scenariusza $s_{1}$ idącego na około $val \left( x_{1}, s_{1} \right) - val^{*}_{s_{1}} = 2^{n} - 0$). Dla problemu INTERVAL MIN–MAX REGRET optymalnym rozwiązaniem jest $x_{2}$ - dla $X_{1}$ $\max_{s \in S} \left( 2^n - 0, 2^n - 2^n \right)$, dla $X_{2}$ $\max_{s \in S} \left( 0 - 0, 2^n + 1 - 2^n \right)$, więc $\min_{x \in \left\{ x_{1}, x_{2} \right\}} \left\{ 2^n, 1 \right\} = 1$ dla $x_{2}$. Najgorsza zatem wartość tego rozwiązania to $2^n + 1$ z żalem $1$.
+
+Propozycja 9 i 10 do dowodu.

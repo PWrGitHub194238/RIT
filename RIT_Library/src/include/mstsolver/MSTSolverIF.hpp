@@ -59,6 +59,19 @@ public:
 
 	EdgeSetIF * getMST() throw (GraphExceptions::DisconnectedGraphException);
 
+	/** @brief Returns minimum spanning tree for given MSTSolverIF::graph.
+	 *
+	 * @details This method will temporarily change all edge costs according to given graphScenario.
+	 * After calculating minimum spanning tree for given scenario, all edge costs
+	 * will be returned to their original value and minimum spanning tree that was found
+	 * will be returned.
+	 *
+	 * @param graphScenario scenario that contains information about every edge cost.
+	 * @return minimum spanning tree for graph with temporarily changed edge costs according to given graphScenario.
+	 */
+	EdgeSetIF * getMST(GraphEdgeCostsIF * graphScenario)
+			throw (GraphExceptions::DisconnectedGraphException);
+
 	/** Temporary disconnects every edge that is not in given visibleSet
 	 *
 	 * @param visibleSet

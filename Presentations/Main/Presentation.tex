@@ -1,0 +1,492 @@
+% -*- TeX:PL -*-
+% $Id: $
+\documentclass[12pt]{beamer}
+\usepackage[T1]{polski}
+\usepackage[cp1250]{inputenc}
+\usepackage{lipsum}
+\usepackage{multimedia}
+
+\usepackage{mathtools}
+\usepackage[ruled,vlined]{algorithm2e}
+%\usepackage[a4paper]{geometry}
+%\usepackage{graphicx}
+%\usepackage[]{hyperref}
+%
+
+%
+\author{Autor: Tomasz Strza³ka \\ Promotor: dr hab. Pawe³ Zieliñski, prof. PWr}
+\title{Wybrane problemy \\ odpornej optymalizacji dyskretnej}
+ \subtitle{z mo¿liwoœci¹ modyfikacji}
+ \date{\today}
+ \institute{Wydzia³ Podstawowych Problemów Techniki}
+ \subject{Logotyp Politechniki Wroc³awskiej}
+ \keywords{logotyp, Politechnika Wroc³awska, LaTeX}
+
+\setbeamersize{text margin left=0mm,text margin right=2.5mm}
+%\setbeamersize{sidebar width left=0mm,sidebar width right=0cm}
+\usetheme[lang=pl,pasek=pasek1]{pwr}
+
+\setbeamercovered{transparent=25}
+
+\newtheorem{pwrblock}{Definicja}
+\newenvironment<>{pwrblock}[1][]{%
+	\setbeamertemplate{blocks}[rounded][shadow=true]
+	\setbeamercolor{block title}{fg=white,bg=red!75!black}%
+	\begin{block}#2{#1}}{\end{block}}
+
+
+\transdissolve[duration=0.2]
+\logo{\includegraphics[height=7mm]{poziom-pl-pantone}}
+\logo{\includegraphics[height=7.05mm]{logopwrpl}}
+
+\begin{document}
+\begin{frame}[plain,t]
+ \maketitle
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 1
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Plan prezentacji}
+	
+	\begin{pwrblock}[Plan]
+		\begin{itemize}
+			\item Problem: \textit{Incremental Minimum Spanning Tree},
+			\pause
+			\begin{itemize}
+				\item idea,
+				\pause
+				\item \textsc{LP} a \textit{Binary-Based IMST}.
+				\pause
+			\end{itemize}
+			\item Problem: \textit{Recoverable Robust Minimum Spanning Tree},
+			\pause
+			\begin{itemize}
+				\item problem: \textsc{Min-Max},
+				\pause
+				\item problem adwersarza.
+				\pause
+			\end{itemize}
+			\item Algorytm: \textit{Tabu Search}.
+		\end{itemize}
+	\end{pwrblock}
+
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 2
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Incremental Minimum Spanning Tree}
+	
+	\begin{pwrblock}[Definicja]
+		\begin{gather*}
+			G = \left( V, E \right)\text{,} \quad \left| V \right| = n\text{,} \quad \left| E \right| = m\text{,}\\
+			\pause
+			\textbf{s} = \left[ c_{1}^{\textbf{s}}, c_{2}^{\textbf{s}}, \dots, c_{m}^{\textbf{s}} \right]\text{,}\\
+			\pause
+			G_{\textbf{s}} = \left( V, E, \textbf{s} \right)\text{,}\\
+			\pause
+			\forall i \in \left\{ 1, 2, \dots, m \right\} \quad c_{e_{i}} = c_{i}^{\textbf{s}}\text{.}\\
+			\pause\\
+			\exists \; \textbf{s}, \textbf{s}^{\prime} \quad : \quad \exists c_{i}^{\textbf{s}} \neq c_{i}^{\textbf{s}^{\prime}}\text{,}\\
+			\pause
+			T^{\ast}_{\textbf{s}} = \min arg_{T \in \mathcal{T} \left( G_{\textbf{s}} \right)} \sum_{\mathclap{e \in T}} c_{e}\text{.}
+		\end{gather*}
+	\end{pwrblock}
+	
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 3
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Incremental Minimum Spanning Tree}
+	
+	\begin{pwrblock}[Definicja c.d.]
+		\begin{gather*}
+			T^{\ast}_{\textbf{s}} = \min arg_{T \in \mathcal{T} \left( G \right)} \sum_{\mathclap{e \in T}} c_{e}^{\textbf{s}}\text{,}\\
+			\pause
+			f : \mathcal{T} \left( G \right) \times \mathcal{T} \left( G \right) \rightarrow \mathbb{Z}^{+}\text{,}\\
+			f \left( T, T^{\prime} \right) = \left| T \setminus T^{\prime} \right| = \left| T^{\prime} \setminus T \right|\text{,}\\
+			\pause
+			\mathcal{T} \left( G, T, k \right) = \left\{ T^{\prime} : T^{\prime} \in \mathcal{T} \left( G \right) \; \wedge \; f \left( T, T^{\prime} \right) \leqslant k \right\}\text{,}\\
+			\pause\\
+			T^{\ast} = \min arg_{T^{\prime} \in \mathcal{T} \left( G, T, k \right)} \sum_{\mathclap{e \in T^{\prime}}} c_{e}\text{.}
+		\end{gather*}
+	\end{pwrblock}
+	
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 4
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Incremental - LP}
+	
+	\begin{pwrblock}[Model \textsc{LP}]
+		\begin{subequations}
+			\begin{alignat*}{4}
+			& \text{min} & & \sum_{\mathclap{e \in E}} c_{e} \cdot x_{e}\text{,}\\
+			& \text{s.t.} & \quad & A \cdot \textbf{x} = \textbf{b}\text{,} & & &\\
+			& & & \sum_{\mathclap{e \in T^{\ast} \setminus T^{\ast}_{\textbf{s}}}} x_{e} \leqslant k \text{,} & & &\label{mod:mst7:c}\\
+			& & & \phantom{\sum} x_{e} \geqslant 0\text{,} & \forall e \in E\text{,}&&&
+			\end{alignat*}
+		\end{subequations}
+	\end{pwrblock}
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 5
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Incremental - relaksacja}
+	
+	\begin{pwrblock}[Relaksacja ograniczeñ modelu]
+		\begin{subequations}
+			\begin{alignat*}{4}
+			& \text{min} & & \sum_{\mathclap{e \in E}} c_{e} \cdot x_{e} + \lambda \cdot \left( \quad \sum_{\mathclap{e \in T^{\ast} \setminus T^{\ast}_{\textbf{s}}}} x_{e} - k \quad \right)\text{,}\\
+			& \text{s.t.} & \quad & A \cdot \textbf{x} = \textbf{b}\text{,} & & &\\
+			& & & \phantom{\sum} x_{e} \geqslant 0\text{,} & \forall e \in E\text{,}&&&
+			\end{alignat*}
+		\end{subequations}
+	\end{pwrblock}
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 6
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Incremental - cel}
+	
+	\begin{pwrblock}[Definicja c.d.]
+		\begin{gather*}
+			\sum_{e_{i} \in E \setminus T^{\ast}_{\textbf{s}}} c_{i} \cdot x_{i} + \sum_{\mathclap{e_{i} \in T^{\ast}_{\textbf{s}}}} \left( c_{i} - \lambda \right) \cdot x_{i}\text{,}\\
+			\pause\\
+			f \left( T^{\ast}, T^{\ast}_{\textbf{s}} \right) \leqslant k \; \wedge \; \lambda = 0 \quad \text{lub}\\
+			f \left( T^{\ast}, T^{\ast}_{\textbf{s}} \right) = k \; \wedge \; \lambda \neq 0\text{,}\\
+			\pause\\
+			\lambda^{\ast} \; : \; T^{\prime} \in \mathcal{T} \left( G_{\textbf{s} \left( \lambda^{\ast} \right)}, T, k \right) \; \wedge \; f \left( T, T^{\prime} \right) = k\text{,}\\
+		\end{gather*}
+	\end{pwrblock}
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 7
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Incremental - przyk³ady}
+	
+	\begin{pwrblock}[Scenariusz $\textbf{s}$, $k = 1$, $T^{\ast}_{\textbf{s}}$]
+		\begin{figure}[htbp]
+			\centering
+			\pgfimage[width=75mm,interpolate=false]{frame7/a}
+		\end{figure}
+	\end{pwrblock}
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 8
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Incremental - przyk³ady}
+	
+	\begin{pwrblock}[Scenariusz $\textbf{s}^{\prime}$, $k = 1$, $T^{\ast}_{\textbf{s}^{\prime}}$]
+		\begin{figure}[htbp]
+			\centering
+			\pgfimage[width=75mm,interpolate=false]{frame8/b}
+		\end{figure}
+	\end{pwrblock}
+\end{frame}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 9
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Incremental - przyk³ady}
+	
+	\begin{pwrblock}[Scenariusz $\textbf{s}^{\prime}_{\lambda_{1}}$, $k = 1$, $T \left( \lambda_{1} \right)$]
+		\begin{figure}[htbp]
+			\centering
+			\pgfimage[width=75mm,interpolate=false]{frame9/c1}
+		\end{figure}
+	\end{pwrblock}
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 10
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Incremental - przyk³ady}
+	
+	\begin{pwrblock}[Scenariusz $\textbf{s}^{\prime}_{\lambda_{2}}$, $k = 1$, $T \left( \lambda_{2} \right)$]
+		\begin{figure}[htbp]
+			\centering
+			\pgfimage[width=75mm,interpolate=false]{frame10/d1}
+		\end{figure}
+	\end{pwrblock}
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 11
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Incremental - czas dzia³ania}
+	
+	\begin{pwrblock}[Algorytmy iteracyjne a model \textsc{LP}]
+		\begin{figure}[htbp]
+			\centering
+			\pgfimage[width=75mm,interpolate=false]{frame11/IMST1psfrag}
+		\end{figure}
+	\end{pwrblock}
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 12
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Incremental - czas dzia³ania}
+	
+	\begin{pwrblock}[Algorytmy iteracyjne a model \textsc{LP}]
+		\begin{figure}[htbp]
+			\centering
+			\pgfimage[width=75mm,interpolate=false]{frame12/IMST3psfrag}
+		\end{figure}
+	\end{pwrblock}
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 13
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Recoverable - idea}
+	
+	\begin{pwrblock}[Min-Max]
+		\begin{gather*}
+			\min_{\mathclap{\textbf{x} \in X}} \max_{\mathclap{\textsc{s} \in S}} v \left( \textbf{x}, \textbf{s} \right) \\
+			\textbf{s} \in S = \left\{ \textbf{s}^{1}, \textbf{s}^{2}, \dots, \textbf{s}^{n} \right\}
+		\end{gather*}
+	\end{pwrblock}
+	
+	\begin{pwrblock}[Recoverable Robust]
+	\begin{gather*}
+	\min_{\mathclap{\textbf{x} \in X}} \left( v \left( \textbf{x}, \textbf{s} \right) + \max_{\mathclap{\textbf{s}^{\prime} \in S}} \min_{\mathclap{\textbf{y} \in S_{\textbf{x}}}} v \left( \textbf{y}, \textbf{s}^{\prime} \right) \right)
+	\end{gather*}
+	\end{pwrblock}
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 14
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Problem Recoverable dla IMST - idea}
+
+	\begin{pwrblock}[Problem adwersarza]
+		\begin{gather*}
+		\max_{\mathclap{\textbf{s}^{\prime} \in S}} \min_{\mathclap{\textbf{y} \in S_{\textbf{x}}}} v \left( \textbf{y}, \textbf{s}^{\prime} \right)
+		\end{gather*}
+	\end{pwrblock}
+	
+	\begin{pwrblock}[Recoverable Robust Incr. Minimum Spanning Tree]
+		\begin{gather*}
+		\min_{\mathclap{T \in \mathcal{T} \left( G \right)}} \; \left( \sum_{e \in T} c_{e}^{\textbf{s}} + \max_{\mathclap{\textbf{s}^{\prime} \in S}} \quad \quad \min_{\mathclap{T^{\prime} \in \mathcal{T} \left( G_{\textbf{s}^{\prime}}, T, k \right)}} \quad \quad \sum_{e^{\prime} \in T^{\prime}} c_{e^{\prime}}^{\textbf{s}^{\prime}} \right)
+		\end{gather*}
+	\end{pwrblock}
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 15
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Tabu Search}
+	
+	\begin{pwrblock}[Recoverable Robust Incr. Minimum Spanning Tree]
+		Problem \textsc{NP}-trudny, nieaproksymowalny.
+		
+		Dowód poprzez sprowadzenie problemu decyzyjnego \textsc{Minimum Degree Spanning Tree} (\textsc{NP}-trudny) do \textsc{RRIMST}.	
+	\end{pwrblock}
+	\vspace{10pt}
+	\textit{Adam Kasperski, Adam Kurpisz, and Pawe³ Zieliñski. Recoverable Robust Combinatorial Optimization Problems, strony $147$-–$153$. Springer International Publishing, Cham, 2014.}
+	
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 16
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Tabu Search - idea}
+	
+	\begin{pwrblock}[Kroki]
+		\begin{itemize}
+			\item WeŸ losowy punkt z przestrzeni dopuszczalnych rozwi¹zañ,
+			\pause
+			\item wykonaj \textbf{ruch} w \textbf{otoczeniu} obecnego rozwi¹zania na podstawie \textbf{funkcji oceny ruchu},
+			\pause
+			\item powtarzaj a¿ nie zajdzie pewien warunek,
+			\pause
+			\item wybierz inne losowe rozwi¹zanie, dalekie od tego, wybranego na pocz¹tku,
+			\pause
+			\item powtarzaj powy¿sze kroki a¿ do momentu, gdy zajdzie pewien warunek koñca.
+		\end{itemize}	
+	\end{pwrblock}
+\end{frame}
+	
+	
+	
+	
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 17
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Tabu Search - wyniki}
+	
+	\begin{pwrblock}[Funkcja oceny ruchu - ró¿nica wartoœci rozwi¹zañ]
+		\begin{figure}[htbp]
+			\centering
+			\pgfimage[width=75mm,interpolate=false]{frame17/RRIMST2psfrag}
+		\end{figure}
+	\end{pwrblock}
+\end{frame}
+
+
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 18
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Tabu Search - wyniki}
+	
+	\begin{pwrblock}[$k = 1$]
+		\begin{figure}[htbp]
+			\centering
+			\pgfimage[width=75mm,interpolate=false]{frame18/RRIMST5psfrag}
+		\end{figure}
+	\end{pwrblock}
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 19
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Tabu Search - wyniki}
+	
+	\begin{pwrblock}[$k = 7$]
+		\begin{figure}[htbp]
+			\centering
+			\pgfimage[width=75mm,interpolate=false]{frame19/RRIMST6psfrag}
+		\end{figure}
+	\end{pwrblock}
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 20
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Tabu Search - wyniki}
+	
+	\begin{pwrblock}[]
+		\begin{figure}[htbp]
+			\centering
+			\pgfimage[width=75mm,interpolate=false]{frame20/RRIMST10psfrag}
+		\end{figure}
+	\end{pwrblock}
+\end{frame}
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Tabu Search - wyniki}
+	
+	\begin{table}
+		\centering
+		\begin{tabular}{ccc}
+			\hline
+			\# & $v_{\textsc{ts}} \left( T, S \right)$ & $\frac{v_{\textsc{ts}} \left( T, S \right) - v_{\textsc{ts}}^{LB^{\ast}}}{v_{\textsc{ts}}^{LB^{\ast}}}$ \\
+			$1$	&	$5388$	&	$11,28\%$	\\
+			$3$	&	$5151$	&	$6,38\%$	\\
+			$8$	&	$4996$	&	$3,18\%$	\\
+			$10$	&	$4988$	&	$3,02\%$	\\
+			$13$	&	$4941$	&	$2,04\%$	\\
+			$40$	&	$4927$	&	$1,76\%$	\\
+			$116$	&	$4880$	&	$0,78\%$	\\
+			$584$	&	$4851$	&	$0,19\%$ \\\hline                                                                                                    
+		\end{tabular}
+	\end{table}
+\end{frame}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Frame 22
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Tabu Search - parametry}
+	
+	\begin{pwrblock}[Funkcje oceny ruchu]
+		\begin{gather*}
+		Mval \left( T, T_{1} \right) = v_{\textsc{RRIMST}} \left( T, S \right) - v_{\textsc{RRIMST}} \left( T_{1}, S \right)\text{,}\\
+		\pause
+		Mval \left( T, T_{1} \right) = \alpha_{1} \cdot \left( v_{\textsc{RRIMST}} \left( T, S \right) - v_{\textsc{RRIMST}} \left( T_{1}, S \right) \right) +\\
+		+ \alpha_{2} \cdot \frac{\text{R} \left[ i, j \right]}{it} + \alpha_{3} \cdot \frac{\text{R} \left[ k, l \right]}{it} + \alpha_{4} \cdot \text{MR} \left[ i, j \right] + \alpha_{5} \cdot \text{MR} \left[ k, l \right]
+		\end{gather*}
+	\end{pwrblock}
+\end{frame}
+
+\begin{frame}%[allowframebreaks=.7]
+	\frametitle{Tabu Search - parametry}
+
+	\begin{pwrblock}[Dolne ograniczenie]
+		\begin{gather*}
+		 \left| S \right| = 1 \rightarrow \min_{\mathclap{\textbf{x} \in X}} v \left( \textbf{x}, \textbf{s} \right) + \max_{\mathclap{\textbf{s}^{\prime} \in S}} \min_{\mathclap{\textbf{y} \in X^{k}_{\textbf{x}}}} v \left( \textbf{y}, \textbf{s}^{\prime} \right) \equiv\\
+		 \equiv \min_{\mathclap{\textbf{x} \in X}} v \left( \textbf{x}, \textbf{s} \right) + \min_{\mathclap{\textbf{y} \in X^{k}_{\textbf{x}}}} v \left( \textbf{y}, \textbf{s}^{\prime} \right)\text{,}\\
+		 \textsc{LB} \leqslant \textsc{LB}^{\ast} = \max_{\mathclap{\textsc{LB} \in \mathcal{LB}}} \textsc{LB} \leqslant v_{\textsc{RRIMST}}^{\ast}\text{.}
+		\end{gather*}
+	\end{pwrblock}
+\end{frame}
+
+\end{document}

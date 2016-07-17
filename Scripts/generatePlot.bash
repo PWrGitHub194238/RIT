@@ -283,7 +283,7 @@ function generatePlot() {
 
 		# Replace colons
 		echo "Formating input files..."
-		sed -i 's/,/./g' $input_data_path/*
+		sed -i 's/,/./g' $input_data_path*
 
 		#generateOctaveString
 		echo "Generating input Octave command..."

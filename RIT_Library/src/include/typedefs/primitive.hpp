@@ -33,6 +33,7 @@ typedef EdgeCount IncrementalParam;
 typedef unsigned int IteratorId;
 
 typedef unsigned int TabuIterationCount;
+typedef double TabuMoveValue;
 
 typedef unsigned int LPUIntValue;
 

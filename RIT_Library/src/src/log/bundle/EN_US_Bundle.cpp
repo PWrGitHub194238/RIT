@@ -140,6 +140,75 @@ const char* logDictionary[] = {
 	//**************** Error ****************//
 	//**************** Fatal ****************//
 
+	//*********************************** CPLEX_LP_IMSTSolver_v3.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	// CPLPIMST3_BUILD_MODEL
+	"Building model for LP version of Minimum Spanning Tree problem.",
+	// CPLPIMST3_BUILD_MODEL_MOVES_SRC
+	"Generating flow constraints for source vertex with ID: %VertexIdx%.",
+	// CPLPIMST3_BUILD_MODEL_MOVES_SRC1
+	"Generating flow constraint for source vertex and commodity (target vertex) with ID: %VertexIdx%.",
+	// CPLPIMST3_BUILD_MODEL_MOVES_OUT_TO_SRC
+	"Input source variable (from node with ID: %VertexIdx% to source vertex) for given commodity was added to constraint. Variable is defined as:\n\tf^{k}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPIMST3_BUILD_MODEL_MOVES_FROM_SRC_OUT
+	"Output source variable (from source node to vertex with ID: %VertexIdx%) for given commodity was added to constraint. Variable is defined as:\n\tf^{k}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPIMST3_BUILD_MODEL_PASS_MOVES
+	"Generating transit constraints for nodes that are either receptor nor acceptor for given commodity.",
+	// CPLPIMST3_BUILD_MODEL_PASS_MOVES1
+	"Generating transit constraint for commodity (target node) with ID: %VertexIdx%.",
+	// CPLPIMST3_BUILD_MODEL_PASS_IN_NODE
+	"Generating transit constraint for node with ID: %VertexIdx% which is neither source node (with ID: %VertexIdx%) nor target vertex (ID: %VertexIdx%).",
+	// CPLPIMST3_BUILD_MODEL_PASS_IN_TO_NODE
+	"Input transit variable (from node with ID: %VertexIdx% to vertex with ID: %VertexIdx%) for given commodity was added to constraint. Variable is defined as:\n\tf^{k}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPIMST3_BUILD_MODEL_PASS_FROM_NODE_OUT
+	"Output transit variable (from node with ID: %VertexIdx% to vertex with ID: %VertexIdx%) for given commodity was added to constraint. Variable is defined as:\n\tf^{k}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPIMST3_BUILD_MODEL_STORE
+	"Generating store constraints for commodities.",
+	// CPLPIMST3_BUILD_MODEL_STORE1
+	"Generating store constraint for commodity (target vertex) with ID: %VertexIdx%.",
+	// CPLPIMST3_BUILD_MODEL_STORE_TO_NODE
+	"Input store variable (from node with ID: %VertexIdx% to target vertex with ID: %VertexIdx%) was added to store constraint for commodity %VertexIdx%. Variable is defined as:\n\tf^{%VertexIdx%}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPIMST3_BUILD_MODEL_STORE_FROM_NODE
+	"Output store variable (from node with ID: %VertexIdx% to target vertex with ID: %VertexIdx%) was added to store constraint for commodity %VertexIdx%. Variable is defined as:\n\tf^{%VertexIdx%}_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPIMST3_BUILD_MODEL_FLOW_CONSTRAINTS
+	"Generating constraints for solution in form of: f^{k}_{ij} <= y_{ij}.",
+	// CPLPIMST3_BUILD_MODEL_FLOW_CONSTRAINTS1
+	"Generating flow constraint:\n\tf^{%VertexIdx%}_{%VertexIdx%,%VertexIdx%}\t<=\ty_{%VertexIdx%,%VertexIdx%} (%s\t<=\t%s).",
+	// CPLPIMST3_BUILD_MODEL_MST_CONSTRAINT
+	"Generating constraint for IMST with only %EdgeCount% edges to be selected.",
+	// CPLPIMST3_BUILD_MODEL_INC_CONSTRTAINT
+	"Generating additional constraints for incremental problem.",
+	// CPLPIMST3_BUILD_MODEL_GOAL_INCR_CONSTRAINT
+	"Generating new solution part of goal constraint.",
+	// CPLPIMST3_BUILD_MODEL_GOAL_INCR_ADD
+	"Expression: c_{%VertexIdx%,%VertexIdx%} * ( z^{+}_{%VertexIdx%,%VertexIdx%} - z^{-}_{%VertexIdx%,%VertexIdx%} ) (%EdgeCost% * ( %s - %s)) was added to goal function.",
+	// CPLPIMST3_EDGE_VAR_GEN
+	"Generating %EdgeCount% CPLEX variables of type: %s.",
+	// CPLPIMST3_EDGE_VAR_ADD
+	"Adding new variable that represents given edge:\n%s.\nVariable description: y_{%VertexIdx%,%VertexIdx%}\t=\t%s.",
+	// CPLPIMST3_SOLVE_INIT
+	"Generated model was extracted, trying to resolve given MST problem.",
+	// CPLPIMST3_SOLUTION_FOUND
+	"Solution for Minimum Spanning Tree problem was found and it is %s solution. Total cost of selected edges is: %EdgeCost%.",
+	// CPLPIMST3_FLOW_GEN
+	"Generating flow variables.",
+	// CPLPIMST3_FLOW_GEN_INIT_NODE
+	"Flow variables for model will be generated with vertex with ID: %VertexIdx% as source node.",
+	// CPLPIMST3_FLOW_GEN_COMMODITY
+	"Generating %EdgeCount% flow variables for commodity (target vertex) with ID: %VertexIdx%.",
+	// CPLPIMST3_FLOW_GEN_COMMODITY_VAR
+	"Flow variable f^{%VertexIdx%}_{%VertexIdx%,%VertexIdx%} was added to model. New variable is defined as: %s.",
+
+	//**************** Warn *****************//
+	// CPLPIMST3_SOLVE_NO_SOLUTION
+	"No feasible solution for given model was found.",
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+
 	//*********************************** CPLEX_LP_MSTSolverIF.cpp ***********************************//
 	//**************** Trace ****************//
 	// CPLPMSTIF_INIT
@@ -214,7 +283,7 @@ const char* logDictionary[] = {
 	//**************** Debug ****************//
 	//**************** Info *****************//
 	// CPLPMST3_BUILD_MODEL
-	"Building model for LP version of Minimum Spanning Tree problem.",
+	"Building model for LP version of Incremental Minimum Spanning Tree problem.",
 	// CPLPMST3_BUILD_MODEL_MOVES_SRC
 	"Generating flow constraints for source vertex with ID: %VertexIdx%.",
 	// CPLPMST3_BUILD_MODEL_MOVES_SRC1

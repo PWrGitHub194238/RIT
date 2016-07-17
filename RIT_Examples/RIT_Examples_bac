@@ -72,7 +72,7 @@ _config() {
     #
     base="autocompletion help install initBuild"
     opts="-d --defaults -f --force-yes log4cxx graphviz gTest --gtest-path --gtest-lib-path --gtest-include-path rapidJSON --rapidjson-path --rapidjson-include-path"
-
+    opts1="-p --path"
     #
     #  Complete the arguments to some of the basic commands.
     #
@@ -82,9 +82,8 @@ _config() {
             return 0
             ;;
 	initBuild)
-	    COMPREPLY=()
+	    COMPREPLY=( $(compgen -W "${opts1}" -- ${cur}) )
             return 0
-            ;;
 	help)
 	    COMPREPLY=()
             return 0

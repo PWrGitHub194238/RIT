@@ -294,7 +294,7 @@ void CPLEX_LP_IMSTSolverIF::changeEdgeCost(EdgeIF* edge, EdgeCost newCost)
 	throw LogicExceptions::EdgeNotFoundException();
 }
 
-EdgeSetIF* CPLEX_LP_IMSTSolverIF::getMST(EdgeCount k,
+EdgeSetIF* CPLEX_LP_IMSTSolverIF::getIMST(EdgeCount k,
 		EdgeSetIF* baseMSTSolution, GraphEdgeCostsIF* newGraphCosts) {
 	replaceBaseMSTSolution(baseMSTSolution);
 	if (baseMSTSolution != nullptr) {
@@ -308,18 +308,18 @@ EdgeSetIF* CPLEX_LP_IMSTSolverIF::getMST(EdgeCount k,
 	return resolve(k);
 }
 
-EdgeSetIF* CPLEX_LP_IMSTSolverIF::getMST(EdgeCount k,
+EdgeSetIF* CPLEX_LP_IMSTSolverIF::getIMST(EdgeCount k,
 		GraphEdgeCostsIF* newGraphCosts) {
-	return getMST(k, nullptr, newGraphCosts);
+	return getIMST(k, nullptr, newGraphCosts);
 }
 
-EdgeSetIF* CPLEX_LP_IMSTSolverIF::getMST(EdgeCount k,
+EdgeSetIF* CPLEX_LP_IMSTSolverIF::getIMST(EdgeCount k,
 		EdgeSetIF* baseMSTSolution) {
-	return getMST(k, baseMSTSolution, nullptr);
+	return getIMST(k, baseMSTSolution, nullptr);
 }
 
-EdgeSetIF* CPLEX_LP_IMSTSolverIF::getMST(EdgeCount k) {
-	return getMST(k, nullptr, nullptr);
+EdgeSetIF* CPLEX_LP_IMSTSolverIF::getIMST(EdgeCount k) {
+	return getIMST(k, nullptr, nullptr);
 }
 
 //*************************************** GETTERS & SETTERS ****************************************//

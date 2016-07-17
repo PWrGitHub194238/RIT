@@ -1,0 +1,56 @@
+\chapter{Robust recoverable and two-stage selection problems}
+\thispagestyle{chapterBeginStyle}
+
+Bierzemy na tapetę problem plecakowy z wagami przedmiotów $0$--$1$ - czyli problem wyboru. Jak zwykle ustalmy na początku oznaczenia:
+
+\begin{itemize}
+	\item $E = \left\{ e_{1}, \dots, e_{n} \right\}$ - zbiór przedmiotów
+	\item w problemie wybieramy dokładnie $p$ przedmiotów tak by zminimalizować $\sum_{e \in X} c_{e}$
+	\item $\Gamma$ - zbiór scenariuszy, zawierający wszystkie wektory możliwych kosztów przedmiotów,
+	\item $\Phi = \left\{ X \subseteq E : \left| X \right| = p \right\}$ - zbiór dopuszczalnych rozwiązań (z dokładnie $p$ wybranymi przedmiotami),
+	\item $\Phi_{1} = \left\{ X \subseteq E : \left| X \right| \leqslant p \right\}$ - zbiór rozwiązań, gdzie wybranych jest mniej niż $p$ przedmiotów.
+	\item $\Phi_{X} = \left\{ Y \subseteq E \setminus X : \left| Y \right| = p - \left| X \right| \right\}$ - zbiór przedmiotów nie należących do wybranego rozwiązania $X \in \Phi_{1}$, uzupełniających to rozwiązanie do $p$ przedmiotów.
+	\item $\Phi_{X}^{k} = \left\{ Y \subseteq E : \left| Y \right| = p, \left| Y \setminus X \right| \leqslant k \right\}, k \in \left\{ 0, \dots, p \right\}$ - zbiór rozwiązań $Y$, które powstały z $X$ w wyniku zamiany co najwyżej $k$ elementów z $X$ na inne, nie należące do tego rozwiązania,
+	\item $C_{e} $- deterministyczny koszt przedmiotu $e \in E$ w pierwszej fazie algorytmu, gdy wybieramy początkowe rozwiązanie dla dostępnego, pojedynczego scenariusza,
+	\item $c_{e}^{S}$ wiadomo, $ f \left( X, S \right)$ też wiadomo.
+\end{itemize}
+
+Dwufazowy algorytm będziemy budować następująco:
+\begin{itemize}
+	\item na początku mamy pewien scenariusz, który determinuje początkowe koszty przedmiotów. Wartość tego rozwiązania to $\sum_{e \in X} C_{e}$ dla wybranego początkowo $X \in \Phi_{1}$,
+	\item scenariusz się zmienia i chcemy, zachowując poprzednią decyzję o wyborze $X$, dobrać pozostałe przedmioty tak, aby mimo zmiany scenariusza wyjść na tym jak najlepiej - tak więc chcemy $\min_{Y \in \Phi_{X}} f \left( Y, S \right)$, gdzie $S \in \Gamma$ jest naszym nowym scenariuszem, zaś $Y$ to możliwe dopełnienia zbioru przedmiotów $X$ do $p$ przedmiotów.
+	\item Zatem koszt wyboru rozwiązania $X$ w przypadku zmiany scenariusza z początkowego na $S$ wynosi $f_{1} \left( X, S \right) = \sum_{e \in X} C_{e} + \min_{Y \in \Phi_{X}} f \left( Y, S \right)$
+	\item w zagadnieniu odpornej optymalizacji dwufazowej (robust two-stage) szukamy oczywiście takiego początkowego wyboru $X$ ażeby zminimalizować wartość funkcji celu w najgorszym przypadku (to jest dla scenariusza $S$ w którym, nawet najlepszy wybór pozostałych przedmiotów $Y \in \Phi_{X}$ da nam wartość gorszą od wszystkich pozostałych scenariuszy dla początkowego rozwiązania $X$): $opt_{1} = \min_{X \in \Phi_{1}} \max_{S \in \Gamma} f_{1} \left( X, S \right)$
+\end{itemize}
+
+Model regeneracyjny nieco się różni. Tutaj wybieramy na początek od razu kompletne rozwiązanie $X \ in \Phi$. Po pojawieniu się nowego scenariusza ($S$) jesteśmy za to w stanie wymienić co najwyżej $k$ przedmiotów z pierwszego rozwiązania i zastąpić je innymi, nie należącymi wcześniej do $X$. Tak jak wcześniej, chcemy by ta zmiana jak najkorzystniej odbiła się na wartości funkcji celu dla nowego scenariusza: $f_{2} \left( X, S \right) = \sum_{e \in X} C_{e} + \min_{Y \in \Phi_{X}^{k}} f \left( Y, S \right)$. Tak samo dla robust recoverable selection problem chcemy wybrać takie początkowe rozwiązanie, które minimalizowałoby funkcję celu dla najgorszego scenariusza jaki może się pojawić - chcemy znaleźć takie początkowe rozwiązanie $X$, które bez względu na nowy scenariusz pozwoli na jak największą optymalizację rozwiązanie względem tego scenariusza i każdego innego. Oczywiście z którejśtam propozycji w paper0 wynika, że scenariuszy z przedziałami ($\Gamma^{1}$) dla najgorszego scenariusza $\overline{S} = \left( \overline{c} \right)_{e \in E}$ zachodzi zarówno $\max_{S \in \Gamma^{1}} f_{1} \left( X, S \right) = f_{1} \left( X, \overline{S} \right)$ jak i $\max_{S \in \Gamma^{1}} f_{2} \left( X, S \right) = f_{1} \left( X, \overline{S} \right)$, co prowadzi ponoć do prostego algorytmu rozwiązania.
+
+Recoverable Selection: $opt_{2}^{1} = \min_{X \in \Phi} \max_{S \in \Gamma^{1}} f_{2} \left( X, S \right) = \min_{X \in \Phi} \max_{S \in \Gamma^{1}} \left[ \sum_{e \in X} C_{e} + \min_{Y \in \Phi_{X}^{k}} f \left( Y, S \right) \right] = \min_{X \in \Phi} \left[ \sum_{e \in X} C_{e} + \min_{Y \in \Phi_{X}^{k}} \max_{S \in \Gamma^{1}} \sum_{e \in Y} c_{e}^{S} \right] = \min_{X \in \Phi} \left[ \sum_{e \in X} C_{e} + \min_{Y \in \Phi_{X}^{k}} \sum_{e \in Y} \overline{c}_{e}^{S} \right]$. Model jest całkiem jasny i nie będę się tu o nim rozpisywać. Wartym zauważenia jest, że warunek $\left| X \cap Y \right| \geqslant p - k$ ogranicza rozwiązania $Y$ tak aby nie różniły się od $X$ większą liczbą przedmiotów niż $k$ (muszą mieć co najmniej $p - k$ elementów wspólnych), czyli żeby $Y \in \Phi_{X}^{k}$, że możemy zdefiniować następująco decyzyjne zmienne binarne:
+
+\begin{equation}
+x_{i} \left( x \right) =
+\left\{\begin{matrix}
+0	&	\textrm{if}	&	e_{i} \notin X, \\ 
+1	&	\textrm{if}	&	e_{i} \in X
+\end{matrix}\right.
+\end{equation},
+
+\begin{equation}
+y_{i} \left( x \right) =
+\left\{\begin{matrix}
+0	&	\textrm{if}	&	e_{i} \notin Y, \\ 
+1	&	\textrm{if}	&	e_{i} \in Y
+\end{matrix}\right.
+\end{equation},
+
+\begin{equation}
+z_{i} \left( x \right) =
+\left\{\begin{matrix}
+0	&	\textrm{if}	&	e_{i} \notin X \cap Y, \\ 
+1	&	\textrm{if}	&	e_{i} \in X \cap Y,
+\end{matrix}\right.
+\end{equation},
+
+że dany element $e$ albo nie ograniczenia $x_{i} + z_{i} \leqslant 1$ i $y_{i} + z_{i} \leqslant 1$ zapewniają nam, że każdy element policzymy tylko raz , co pozwala na napisanie pozostałych ograniczeń.
+W unimodularność macierzy jestem w stanie uwierzyć, więc bez ograniczeń całkowitoliczbowych uzyskamy na pewno rozwiązanie całkowitoliczbowe (teorię przydałoby się wyłożyć).
+

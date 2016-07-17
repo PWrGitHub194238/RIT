@@ -1,0 +1,21 @@
+\chapter{Robust optimization with incremental recourse}
+\thispagestyle{chapterBeginStyle}
+
+Mamy początkowe kosztu $d$ i odpowiadające im rozwiązanie $x$. Dostajemy inny scenariusz tożsamy z wektorem kosztów (scenariusz $s \in \mathcal{U} \equiv c^{s} \in \mathcal{U}$). Możemy w pewnym ograniczonym zakresie nagiąć rozwiazanie $x$ tak, aby dobrze się sprawowało pod nowym scenariuszem. $S_{x} = \left\{ y \in S : F \left( x, y \right) \leqslant K \right\}$ - zbiór scenariuszy nie różniący się od oryginalnego rozwiązania o więcej niż $K$. 
+Podstawowy problem: $Z_{RobInc} = \min_{x \in S} \left[ d^T \cdot x + \max_{c \in \mathcal{U}} \min_{y \in S_{x}} c^T \cdot y \right]$ - chcemy wybrać takie rozwiązanie $x$ by móc je nagiąć tak, żeby zminimalizować wartość rozwiązania w przypadku pojawienia się najgorszego scenariusza (ogólnie jesteśmy zainteresowani minimalizacją 
+
+$\min_{x \in S} \left[ d^T \cdot x + \min_{y \in S_{x}} c^T \cdot y \right]$ dla najgorszego scenariusza: 
+
+$\min_{x \in S} \max_{c \in \mathcal{U}} \left[ d^T \cdot x + \min_{y \in S_{x}} c^T \cdot y \right]$, przy czym pierwszy człon nie zależy od scenariusza, więc 
+
+$\min_{x \in S} \max_{c \in \mathcal{U}} \left[ d^T \cdot x + \min_{y \in S_{x}} c^T \cdot y \right]$ = $\min_{x \in S} \left[ d^T \cdot x + \max_{c \in \mathcal{U}} \left( \min_{y \in S_{x}} c^T \cdot y \right) \right]$).
+
+Możemy wytyczyć dwa specyficzne przypadki:
+
+\begin{itemize}
+	\item początkowe  koszty $d = 0$ ($\min_{x \in S} \left[ \max_{c \in \mathcal{U}} \left( \min_{y \in S_{x}} c^T \cdot y \right) \right]$) i $S_{x} = \left\{ x \right\}$ (nie mamy żadnej możliwości modyfikacji rozwiązania). Skoro tak to $\min_{y \in S_{x}} c^T \cdot y = c^T \cdot x$, a więc $\min_{x \in S} \left[ \max_{c \in \mathcal{U}} \left( \min_{y \in S_{x}} c^T \cdot y \right) \right] = \min_{x \in S} \left[ \max_{c \in \mathcal{U}} \left( c^T \cdot x \right) \right] = \min_{x \in S} \max_{c \in \mathcal{U}} c^T \cdot x$.
+	\item w drugim przypadku możemy móc całkowicie zmienić nasze rozwiązanie, niezależnie od początkowego wybranego $x \in S$ ($S_{x} = S$) tak więc, jeśli $d = 0$ to $\min_{x \in S} \left[ \max_{e \in \mathcal{U}} \min_{y \in S_{x}} c^T \cdot y \right] = \min_{x \in S} \left[ \max_{e \in \mathcal{U}} \min_{y \in S} c^T \cdot y \right]$, zatem od $x$ nie zależy rozwiązanie ($\forall x \min_{x \in S} \left[ \max_{e \in \mathcal{U}} \min_{y \in S} c^T \cdot y \right] = \max_{e \in \mathcal{U}} \min_{y \in S} c^T \cdot y$)
+\end{itemize}
+
+Dwa modele niepewności w zbiorach: $\mathcal{U}_{1}$ - zawiera wszystkie wektory kosztów, w których każdy z jego elementów $c_{i}$ może przyjmować ciągłą wartość pomiędzy $\overline{c}_{i}, \overline{c}_{i} + \hat{c}_{i}$, gdzie $\overline{c}_{i}$ to najmniejsza wartość współczynnika $c_{i}$. Suma kosztów wektora nie może być większa od kosztu wektora $\overline{c} = \left( \overline{c}_{i} \right)$ niż o $\Gamma$ (w sensie jeśli jeden czynnik $c^{\prime}_{i}$ wektora $c^{\prime} \in \mathcal{U}_{1}$ wynosi $\overline{c}_{i} + \Gamma$ to reszta musi już spełniać $c^{\prime}_{i} = \overline{c}_{i}$).
+Drugim modelem jest $\mathcal{U}_{2}$

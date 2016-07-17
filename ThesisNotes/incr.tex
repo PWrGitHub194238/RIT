@@ -1,0 +1,256 @@
+\chapter{Incremental Network Optimization: Theory and Algorithms}
+\thispagestyle{chapterBeginStyle}
+
+Incremental problem dla MST - mamy drzewo $T$, mamy jakieś wstępne rozwiązanie $T^{\ast}$, zmieniamy koszty, chcemy znaleźć inne rozwiązanie, które nie różni się zbytnio od pierwotnego.
+
+Kroki:
+\begin{itemize}
+	\item Mamy graf $G = \left( N, A \right)$, $\left| N \right| = n$, $\left| A \right| = m$, mamy początkowe drzewo rozpinające $T^{0}$,
+	\item Zmieniamy koszt krawędzi w drzewie (nie mówiliśmy, że $T^{0}$ jest MST, bo po zmianie kosztów pewnie i tak już nim nie jest). Szukamy $T^{k}$, które ma najmniejszy koszt dla zmodyfikowanych wag i dodatkowo różni się co najwyżej $k$ krawędziami (ma co najwyżej $k$ krawędzi, których nie ma w $T^{0}$ --- $f \left( T^{0}, T^{k} \right) = \left| T^{0} \setminus T^{k} \right| = \left| T^{k} \setminus T^{0} \right| \leqslant k$). Czyli szukamy takiego drzewa $T^{k}$, którego koszt jest $c \left( T^{k} \right) = \min \left\{ c \left( T \right) : f \left( T, T^{k} \right) \leqslant k \right\}$.
+	\item Będziemy szukać naszego $T^{k}$ na dość okrojonym grafie. Mamy bowiem lemat, który mówi, że dla dowolnego drzewa MST $T^{\ast} \in G = \left( N, A \right)$, gdzie $\left| N \right| = n$, $\left| A \right| = m$ istnieje IMST $T^{k} \in G^{\ast} = \left( N, A^{\ast} \right)$, gdzie $A^{\ast} = T^{\ast} \cup T^{0}$, co może nam efektywnie zredukować liczbę krawędzi (co jak się potem okaże znacznie przyspieszyć może cały algorytm).
+	
+	W najgorszym przypadku oczywiście zbiory wierzchołków należących do MST $T^{\ast}$ (MST dla zmodyfikowanych kosztów, bez uwzględniania warunku $f \left( T, T^{*} \right) \leqslant k$) oraz do drzewa $T^{0}$ (drzewo początkowe, będące pewnie MST dla pierwotnych kosztów) mogą być całkowicie rozłączne, co prowadzi do ograniczenia $n - 1 \leqslant \left| A^{\ast} \right| \leqslant 2 \cdot \left( n - 1 \right)$. Jeżeli jednak $m \gg 2 \cdot \left( n - 1 \right)$ (np. w grafach pełnych, gdzie $m = \binom{n}{2} = \frac{n \cdot \left( n - 1 \right)}{2}$) to potencjalnie zyskujemy bardzo wiele, kosztem wyliczenia MST dla danych kosztów (co możemy zrobić dowolnym algorytmem, bo koszty są stałe i nie interesują nas dodatkowe ograniczenia).
+	
+	Czemu tak jest? Szukamy IMST, które od $T^{0}$ różni się o nie więcej niż $k$ krawędzi. Niech $T^{k}$ będzie takim IMST spośród wszystkich optymalnych rozwiązań, które ma maksymalną liczbę krawędzi w $A^{\ast}$. Jeżeli ma wszystkie ($\forall e \in T^{k} \implies e \in A^{\ast}$) to $T^{k} \in G^{\ast}$ i nie ma czego dowodzić.
+	
+	Załóżmy zatem, że tak nie jest i istnieje krawędź $e \in T^{k} \setminus A^{\ast}$. Usuńmy teraz tą krawędź z drzewa $T^{k}$. Otrzymamy podział na dwa poddrzewa: $S$ oraz $\overline{S}$ a także zbiór $\mathcal{Q} \left( T^{k}, e \right)$, zawierający wszystkie takie krawędzie $\left( i, j \right)$, gdzie $i \in S$ a $j \in \overline{S}$. Z własności optymalnego cięcia MST (drzewo jest MST wtedy i tylko wtedy, gdy należące do niego krawędzie $e$ mają najmniejszy koszt spośród wszystkich innych krawędzi, które należą do zbioru $\mathcal{Q} \left( T^{\ast}, e \right)$) wiemy, że w zbiorze $\mathcal{Q} \left( T^{k}, e \right)$ jest krawędź $e^{\prime} \in T^{\ast}$ (która ma najmniejszy koszt spośród wszystkich krawędzi, należących do tego cięcia). Wiemy, że $e$ nie należy do $A^{\ast}$, więc też $e \notin T^{\ast}$, więc $e \neq e^{\ast}$. Stąd, tworząc nowe drzewo $T^{k\prime}$ poprzez usunięcie z niego krawędzi $e \in T^{k} \setminus A^{\ast}$, dodając do niego krawędź $e^{\prime} \in T^{\ast} \in A^{\ast}$, otrzymujemy drzewo o koszcie na pewno nie większym niż drzewo $T^{k}$. Skoro $T^{k}$ było MST, więc nowe drzewo jest takim także (z $c \left( T^{k\prime} \right) \leqslant c \left( T^{k} \right)$ oraz z optymalności $T^{k}$ mamy, że $c \left( T^{k\prime} \right) = c \left( T^{k} \right)$). A skoro $T^{k\prime}$ też jest MST to mamy sprzeczność, że $T^{k}$ jest MST i ma największą liczbę krawędzi w $A^{\ast}$, bo $T^{k\prime}$ ma ich o jedną więcej.
+	
+	Nowe drzewo $T^{k\prime}$ spełnia też w oczywisty sposób $f \left( T^{0}, T^{k\prime} \right) \leqslant k$ --- $T^{k\prime} = T^{k} - e + e^{\prime}$, gdzie $e \notin A^{\ast} \equiv e \notin T^{\ast} \cup T^{0} \equiv e \notin T^{\ast} \wedge e \notin T^{0}$, stąd po usunięciu z drzewa $T^{k}$ krawędzi $e$ ($T^{k} \setminus \left\{ e \right\}$), ma ono mniej krawędzi nie będących w pierwotnym drzewie $T^{0}$, jako że usunięta krawędź na pewno do niego nie należała. Stąd $f \left( T^{0}, T^{k} \setminus \left\{ e \right\} \right) < k$ oraz $f \left( T^{0}, T^{k\prime} \right) \leqslant k$.
+	
+	\item Następnie formułujemy sam problem. Celem jest wykorzystanie własności relaksacji Lagrangian'a do sprowadzenia modelu IMST do MST ze zmodyfikowanymi kosztami krawędzi, zależnie od $\lambda$. Jest oczywistym, że zwykły problem MST możemy rozwiązać nie tyle co LP, co innymi algorytmami, takimi jak Kruskala, Prima, czy Sollin'a. Przy wykorzystaniu zaawansowanych struktur (Johnson's data structure), możemy zejść z czasem poszukiwania MST dla konkretnych danych do $O \left( m \cdot \log \left( \log \left( C \right) \right) \right)$ (choć pewnie samo tworzenie takiej struktury jest koszmarnie drogie). Weźmy rozpatrzmy model LP dla MST:
+	
+	Pierwszy z modeli jest najprostszy i wynika bezpośrednio z definicji bycia drzewem rozpinającym.
+	
+	\begin{eqnarray}
+	\sum_{e \in E} x_{e} = \left| V \right| - 1\\
+	\sum_{e \in E \left( S \right)} x_{e} = \left| S \right| - 1 \; \forall S \subseteq V,
+	\end{eqnarray}
+	
+	gdzie $G = \left( V, E \right)$, $\forall S \subseteq V \; E \left( S \right) = \left\{ e = \left( i, j \right) : e \in E, i, j \in S \right\}$ (zbiór krawędzi łączących ze sobą dany podzbiór wierzchołków grafu $G$), zaś $x_{e} = 1 \iff e \in MST$. Minimalne drzewo rozpinające musi mieć dokładnie $\left| V \right| - 1$ krawędzi, nie może mieć cykli (czyli każdy podzbiór $S \subseteq V$ musi być drzewem - mieć $\left| S \right| - 1$ krawędzi). Każda krawędź $e$ ma koszt $c_{e}$, oczywiście chcemy minimalizować $\sum_{e \in E} c_{e} \cdot x_{e}$.
+	
+	Ten model ma jednak $P \left( V \right) + 1 = 2^{\left| V \right|} + 1$ ograniczeń, co go raczej dyskwalifikuje. Na plus na pewno jest to, że zmienne decyzyjne nie muszą być całkowitymi - z unimodularności macierzy mamy, że wynik i tak będzie całkowity.
+	
+	Drugiego i trzeciego modelu nie będę tutaj przedstawiać, bo nie o to chodzi.
+	
+	Co ważne to jest to, że przedstawiony model MST teraz chcielibyśmy przekształcić do modelu IMST:
+
+\begin{figure}[htb]
+	\null\hfill
+	\begin{subfigure}[b]{0.5\textwidth}
+		\begin{subequations}
+			\begin{alignat}{4}
+			& \text{min} & & \sum_{e_{i} \in E} c_{i} \cdot x_{i} \\
+			& \text{s.t.} & \quad & \sum_{\mathclap{e_{i} \in E}} x_{i} = \left| V \right| - 1,\\
+			& & & \sum_{\mathclap{e_{i} \in E \left( S \right) }} x_{i} = \left| S \right| - 1, & \quad & S & \subseteq V,\\
+			& & & \phantom{\sum} x_{i} \geqslant 0, &\quad & e_{i} &\in E
+			\end{alignat}
+		\end{subequations}
+		\caption{}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}[b]{0.5\textwidth}
+		\begin{subequations}
+			\begin{alignat}{6}
+			& \text{min} & & \sum_{e_{i} \in E} c_{i} \cdot x_{i} \\
+			& \text{s.t.} & \quad & \sum_{\mathclap{e_{i} \in E}} x_{i} = \left| V \right| - 1,\\
+			& & & \sum_{\mathclap{e_{i} \in E \left( S \right) }} x_{i} = \left| S \right| - 1, & \quad & S & \subseteq V,\\
+			& & & \phantom{\sum} x_{i} \geqslant 0, &\quad & e_{i} &\in E \\
+			& & & \sum_{\mathclap{e_{i} \in T^{\ast} \setminus T^{0}}} x_{i} \leqslant k, \label{eq:k}\\
+			& & & \phantom{\sum} x_{i} = 0, &\quad & e_{i} &\notin A^{\ast}
+			\end{alignat}
+		\end{subequations}
+		\caption{}
+	\end{subfigure}%
+	\hfill\null
+\end{figure}
+
+Do pierwszego modelu dodaliśmy ograniczenie, że dla początkowego drzewa rozpinającego $T^{0}$, po zmianie kosztów krawędzi, nowe optymalne rozwiązanie $T^{\ast}$ nie może się różnić od $T^{0}$ większą liczbą niż $k$ krawędzi. Dodatkowo pokazaliśmy, że nowe drzewo MST na pewno będzie się znajdować w $G^{\ast} = \left( V, E^{\ast} \right)$, gdzie $E^{\ast} = T^{\ast} \cup T^{0}$ ($T^{\ast}$ to dowolne MST dla nowych kosztów w grafie), więc śmiało możemy wszystkie zmienne decyzyjne, które decydują o przynależności do MST krawędzi spoza zbioru $E^{\ast}$, ustawić na $0$.
+
+Teraz, poza warunkiem \ref{eq:k}, model jest ciągle prostym modelem na MST - dodatkowy warunek, że niektóre krawędzie nie znajdą się w MST, możemy wymusić na algorytmie Prima/Kruskala itd. po prostu dając mu do rozwiązania $G^{\ast}$ zamiast $G$. Zrelaksujmy zatem ograniczenie \ref{eq:k}. Po drodze zauważmy, że warunek $\sum_{e_{i} \in T^{\ast} \setminus T^{0}} x_{i} \leqslant k$ jest równoważny $\sum_{e_{i} \in T^{0}} x_{i} \geqslant \left( n - 1 \right) - k$ ($\left| e : e \in T^{\ast} \right| - \left| e : e \in T^{0} \right| = \left| e : e \in T^{\ast} \setminus T^{0} \right| \leqslant k$ z pierwszego założenia i $\left| e : e \in T^{\ast} \right| = n - 1$, więc $\left( n - 1 \right) - k \leqslant \left| e : e \in T^{0} \right|$).
+		
+\begin{figure}[htb]
+	\begin{subequations}
+		\begin{alignat}{4}
+		& \text{min} & & \sum_{e_{i} \in E^{\ast}} c_{i} \cdot x_{i} \\
+		& \text{s.t.} & \quad & \sum_{\mathclap{e_{i} \in E^{\ast}}} x_{i} = \left| V \right| - 1,\\
+		& & & \sum_{\mathclap{e_{i} \in E^{\ast} \left( S \right) }} x_{i} = \left| S \right| - 1, & \quad & S & \subseteq V,\\
+		& & & \phantom{\sum} x_{i} \geqslant 0, &\quad & e_{i} &\in E^{\ast}, \\
+		& & & \sum_{\mathclap{e_{i} \in T^{0}}} x_{i} \geqslant n - 1 - k.
+		\end{alignat}
+	\end{subequations}
+	\caption{}
+\end{figure}%
+
+\begin{figure}[htb]
+	\begin{subequations}
+		\begin{alignat}{4}
+		& \text{min} & & \sum_{e_{i} \in E^{\ast}} c_{i} \cdot x_{i} + \lambda \cdot \left( \left( n - 1 - k \right) - \sum_{\mathclap{e_{i} \in T^{0}}} x_{i} \right) \\
+		& \text{s.t.} & \quad & \sum_{\mathclap{e_{i} \in E^{\ast}}} x_{i} = \left| V \right| - 1,\\
+		& & & \sum_{\mathclap{e_{i} \in E^{\ast} \left( S \right) }} x_{i} = \left| S \right| - 1, & \quad & S & \subseteq V,\\
+		& & & \phantom{\sum} x_{i} \geqslant 0, &\quad & e_{i} &\in E^{\ast}.
+		\end{alignat}
+	\end{subequations}
+	\caption{}
+\end{figure}%
+
+Po zrelaksowaniu, teraz od parametru $\lambda$ zależy jakość rozwiązania. Jeżeli będzie ono dopuszczalne dla niezrelaksowanego problemu to nic się nie dzieje. Jeżeli nie będzie dopuszczalne (czyli $\sum_{\mathclap{e_{i} \in T^{0}}} x_{i} < n - 1 - k$), wtedy wartość funkcji celu odpowiednio się pogorszy, wzrośnie.
+
+\begin{eqnarray}
+L \left( \lambda, x \right) = \sum_{e_{i} \in E^{\ast}} c_{i} \cdot x_{i} + \lambda \cdot \left( \left( n - 1 - k \right) - \sum_{\mathclap{e_{i} \in T^{0}}} x_{i} \right) = \\
+\sum_{e_{i} \in T^{\ast} \cup T^{0}} c_{i} \cdot x_{i} - \lambda \sum_{\mathclap{e_{i} \in T^{0}}} x_{i} + \lambda \cdot \left( n - 1 - k \right) = \\
+\left( \sum_{e_{i} \in T^{\ast} \setminus T^{0}} c_{i} \cdot x_{i} + \sum_{e_{i} \in T^{0}} c_{i} \cdot x_{i} \right) - \lambda \sum_{\mathclap{e_{i} \in T^{0}}} x_{i} + \lambda \cdot \left( n - 1 - k \right) = \\
+\sum_{e_{i} \in T^{\ast} \setminus T^{0}} c_{i} \cdot x_{i} + \sum_{\mathclap{e_{i} \in T^{0}}} \left( c_{i} - \lambda \right) \cdot x_{i} + \lambda \cdot \left( n - 1 - k \right)
+\end{eqnarray}
+
+\begin{eqnarray}
+L \left( \lambda \right) = \min_{x \in X} L \left( \lambda, x \right) = \min \left\{ \sum_{e_{i} \in T^{\ast} \setminus T^{0}} c_{i} \cdot x_{i} + \sum_{\mathclap{e_{i} \in T^{0}}} \left( c_{i} - \lambda \right) \cdot x_{i} + \lambda \cdot \left( n - 1 - k \right) \right\} =
+\end{eqnarray}
+
+\begin{eqnarray}
+= \min \left\{ \sum_{e_{i} \in T^{\ast} \setminus T^{0}} c_{i} \cdot x_{i} + \sum_{\mathclap{e_{i} \in T^{0}}} \left( c_{i} - \lambda \right) \cdot x_{i} \right\}
+\end{eqnarray}.
+
+Po kolei, co się zadziało: przekształciliśmy funkcję $L \left( \lambda, x \right)$ zgodnie z operacjami na zbiorach (wystarczy rozrysować), skoro $\forall e_{i} \notin E^{\ast} x_{i} = 0$, więc nie ma sensu w wartości funkcji celu uwzględniać tych krawędzi, bo dla nich $c_{i} \cdot x_{i} = 0$. Parametry $n$ i $k$ są stałe, więc $L \left( \lambda \right)$ zależy tylko od $x_{i}$, $C_{i}$ i $\lambda$ (oczywiście wartość $L \left( \lambda \right)$ już od $k$ i $n$ zależy).
+
+I tutaj dochodzimy do sedna, bo z relaksacji Lagrangea otrzymaliśmy znowu model na MST, tyle że z nieco innymi kosztami, które teraz zależą od parametru $\lambda$. Ustalając go sobie odpowiednio, dostajemy niczym nie różniący się od podstawowego model MST, który będziemy rozwiązywać standardowymi algorytmami (koszty krawędzi należących do starego rozwiązania będą wynosić $c_{i} - \lambda$, wszystkie pozostałe będą kosztować po staremu (czyli po nowemu, ale bez kolejnych zmian, wynikających z relaksacji problemu)).
+
+\item dla tak utworzonych danych odpalamy algorytm, ale wcześniej słów parę czemu to działa.
+\end{itemize}
+
+Jak widzimy, minimalizujemy $\sum_{e_{i} \in T^{\ast} \setminus T^{0}} c_{i} \cdot x_{i} + \sum_{\mathclap{e_{i} \in T^{0}}} \left( c_{i} - \lambda \right) \cdot x_{i}$. Im większą lambdę weźmiemy, tym mniejszy koszt będą miały krawędzie należące do starego rozwiązania. Czyli kiedyś, przy dostatecznie dużym $\lambda$, uda nam się skonstruować optymalne rozwiązanie dla tego $\lambda$, które będzie miało nie więcej niż $k$ nowych krawędzi, a resztę wspólną.
+
+\subsection{Lagrangian}
+
+Będziemy teraz chcieli określić warunki, przy których się zatrzymamy, bo osiągniemy optimum.
+
+Weźmy ogólny problem optymalizacyjny:
+
+\begin{figure}[htb]
+	\begin{subequations}
+		\begin{alignat}{4}
+		z^{\ast} = & \text{min} & & cx \\
+		& \text{s.t.} & \quad & Ax = b,\\
+		& & & \phantom{\sum} x_{i} \in X.
+		\end{alignat}
+	\end{subequations}
+	\caption{}
+\end{figure}%
+
+Relaksując, dostajemy taki model:
+
+\begin{figure}[htb]
+	\begin{subequations}
+		\begin{alignat}{4}
+		L \left( \lambda \right) = & \text{min} & & cx + \lambda \left( Ax - b \right) \\
+		& \text{s.t.} & \quad & Ax = b,\\
+		& & & \phantom{\sum} x_{i} \in X.
+		\end{alignat}
+	\end{subequations}
+	\caption{}
+\end{figure}%
+
+Oczywiście, $z^{\ast} = \min_{x \in X} \left\{ cx : Ax = b \right\} \geqslant \min_{x \in X} \left\{ cx + \lambda \left( Ax - b \right)  \right\} = L \left( \lambda \right)$. Wystarczy chociażby sobie rozrysować zbiory rozwiązań dopuszczalnych, gdzie oczywiście pierwszy (z ograniczeniem) zawiera się w drugim (bez ograniczeń) i po jego poszerzeniu (przy pozbyciu się ograniczenia) możemy znaleźć lepsze rozwiązanie, niż to, które jest w pierwszym. Jeśli będą same większe rozwiązania, to minimum nadal pozostanie rozwiązanie sprzed relaksacji, a więc zawsze, dla każdego $\lambda$ $L \left( \lambda \right) \leqslant z^{\ast}$.
+
+Skoro $L \left( \lambda \right)$ jest zawsze dolnym ograniczeniem na optymalne rozwiązanie $z^{\ast}$, to chcielibyśmy mieć je jak najdokładniejsze, czyli znaleźć $L^{\ast} = \max_{\lambda} L \left( \lambda \right)$. Oczywiście, skoro dla każdego $\lambda$ $L \left( \lambda \right) \leqslant z^{\ast}$ to  i $L^{\ast} \leqslant z^{\ast}$. Z drugiej strony dla dowolnego $\lambda$ $L \left( \lambda \right) \leqslant \max_{\lambda} L \left( \lambda \right) = L^{\ast}$. Stąd mamy $L \left( \lambda \right) \leqslant L^{\ast} \leqslant z^{\ast}$. $z^{\ast}$ jest optymalnym rozwiązaniem dla oryginalnego problemu, więc wartość funkcji celu dla tego rozwiązania jest na pewno nie większa (minimalizujemy) niż dla wszystkich dopuszczalnych rozwiązań: $z^{\ast} = c \cdot x^{\ast} \leqslant cx$, gdzie $x \in X$.
+
+Tym samym: $L \left( \lambda \right) \leqslant L^{\ast} \leqslant z^{\ast} = c \cdot x^{\ast} \leqslant c \cdot x$.
+
+Teraz, jeżeli mamy wektor $\lambda$ i dopuszczalne rozwiązanie $x$ oryginalnego problemu, które dodatkowo spełnia $L \left( \lambda \right) = c \cdot x$ (wszystkie zrelaksowane ograniczenia zaszły w postaci równości lub $\lambda = 0$), to z $L \left( \lambda \right) = c \cdot x$ mamy $L \left( \lambda \right) = L^{\ast} = z^{\ast} = c \cdot x^{\ast} = c \cdot x$, a stąd mamy, że nasze dopuszczalne rozwiązanie $x$ jest rozwiązaniem optymalnym dla oryginalnego problemu. Dodatkowo tak wybrane $\lambda$ jest optymalnym rozwiązaniem dla problemu mnożników Lagrangiana, gdyż $L^{\ast} = \max_{\lambda} L \left( \lambda \right)$, a najwyższym możliwym dolnym ograniczeniem dla $z^{\ast}$ ($\forall \lambda L \left( \lambda \right) \leqslant z^{\ast}$) jest właśnie $L \left( \lambda \right) = z^{\ast}$.
+
+Aby zaszło  $L \left( \lambda \right) = c \cdot x$, albo wszystkie ograniczenia musiałyby zajść w postaci równości, albo $\lambda = 0$ --- w przypadku tej drugiej opcji wracamy do punktu wyjścia: $L \left( 0 \right) = \text{min} cx + 0 \left( Ax - b \right) = \min cx$. Ba, nawet jest gorzej, bo musimy wstrzelić się w dopuszczalne rozwiązanie $x$ dla oryginalnego problemu bez podania ograniczenia, które zniknęło nam w relaksacji, tak więc algorytm rozwiązujący nowy model będzie wypluwał też rozwiązania niedopuszczalne. W pierwszym przypadku sprawa natomiast jest jasna - wszystkie ograniczenia zaszły w postaci równości, rozwiązanie $x$ jest zatem dopuszczalne, funkcja celu zmienia się z $L \left( \lambda \right) = \text{min} cx + \lambda \left( Ax - b \right) = \min cx$ na $L \left( \lambda \right) = \min cx$, co tak naprawdę jest tym samym, co funkcja celu dla oryginalnego problemu.
+
+Dzięki nierównościom $L \left( \lambda \right) \leqslant L^{\ast} \leqslant z^{\ast} = c \cdot x^{\ast} \leqslant c \cdot x$ i wiedzy, że optymalne rozwiązanie będzie wtedy, gdy to wszystko będzie równe, możemy szacować jak daleko od rozwiązania aktualnie jesteśmy dla DOWOLNEGO $x$ (nie znając optymalnej wartości): $\frac{cx - L \left( \lambda \right)}{L \left( \lambda \right)}$.
+
+Zatem wreszcie dochodzimy do ostatecznego wniosku: że gdy zrelaksowany problem ma rozwiązanie $x$ i spełnia warunek różnic dopełniających $\lambda \left( Ax - b\right) = 0$ i jest dopuszczalnym rozwiązaniem w oryginalnym problemie, wtedy $x$ jest optymalny dla tego problemu.
+
+\subsection{I dalej w algorytm}
+
+\begin{itemize}
+	\item Z powyższego wynika podstawowe twierdzenie $2.5$, które daje nam algorytm:
+	
+	Drzewo rozpinające $T$ jest IMST wtedy i tylko wtedy, gdy istnieje $\lambda \geqslant 0$ takie, że $T$ jest optymalne dla $L \left( \lambda \right)$ i zachodzi warunek komplementarności: $\lambda \cdot \left( \sum_{e_{i} \in T \setminus T^{0}} x_{i} - k \right) = 0$, czyli gdy:
+	\begin{itemize}
+		\item $f \left( T, T^{0} \right) = k \wedge \lambda = 0$ lub
+		\item $f \left( T, T^{0} \right) < k \wedge \lambda = 0$ lub
+		\item $f \left( T, T^{0} \right) = k \wedge \lambda \neq 0$
+	\end{itemize}
+	
+	po skróceniu:
+	
+	\begin{itemize}
+		\item $f \left( T, T^{0} \right) \leqslant k \wedge \lambda = 0$ lub
+		\item $f \left( T, T^{0} \right) = k \wedge \lambda \neq 0$
+	\end{itemize}
+	
+	Łatwo to pokazać: $T \text{--- IMST} \iff \exists \lambda \geqslant 0 : L \left( \lambda \right) = L^{*} \wedge \lambda \cdot \left( f \left( T, T^{0} \right) - k \right) = 0$
+	
+	Część pierwsza (A if B --> B if A) wynika prosto z poprzedniego twierdzenia. A only if B --> -B -> -A --> A -> B:
+	
+	Jeśli $T$ jest IMST to jest też MST i na pewno jest optymalnym rozwiązaniem $L \left( 0 \right) = z^{\ast}$ i $f \left( T, T^{0} \right) \leqslant k$ (bo $T$ jest IMST). Załóżmy, że $T$ jest IMST, ale nie zaszedł pierwszy przypadek (czyli, że $f \left( T, T^{0} \right) = t > k$ lub $\lambda \neq 0$). Weźmy $\lambda \geqslant 0$, dla którego drugi z opcjonalnych warunków ma być prawdziwy. Patrząc na koszty krawędzi: $\sum_{e_{i} \in T^{\ast} \setminus T^{0}} c_{i} \cdot x_{i} + \sum_{\mathclap{e_{i} \in T^{0}}} \left( c_{i} - \lambda \right) \cdot x_{i}$ widzimy, że wraz ze zwiększaniem $\lambda$ koszty krawędzi należących do $T^{0}$ spadają, więc w jakimś momencie, dla $\lambda_{1}$, $c_{e_{0}} - \lambda_{1} = c_{e_{0}} \left( \lambda_{1} \right) = c_{e^{\ast}_{0}}$, gdzie $e_{0}$ to krawędź należąca do rozwiązania, a należąca do starego drzewa $T^{0}$, zaś $e^{\ast}_{0} \in T \left( \lambda_{0} \right) \setminus T^{0}$. Skoro doszliśmy do punktu, gdzie sparametryzowane koszty tych krawędzi są równe, to możemy je ze sobą zamienić miejscami, nie powodując żadnej zmiany kosztów w drzewie, a nowe drzewo $T \left( \lambda_{1} \right)$ będzie spełniało równość $f \left( T \left( \lambda_{1} \right), T^{0} \right) = t - 1$. Ogólnie, przy zwiększaniu $\lambda$, zawsze będzie zachodzić: $f \left( T \left( \lambda_{i} \right), T^{0} \right) = f \left( T \left( \lambda_{i-1} \right), T^{0} \right) - 1 = f \left( T \left( \lambda_{0} \right) = T, T^{0} \right) - i = t - i$. Dla wygody dowodzenia zakłada się, że wszystkie koszty krawędzi są różne i że otrzymane w ten sposób drzewo jest wtedy unikalne. Bez tego założenia też wszystko śmiga, z tym że mogą się zdarzyć sytuacje, w których moglibyśmy od razu zamienić ze sobą miejscami kilka krawędzi, co nie wpływa na cały proces budowania drzewa.
+	
+	Z powyższego wynika, że funkcja $f \left( T \left( \lambda \right), T \right)$ jest monotonicznie malejąca, zaś z $f \left( T \left( \lambda_{i} \right), T^{0} \right) = t - i$ mamy, że $\lambda^{\ast} = \lambda_{t-k}$ ($f \left( T \left( \lambda_{t-k} \right), T^{0} \right) = t - \left( t - k \right) = k$), zaś jej wartość to $\lambda^{\ast} = \lambda_{t-k} = c_{e_{e-k}} - c_{e^{\ast}_{t-k}}$ (bo wtedy $c_{e_{t-k}} \left( \lambda_{t-k} \right) = c_{e_{t-k}} - \lambda_{t-k} = c_{e_{t-k}} - \left( c_{e_{e-k}} - c_{e^{\ast}_{t-k}} \right) = c_{e^{\ast}_{t-k}}$), gdzie $e_{t-k} \in T^{0} \setminus T \left( \lambda_{t-k-1} \right)$ (krawędź należąca do zbioru krawędzi $T^{0}$, ale nie należąca jeszcze do dotychczas skonstruowanego drzewa), a $e^{\ast}_{t-k} \in T \left( \lambda_{t-k-1} \right) \setminus  T^{0}$ (krawędź, która wylatuje z obecnego rozwiązania, a nie należy do $T^{0}$ --- czyli jej pozbycie się redukuje liczbę niewspólnych krawędzi).
+
+	\item Aby zapewnić unikalność rozwiązania, można albo zastosować pewien porządek na krawędziach albo zmodyfikować ich koszty tak, aby każda krawędź miała inne przy nadal zachowanym porządku ich wielkości.
+	
+	Weźmy zatem zmodyfikujmy koszty: $c^{\prime}_{e_{i}} = c_{e_{i}} + \phi \left( i \right)$, gdzie $\phi \left( i \right) = \frac{m \cdot i^{2} + i}{\left( m + 1 \right)^{3}}$.
+	
+	Pokażemy, że:
+	
+	\begin{itemize}
+		\item[P1] $c_{e_{i}} < c^{\prime}_{e_{i}} < c_{e_{i}} + 1$
+		\item[P2] Dla każdego $i$, $j$, $k$, $l$, gdzie $i \neq j$ oraz $i \neq k$ mamy $c^{\prime}_{e_{i}} - c^{\prime}_{e_{j}} \neq c^{\prime}_{e_{k}} - c^{\prime}_{e_{l}}$
+	\end{itemize}
+	
+	Zaczynając od P1:
+	
+	Najpierw pokażmy, że $\phi \left( i \right) > 0$. $i > 0$, bo numerujemy krawędzie od $1$  do $\left| E \right|$. $m = \left| E \right|$. Działa, sprawdzone WolframAlphą ( dla $0 < n \leqslant m$). %http://www.wolframalpha.com/input/?i=Solve[0+%3C%28m*n^2+%2B+n%29%2F%28m+%2B+1%29^3%2C+%28m*n^2+%2B+n%29%2F%28m+%2B+1%29^3+%3C+1%2C+m+%3E%3Dn]
+	
+	Drugie: wziąłem $j = l$, by było prościej i w zasadzie wolfram pokazał, że nie: $c_{e_{i}} + \phi \left( i \right) \neq c_{e_{k}} + \phi \left( k \right) \equiv \phi \left( i \right) - \phi \left( k \right) \neq c_{e_{k}} - c_{e_{i}}$, $c_{e} \in \NN$, $c_{e_{k}} - c_{e_{i}} \in \ZZ$, a jedyne całkowite rozwiązania dla $\phi \left( i \right) - \phi \left( k \right)$ są wtedy, gdy $k < 0$ lub $m < -2$, co pozwala posunąć się do stwierdzenia, że $c_{e_{i}} + \phi \left( i \right) \neq c_{e_{k}} + \phi \left( k \right)$. Co do pełnej wersji nierówności to nie wiem. Pełna wersja przyda się później, gdzie dzięki niej będziemy mieli pewność, że kolejne $\lambda$, które z Tw 2.5 maja wartość równą różnicy kosztów krawędzi, są różne od siebie.
+	
+	%http://www.wolframalpha.com/input/?i=%28m*i^2+%2B+i%29%2F%28m%2B1%29^3+-+%28m*k^2+%2B+k%29%2F%28m%2B1%29^3&a=i_Variable
+	
+	Oczywiście, graf z takimi kosztami wygeneruje dokładnie takie samo drzewo, chociażby z racji, że w zachłannym algorytmie najpierw sortujemy krawędzie po kosztach, a ich kolejność się nie zmieniła (ze względu na własność P1). Oczywiście jest drobny haczyk, jeżeli istnieje kilka krawędzi $e_{i_{1}}, \cdots, e_{i_{j}}$ o tym samym koszcie, gdzie $\forall k \; i_{k} < i_{k+1}$, to zachodzi wtedy $\forall k \in \left\{ 1, \cdots, j \right\} \; c_{e_{i_{k}}} < c^{\prime}_{e_{i_{1}}} < \cdots < c^{\prime}_{e_{i_{j}}} < c_{e_{i_{k}}} + 1$. Jeśli teraz w MST $T^{\ast\prime}$, otrzymanym za pomocą zachłannego algorytmu z $G^{\prime}$, znajdzie się tylko część krawędzi, które w oryginalnym drzewie mają ten sam koszt ($\left\{ e_{i_{k}} : 1 \leqslant k < j \right\} \in T^{\ast\prime}$) to nie mamy gwarancji, że ten sam podzbiór krawędzi znajdzie się również w MST $T^{\ast}$, które zostanie skonstruowane dla grafu $G$, gdzie koszty krawędzi $e_{i_{1}}, \cdots, e_{i_{j}}$ są takie same. Możemy tylko powiedzieć, że drzewo $T^{\ast\prime}$ ma ten sam koszt co drzewo $T^{\ast}$ i że mogą, ale nie muszą, być to te same drzewa. Chyba, że umówimy się, że naturalnym porządkiem dla krawędzi $e_{i_{1}}, \cdots, e_{i_{j}}$ w posortowanym ciągu dla algorytmu zachłannego jest porządek zgodny z ich rosnącymi indeksami - wtedy OK.
+	
+	\item Sam algorytm szuka takiego $\lambda$ aby zapewnić $f \left( T \left( \lambda \right), T^{0} \right) = k \wedge \lambda \neq 0 $ (jeden z warunków komplementarności), gdzie $T^{0}$ to rozwiązanie stare, dla starych kosztów, zaś $T \left( \lambda \right)$ to drzewo znalezione przez algorytm do MST dla kosztów $c_{i} - \lambda$ dla $\forall i \; : \; e_{i} \in T^{0}$ i $c_{i}$ dla pozostałych (czyli $T^{\ast} \setminus T^{0}$).
+	
+	\item Posiłkujemy się teorią o tym, że nasze rozwiązanie znajduje się na pewno w $G^{\ast} = \left( V, E^{\ast} \right)$, gdzie $E^{\ast} = \left\{ e \in T^{\ast} \right\} \cup \left\{ e \in T^{0} \right\}$. by ustalić ten zbiór $E^{\ast}$, najpierw musimy mieć stare rozwiązanie $T^{0}$, dostać informację o zmienionych kosztach, dla których chcemy znaleźć $T^{k}$ i policzyć MST $T^{\ast}$ dla tych kosztów, na razie bez uwzględnienia ograniczenia $f \left( T^{\ast}, T^{0} \right) \leqslant k$.
+	
+	\item Mając już $G^{\ast}$, możemy zacząć szukać $\lambda^{\ast}$. Bierzemy ograniczenia na $\lambda^{\ast}$: $L \leqslant \lambda^{\ast} \geqslant U$ i zaczynamy szukać. Z każdą iteracją dostajemy jakieś $\lambda$, które po policzeniu MST dla kosztów generowanych przez $\lambda$ daje nam albo $f \left( T^{\ast}, T^{0} \right) < k$, albo $f \left( T^{\ast}, T^{0} \right) > k$, albo $f \left( T^{\ast}, T^{0} \right) = k$. W tym trzecim przypadku znaleźliśmy optymalną wartość $\lambda$ i kończymy, jako że spełniliśmy warunek komplementarności i nasze rozwiązanie jest optymalne. Jeśli $f \left( T^{\ast}, T^{0} \right) > k$, to znaczy, że nasza $\lambda$ jest za mała (pokazaliśmy, że $f \left( T^{\ast}, T^{0} \right)$ maleje wraz ze wzrostem $\lambda$). Odpalamy zatem nasz algorytm od nowa, tym razem z nowym oszacowaniem dla $\lambda^{\ast}$: $\lambda \leqslant \lambda^{\ast} \geqslant U$. Jeśli $f \left( T^{\ast}, T^{0} \right) < k$, to znaczy, że nasza $\lambda$ jest za duża, więc odpalamy zatem nasz algorytm od nowa, tym razem z nowym oszacowaniem dla $\lambda^{\ast}$: $L \leqslant \lambda^{\ast} \geqslant \lambda$. Tak powtarzamy dopóki ograniczenia dla $\lambda^{\ast}$ nie będą już na tyle ciasne, by możliwych wartości dla $\lambda^{\ast}$ pozostało na tyle mało, byśmy mogli spokojnie posłużyć się przeszukiwaniem binarnym. Znaczy cały czas szukaliśmy ,,binarnie'', ale nieco przyspieszonym sposobem, robiąc duże przesiewy w każdej iteracji, teraz możemy zejść na mniejsze kroczki.
+	
+	\item Bierzemy pozostałe możliwe wartości dla $\lambda^{\ast}$, sortujemy je i szukamy odpowiedniego $\lambda$ tak samo jak wyżej, dzieląc zbiór do przeszukania za każdym razem po połowie (binnary search w końcu). W skończonym czasie znajdziemy odpowiednie $\lambda$.
+	
+	\item W detalach: Nasze możliwe $\lambda$ tworzymy w ten sposób, że $\lambda \left( i, j \right) = d \left( i, j \right) = c_{e_{i}} - c_{e^{\ast}_{j}}$ (z teorii mamy, że $\lambda$ to różnica kosztu krawędzi $ e \in T^{0} \setminus T^{\ast}$ i $e^{\ast} \in T^{\ast} \setminus T^{0}$). Sortując pierwsze krawędzie rosnąco po kosztach, drugie zaś malejąco otrzymamy, że $d \left( i, j \right)$ rośnie wraz ze zwiększaniem $i$ lub $j$. Stąd, gdy szukamy odpowiedniego zbioru $\lambda$, które spełniają $L \leqslant \lambda \geqslant U$, możemy skorzystać z tej właściwości monotoniczności $d \left( i, j \right)$. Wiemy, że $MaxIndex \left( i \right) \geqslant MaxIndex \left( i + 1 \right)$ ($\max \left\{ j : d \left( i, j \right) \leqslant U \right\} \geqslant \max \left\{ j : d \left( i + 1, j \right) \leqslant U \right\}$, bo $d \left( i + 1, j \right) \geqslant d \left( i, j \right)$, tym samym maksymalne $j$ dla $MaxIndex \left( i + 1 \right)$ na pewno nie będzie większe niż dla $MaxIndex \left( i \right)$ (bo $d \left( i, MaxIndex \left( i \right) \right) \leqslant U$, ale $d \left( i + 1, MaxIndex \left( i \right) \right) \leqslant U$ już niekoniecznie musi zachodzić)). Tak więc ciąg $MaxIndex \left( 1 \right) \geqslant MaxIndex \left( 2 \right) \geqslant MaxIndex \left( n \right)$. Stąd też każdy następny $MaxIndex \left( i + 1 \right)$ możemy zaczynać szukać od $j = MaxIndex \left( i \right)$, który albo od razu będzie rozwiązaniem, albo będzie mniejszy, czyli $MaxIndex \left( i + 1 \right) \leqslant MaxIndex \left( i \right)$. Będziemy tak sobie schodzić z $j$ dla każdego $i$, więc cała ta zabawa zajmie $O \left( n \right)$.
+	
+	\item Podobnie z $MinIndex \left( i \right) = min \left\{ j : d \left( i, j \right) \geqslant L \right\} \geqslant min \left\{ j : d \left( i + 1, j \right) \geqslant L \right\} = MinIndex \left( i + 1 \right)$
+	
+	\item Co więcej, zachodzi $L \leqslant d \left( i, MinIndex \left( i \right) \right) \leqslant d \left( i, MinIndex \left( i \right) + 1 \right) \leqslant d \left( i, MaxIndex \left( i \right) - 1 \right) \leqslant d \left( i, MaxIndex \left( i \right) \right) \leqslant U$, więc liczba tych dopuszczalnych $j$ dla $i$ jest równa $MaxIndex \left( i \right) - MinIndex \left( i \right) + 1$ lub $0$.
+	
+	\item $\left| H \right|$ jest oczywiście ograniczone z dołu przez $6n$ ($\frac{TotalCount}{K} = \frac{TotalCount}{\left \lfloor \frac{TotalCount}{6n} \right \rfloor} = 6n$).
+	
+	\item Z góry jest nieco bardziej skomplikowana sprawa: $\left| H \right| \leqslant 9n$. Najpierw zauważmy, że $K \geqslant 2$, gdyż $TotalCount > 12n$. Iloraz $\frac{TotalCount}{\left \lfloor \frac{TotalCount}{6n} \right \rfloor}$ będzie największy wtedy, gdy $TotalCount = 6 \cdot k \cdot n - 1$ --- wtedy $\left \lfloor \frac{TotalCount}{6n} \right \rfloor = k - 1$. $TotalCount > 12 \cdot n$ więc weźmy $\frac{TotalCount}{K} = \frac{12 \cdot n + \left( 6 \cdot k \cdot n - 1\right)}{\left \lfloor \frac{12 \cdot n + \left( 6 \cdot k \cdot n - 1\right)}{6n} \right \rfloor} = \frac{12 \cdot n + 6 \cdot k \cdot n - 1}{2 + \left \lfloor \frac{6 \cdot k \cdot n - 1}{6n} \right \rfloor} = \frac{12 \cdot n + 6 \cdot k \cdot n - 1}{2 + \left( k - 1 \right)}$. Zatem szukamy takiego $l$, że $ l = \min \left\{ l^{\prime} : \frac{12 \cdot n + 6 \cdot k \cdot n - 1}{k + 1} \leqslant l^{\prime} \cdot n \right\}$. Z wolframaAlphy wychodzi, że $l = 9$, gdzie nierówność jest spełniona dla $k \geqslant 1$ i $n > 0$. Dla $k < 1$ ($k \in N$) otrzymujemy natomiast $TotalCount = 12 \cdot n - 1 \leqslant 12 \cdot n$, tak więc dla $k = 0$ w ogóle nie rozpatrujemy, bo bylibyśmy w przypadku, gdzie odpalamy BS.
+	
+	%http://www.wolframalpha.com/input/?i=%2812*n+%2B+6*k*n+-+1%29%2F%28k%2B1%29+%3C%3D+9n%2C+n%3E0
+	
+	\item Jeśli dla znalezionej mediany $\overbrace{\lambda}$ znaleźliśmy MST, które spełnia $f \left( T \left( \overbrace{\lambda} \right), T^{0} \right) = k$ wtedy się cieszymy i kończymy algorytm ze znalezionym optymalnym IMST. Jeśli nie to mamy dwa przypadki:
+	
+	
+	\begin{itemize}
+		\item $f \left( T \left( \overbrace{\lambda} \right), T^{0} \right) > k$, czyli wybrana $\overbrace{\lambda} < \lambda$. Skoro $\overbrace{\lambda}$ jest medianą z równomiernie wybranych dopuszczalnych par $d \left( i, j \right) \in H$, to co najmniej połowa par z $H$ spełnia $d \left( i, j \right) \leqslant \overbrace{\lambda}$. Mamy ograniczenie: $6 \cdot n \leqslant \left| H \right|$, więc tych par jest co najmniej $3 \cdot n$. Pamiętamy, że do zbioru $h$ braliśmy co $K$'ty element ($\left| H \right| = \frac{TotalCount}{K}$), więc wszystkich osiągalnych elementów $d \left( i, j \right)$ takich, że $d \left( i, j \right) \leqslant \overbrace{\lambda}$ jest co najmniej $3 \cdot n \cdot K = 3 \cdot n \cdot \left \lfloor \frac{TotalCount}{6n} \right \rfloor \geqslant \frac{TotalCount}{2} - 3 \cdot n \geqslant \frac{TotalCount}{4}$ (jako, że pamiętamy, że $TotalCount > 12 \cdot n$, więc dla granicznego przypadku jest równość, dla większych wartości tym bardziej jest OK). W związku z tym możemy odrzucić co najmniej $\frac{1}{4}$ z dostępnych osiągalnych par $\left( i, j \right)$, bo na pewno dla nich $d \left( i, j \right) <= \overbrace{\lambda} < \lambda^{\ast}$.
+		\item $f \left( T \left( \overbrace{\lambda} \right), T^{0} \right) < k$, czyli wybrana $\overbrace{\lambda} > \lambda$. Skoro $\overbrace{\lambda}$ jest medianą z równomiernie wybranych dopuszczalnych par $d \left( i, j \right) \in H$, to co najmniej połowa par z $H$ spełnia $d \left( i, j \right) \geqslant \overbrace{\lambda}$. Mamy ograniczenie: $6 \cdot n \leqslant \left| H \right|$, więc tych par jest co najmniej $3 \cdot n$. ....yyyy....
+	\end{itemize} 
+	
+	Rzeczy, których nie potrafię wyjaśnić:
+	
+	\begin{itemize}
+		\item Czemu takie dziwne ograniczenie $\frac{1}{4} n^{2} < \lambda^{\ast} \leqslant C$ ?
+		\item Skąd się wzięły te pierwsze złożoności, np. $O \left( n^2 k \right)$ ?
+		\item Czy P2 faktycznie tak łatwo udowodnić?
+		\item Czemu w drugim przypadku mamy $2nK$ ??
+		\item Czy w 4 równaniu nie ma czasem błędu? Czemu tam jest minus? U mnie wyszedł plus.
+		\item Czasy działania z odwróconą funkcją Ackermana można sobie darować, zostawić na później ewentualnie.
+		\item Czy przy sortowaniu nie można zrobić tego jakoś lepiej niż w $O \left( n \log \left( n \right) \right)$? Np. przesortować tylko pierwszy wiersz lub kolumnę --- reszta w kolumnie lub wierszu jest tak samo oddalona, więc wystarczy naprzemiennie brać kolejne elementy z kolumny lub wiersza.
+	\end{itemize}
+	
+	
+	WAŻNE: Modyfikacje kosztów są jednak istotne, gdyż w przeciwnym wypadku możemy natknąć się na sytuacje, w której będziemy mogli wybrać dobre rozwiązanie IMST, ale algorytm do MST wybierze złe rozwiązanie --- gdy np. dobijemy przy przeszukiwaniu binarnym do końca, a zmodyfikowane koszta na krawędziach będą takie same --- MST może ale nie musi wtedy wybrać IMST z ograniczeniem $k$ i... krach.
+\end{itemize}

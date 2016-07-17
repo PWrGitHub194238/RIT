@@ -1,33 +1,20 @@
-\chapter{Biblioteka:  RIT}
+\chapter{Biblioteka: Incremental MST}
 \label{app:takeMeHome}
 \thispagestyle{appendixStyle}
-
-Poniżej opisana biblioteka \textsc{RIT} (ang. \textit{Recoverable Incremental Tree}) stanowi zwieńczenie naszej pracy --- zawiera implementacje wszystkich algorytmów, których pseudokody pojawiły się w powyższym tekście, zarówno tych klasycznych, imperatywnych, jak i dotyczących problemów programowania liniowego, bądź całkowitoliczbowego. Całość biblioteki została napisana w języku \textsc{C++} w jego najnowszym, dostępnym na chwilę powstawania tego dokumentu, standardzie \textsc{C++14}, z wykorzystaniem elementów bibliotek stron trzecich, takich jak: \textsc{graphviz}, \textsc{gtest} oraz \textsc{log4cxx}. Poniższy rozdział zawiera skrócony opis jej funkcjonalności\footnote{Pełen projekt wraz z jego dokumentacją został umieszczony na zdalnym repozytorium pod adresem: \url{https://github.com/PWrGitHub194238/RIT}.}, sposób instalacji oraz korzystania z niej, także w podstawowym zakresie.
-
-\section{Wymagania i instalacja}
-
-Całość omawianej biblioteki została zaimplementowana w środowisku systemu \textsc{Ubuntu 15.10} dla architektury $64$-bitowej w związku z tym wszelkie przykłady oraz wykorzystywane skrypty zostały napisane z myślą o użytkownikach systemu z tej rodziny --- proces kompilacji oraz instalacji biblioteki może się różnic w zależności od wykorzystywanego systemu operacyjnego. Dodatkowo jeden z prezentowanych skryptów korzysta z konsolowego \textsc{api} programu \textsc{Eclipse Mars.1 (4.5.1)}, przystosowanego do pisania we językach \textsc{C} oraz \textsc{C++} (\textsc{Eclipse CDT}), który posłużył do napisania całości biblioteki, co tym samym czyni go preferowanym narzędziem w przypadku chęci budowy biblioteki \textsc{RIT} na podstawie jej, udostępnionych na zdalnym repozytorium, źródeł. Poniżej prezentowany proces ma w tym pomóc.
-
-
 
 % Folder tree %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \dirtree{%
 .1 /.
-.2 \textsc{RIT}.
-.3 \textsc{BinaryIMST\_bac}.
-.3 \textsc{BinaryIMST_Library}.
-.3 \textsc{BinaryIMST_Examples}.
-.3 \textsc{buildProject.bash}.
-.3 \textsc{BinaryIMST\_bac}.
-.2 \textsc{\textcolor{lgray}{EmptyTeX}}.
 .2 \textsc{\textcolor{lgray}{Presentations}}.
 .2 \textsc{\textcolor{lgray}{References}}.
 .2 \textsc{Scripts}.
 .2 \textsc{\textcolor{lgray}{Thesis}}.
+.2 \textsc{TMH\_Examples}.
+.2 \textsc{TMH\_Library}.
+.2 \textsc{TMH\_GraphHelper}.
 .2 clear.bash. 
-.2 \textcolor{lgray}{LICENSE}. 
-.2 \textcolor{lgray}{README.md}. 
+.2 README.md. 
 }
 
 \dirtree{%

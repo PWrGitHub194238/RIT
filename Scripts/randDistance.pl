@@ -9,7 +9,7 @@ print "Changing 9th DIMACS Implementation Challenge params...\nChange distance l
 
 while($line = <INPUT>) {
 	if ($line =~ /^(a (\d+) (\d+) (\d+))/) {	#tylko liczby całkowite, ignoruje część ułamkową kosztów
-		if (rand() >= $seed) {
+		if (rand() <= $seed) {
 			$newCost = $4+int($minRange + rand($range));
 			$out = "a ".$2." ".$3." ".$newCost."\n";
 			print "[".$2."\t->\t".$3."]\tcost changed:\t".$4."\t=>\t".$newCost.".\n";

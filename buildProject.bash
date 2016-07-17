@@ -2,10 +2,10 @@
 
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-exsName="BinaryIMST_Examples"
+exsName="RIT_Examples"
 exsLibPath="$exsName/lib"
-exsIncludePath="$exsName/include/IMST"
-libName="BinaryIMST_Library"
+exsIncludePath="$exsName/include/RIT"
+libName="RIT_Library"
 libIncludePath="$libName/src/include"
 staticLibName="lib$libName.a"
 
@@ -126,8 +126,8 @@ function buildLib() {
 
 
 function loadBashAutocompletion() {
-	source "BinaryIMST_bac"
-	sudo cp "./BinaryIMST_bac" "/etc/bash_completion.d/"
+	source "RIT_bac"
+	sudo cp "./RIT_bac" "/etc/bash_completion.d/"
 }
 
 
