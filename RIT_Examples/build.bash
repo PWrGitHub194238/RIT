@@ -67,6 +67,8 @@ function printHelp() {
 
 function buildDoc() {
 	doxygen "$1"
+	ln -s "$BASE_DIR/html/index.html" "doc.html"
+	rm *.tmp
 }
 
 function buildProject() {

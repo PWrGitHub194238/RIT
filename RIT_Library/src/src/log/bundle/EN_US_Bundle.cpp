@@ -7,6 +7,18 @@
 
 const char* logDictionary[] = {
 
+	//*********************************** CPLEX_LP_AIMSTSolverIF.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	//**************** Warn *****************//
+	// AIMSTIF_INIT_NO_SCENARIO
+	"No adversarial scenarios have been given for Adversarial Incremental Minimum Spanning Tree algorithm.",
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+
 	//*********************************** CPLEX_LP_AIMSTSolver.cpp ***********************************//
 	//**************** Trace ****************//
 	//**************** Debug ****************//
@@ -748,7 +760,7 @@ const char* logDictionary[] = {
 
 	//**************** Warn *****************//
 	// BS_V1_MST_BIN_SEARCH_PART_SOLUTION
-	"Optimal solution was not found for any λ parameter. The best feasible solution will be returned (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are %EdgeCount% edges that are not in base edge set:\n%s. This solution was returned as a result of λ-based MST binary search (with 'k value: %EdgeCount%) termination. This solution has no guarantee to be an optimal one.",
+	"Optimal solution was not found for any λ parameter. The best feasible solution will be returned (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are %EdgeCount% edges that are not in base edge set:\n%s. This solution was returned as a result of λ-based MST binary search (with k value: %EdgeCount%) termination. This solution has no guarantee to be an optimal one.",
 
 	//**************** Error ****************//
 	//**************** Fatal ****************//
@@ -860,7 +872,7 @@ const char* logDictionary[] = {
 
 	//**************** Warn *****************//
 	// BS_V2_MST_BIN_SEARCH_PART_SOLUTION
-	"Optimal solution was not found for any λ parameter. The best feasible solution will be returned (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are %EdgeCount% edges that are not in base edge set:\n%s.\nThis solution was returned as a result of λ-based MST binary search (with 'k value: %EdgeCount%) termination. This solution has no guarantee to be an optimal one.",
+	"Optimal solution was not found for any λ parameter. The best feasible solution will be returned (with total cost of edges: %EdgeCost%). Solution includes following edges:\n%s\nin which there are %EdgeCount% edges that are not in base edge set:\n%s.\nThis solution was returned as a result of λ-based MST binary search (with k value: %EdgeCount%) termination. This solution has no guarantee to be an optimal one.",
 	// BS_V2_PART_SOLUTION
 	"Optimal solution was not found for any λ parameter. Base MST solution will be returned instead to prevent undefined behaviors.",
 
@@ -943,6 +955,8 @@ const char* logDictionary[] = {
 	"Initial random spanning tree for Tabu Search was generated and it looks like follows:\n%s.\nTotal cost of this random tree is: %EdgeCost%.",
 	// TS_RESOLVE_INIT_SOL
 	"Initial solution for robust optimization problem was generated. Following set was generated:\n%s.\nThe worst cost of adversarial subproblem was achieved with scenario:\n%s.\nFor this set of costs, value of solution of adversarial problem is: %EdgeCost%.\nCost of base solution for that set of edges is: %EdgeCost%, %EdgeCost% in total.",
+	// TS_RESOLVE_INIT_SOL_NO_SCENARIO
+	"Initial solution for robust optimization problem was generated. Following set was generated:\n%s.\nNo scenario has been given therefore original costs of graphs edges were taken%s.\nFor this set of costs, value of solution of adversarial problem is: %EdgeCost%.\nCost of base solution for that set of edges is: %EdgeCost%, %EdgeCost% in total.",
 	// TS_RESOLVE_NEIGHBOR_SOL
 	"New neighbor solution was selected from neighborhood:\n%s.\nTotal cost of this solution is: %EdgeCost% (best found value so far is: %EdgeCost%).",
 	// TS_RESOLVE_STATE

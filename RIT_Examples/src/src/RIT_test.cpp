@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 
 
 	//return 0;
-	::testing::GTEST_FLAG(filter) = "UNDIRECTED_VERTEX_TEST.OUT_IN_EDGES_100_10000";
+	::testing::GTEST_FLAG(filter) = "TABU_SEARCH_EXAMPLE.*";
 	return RUN_ALL_TESTS();
 }
 

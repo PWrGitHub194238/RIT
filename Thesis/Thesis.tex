@@ -163,9 +163,29 @@
 \SetCommentSty{algcomment}
 
 
-% Listowanie kodów źródłowych (C, bash, perl)
+% Wyśrodkowana tylda
+\usepackage{textcomp}%
+\newcommand{\textapprox}{\raisebox{0.5ex}{\texttildelow}}
+
+% Listowanie kodów źródłowych (bash, perl)
+\usepackage{minted}
+
+
+% Listowanie kodów źródłowych (C, C++)
 \usepackage{listings} 
 
+\lstdefinestyle{BashInputStyle}{
+	language=bash,
+	basicstyle=\small\sffamily,
+	numbers=left,
+	numberstyle=\tiny,
+	numbersep=3pt,
+	frame=tb,
+	columns=fullflexible,
+	backgroundcolor=\color{yellow!20},
+	linewidth=0.9\linewidth,
+	xleftmargin=0.1\linewidth
+}
 
 % Styl wyświetlania listingów dla języka C
 \lstdefinestyle{customc}{
@@ -416,8 +436,8 @@
 
 
 % Umożliwia wstawianie hiperłączy do dokumentu
-\usepackage[draft]{hyperref}					% Wyłączenie linków (pewna wersja do druku)
-%\usepackage{hyperref}							% Aktywuje linki
+%\usepackage[draft]{hyperref}					% Wyłączenie linków (pewna wersja do druku)
+\usepackage{hyperref}							% Aktywuje linki
 
 
 \hypersetup{
@@ -650,15 +670,18 @@
 		\vspace*{\fill}
 		\begin{center}
 			\begin{picture}(300,510)
-				\put(100, 130){\makebox(0,0)[l]{Podziękowania chciałbym skierować do mojego promotora,}}
-				\put(100, 115){\makebox(0,0)[l]{dr hab. Pawła Zielińskiego, prof. nadzw. Politechniki Wrocławskiej,}}
-				\put(100, 100){\makebox(0,0)[l]{za nakład włożonej pracy w~korektę tekstu,}}
-				\put(100, 85){\makebox(0,0)[l]{poświęcony na konsultacjach czas oraz zaangażowanie,}}
-				\put(100, 70){\makebox(0,0)[l]{płynące z~chęci pomocy w~przygotowaniu jak najlepszej pracy dyplomowej.}}
-				\put(100, 45){\makebox(0,0)[l]{X,}}
-				\put(100, 30){\makebox(0,0)[l]{X}}
-				\put(100, 15){\makebox(0,0)[l]{X}}
-				\put(100, 0){\makebox(0,0)[l]{X.}}
+				\put(100, 160){\makebox(0,0)[l]{Podziękowania chciałbym skierować do mojego promotora,}}
+				\put(100, 145){\makebox(0,0)[l]{dr hab. Pawła Zielińskiego, prof. nadzw. Politechniki Wrocławskiej,}}
+				\put(100, 130){\makebox(0,0)[l]{za nakład włożonej pracy w~korektę tekstu,}}
+				\put(100, 115){\makebox(0,0)[l]{poświęcony na konsultacjach czas oraz zaangażowanie,}}
+				\put(100, 100){\makebox(0,0)[l]{płynące z~chęci pomocy w~przygotowaniu jak najlepszej pracy dyplomowej,}}
+				\put(100, 75){\makebox(0,0)[l]{oraz podziękować wszystkim koleżankom i kolegom,}}
+				\put(100, 60){\makebox(0,0)[l]{z którymi miałem przyjemność studiować}}
+				\put(100, 45){\makebox(0,0)[l]{przez cały okres studiów magisterskich}}
+				\put(100, 30){\makebox(0,0)[l]{na Politechnice Wrocławskiej, szczególnie tym paru najbliższym,}}
+				\put(100, 15){\makebox(0,0)[l]{których wierzę, że z imienia nie trzeba wymieniać,}}
+				\put(100, 0){\makebox(0,0)[l]{gdyż doskonale wiedzą, że to o nich mowa.}}
+				\put(-90,-100){\includegraphics[width=0.1\textwidth]{pwr}}
 				\put(-90,-100){\includegraphics[width=0.1\textwidth]{pwr}}
 			\end{picture}
 		\end{center}
@@ -736,11 +759,10 @@
 	\clearpage
 	\input{Chapter_VI}
 	\clearpage
-	
+
 	\clearpage
 	\input{Chapter_VII}
-	\clearpage
-	
+	\clearpage	
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BIBLIOGRAFIA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -14,10 +14,8 @@
 
 #ifdef CPLEX_LP_IMSTSolverIF_CPLEX_LP_IMSTSolver_v2
 #include "CPLEX_LP_IMSTSolver_v2.hpp"
-/*
- #elif defined(EdgeSetIF_EdgeList)
- #include "EdgeSet/EdgeList.hpp"
- */
+#elif defined(CPLEX_LP_IMSTSolverIF_CPLEX_LP_IMSTSolver_v3)
+#include "CPLEX_LP_IMSTSolver_v3.hpp"
 #endif
 
 typedef CPLEX_LP_IMSTSolver_v2 CPLEX_LP_IMSTSolverImpl;

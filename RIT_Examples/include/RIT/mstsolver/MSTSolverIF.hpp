@@ -8,6 +8,7 @@
 #ifndef SRC_INCLUDE_MSTSOLVER_MSTSOLVERIF_HPP_
 #define SRC_INCLUDE_MSTSOLVER_MSTSOLVERIF_HPP_
 
+class GraphEdgeCostsIF;
 class VertexIF;
 class EdgeSetIF;
 class GraphIF;
@@ -59,18 +60,31 @@ public:
 
 	EdgeSetIF * getMST() throw (GraphExceptions::DisconnectedGraphException);
 
+	/** @brief Returns minimum spanning tree for given MSTSolverIF::graph.
+	 *
+	 * @details This method will temporarily change all edge costs according to given graphScenario.
+	 * After calculating minimum spanning tree for given scenario, all edge costs
+	 * will be returned to their original value and minimum spanning tree that was found
+	 * will be returned.
+	 *
+	 * @param graphScenario scenario that contains information about every edge cost.
+	 * @return minimum spanning tree for graph with temporarily changed edge costs according to given graphScenario.
+	 */
+	EdgeSetIF * getMST(GraphEdgeCostsIF * const & graphScenario)
+			throw (GraphExceptions::DisconnectedGraphException);
+
 	/** Temporary disconnects every edge that is not in given visibleSet
 	 *
 	 * @param visibleSet
 	 * @return
 	 */
-	EdgeSetIF * getMST(EdgeSetIF* visibleSet)
+	EdgeSetIF * getMST(EdgeSetIF * const & visibleSet)
 			throw (GraphExceptions::DisconnectedGraphException);
 
-	EdgeSetIF * getMST(VertexIF * const initialVertex)
+	EdgeSetIF * getMST(VertexIF * const & initialVertex)
 			throw (GraphExceptions::DisconnectedGraphException);
 
-	EdgeSetIF * getMST(VertexIF * const initialVertex, EdgeSetIF* visibleSet)
+	EdgeSetIF * getMST(VertexIF * const & initialVertex, EdgeSetIF * const & visibleSet)
 			throw (GraphExceptions::DisconnectedGraphException);
 
 	//*************************************** GETTERS & SETTERS ****************************************//

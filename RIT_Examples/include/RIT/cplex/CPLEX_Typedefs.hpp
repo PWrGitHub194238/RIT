@@ -12,7 +12,7 @@
 #include <map>
 #include <utility>
 
-#include "../../include/typedefs/primitive.hpp"
+#include "../typedefs/primitive.hpp"
 
 class EdgeIF;
 

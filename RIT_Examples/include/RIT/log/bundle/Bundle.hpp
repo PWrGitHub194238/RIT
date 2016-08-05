@@ -10,6 +10,17 @@
 
 enum LogBundleKey {
 
+	//*********************************** CPLEX_LP_AIMSTSolverIF.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	//**************** Warn *****************//
+	AIMSTIF_INIT_NO_SCENARIO,
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+
 	//*********************************** CPLEX_LP_AIMSTSolver.cpp ***********************************//
 	//**************** Trace ****************//
 	//**************** Debug ****************//
@@ -30,6 +41,7 @@ enum LogBundleKey {
 	//**************** Error ****************//
 	//**************** Fatal ****************//
 
+
 	//*********************************** CPLEX_LP_IMSTSolverIF.cpp ***********************************//
 	//**************** Trace ****************//
 	CPLPIMSTIF_INIT,
@@ -48,6 +60,7 @@ enum LogBundleKey {
 	CPLPIMSTIF_SOLVER_ERROR,
 
 	//**************** Fatal ****************//
+
 
 	//*********************************** CPLEX_LP_IMSTSolver_v2.cpp ***********************************//
 	//**************** Trace ****************//
@@ -92,6 +105,47 @@ enum LogBundleKey {
 	//**************** Error ****************//
 	//**************** Fatal ****************//
 
+
+	//*********************************** CPLEX_LP_IMSTSolver_v3.cpp ***********************************//
+	//**************** Trace ****************//
+	//**************** Debug ****************//
+	//**************** Info *****************//
+	CPLPIMST3_BUILD_MODEL,
+	CPLPIMST3_BUILD_MODEL_MOVES_SRC,
+	CPLPIMST3_BUILD_MODEL_MOVES_SRC1,
+	CPLPIMST3_BUILD_MODEL_MOVES_OUT_TO_SRC,
+	CPLPIMST3_BUILD_MODEL_MOVES_FROM_SRC_OUT,
+	CPLPIMST3_BUILD_MODEL_PASS_MOVES,
+	CPLPIMST3_BUILD_MODEL_PASS_MOVES1,
+	CPLPIMST3_BUILD_MODEL_PASS_IN_NODE,
+	CPLPIMST3_BUILD_MODEL_PASS_IN_TO_NODE,
+	CPLPIMST3_BUILD_MODEL_PASS_FROM_NODE_OUT,
+	CPLPIMST3_BUILD_MODEL_STORE,
+	CPLPIMST3_BUILD_MODEL_STORE1,
+	CPLPIMST3_BUILD_MODEL_STORE_TO_NODE,
+	CPLPIMST3_BUILD_MODEL_STORE_FROM_NODE,
+	CPLPIMST3_BUILD_MODEL_FLOW_CONSTRAINTS,
+	CPLPIMST3_BUILD_MODEL_FLOW_CONSTRAINTS1,
+	CPLPIMST3_BUILD_MODEL_MST_CONSTRAINT,
+	CPLPIMST3_BUILD_MODEL_INC_CONSTRTAINT,
+	CPLPIMST3_BUILD_MODEL_GOAL_INCR_CONSTRAINT,
+	CPLPIMST3_BUILD_MODEL_GOAL_INCR_ADD,
+	CPLPIMST3_EDGE_VAR_GEN,
+	CPLPIMST3_EDGE_VAR_ADD,
+	CPLPIMST3_SOLVE_INIT,
+	CPLPIMST3_SOLUTION_FOUND,
+	CPLPIMST3_FLOW_GEN,
+	CPLPIMST3_FLOW_GEN_INIT_NODE,
+	CPLPIMST3_FLOW_GEN_COMMODITY,
+	CPLPIMST3_FLOW_GEN_COMMODITY_VAR,
+
+	//**************** Warn *****************//
+	CPLPIMST3_SOLVE_NO_SOLUTION,
+
+	//**************** Error ****************//
+	//**************** Fatal ****************//
+
+
 	//*********************************** CPLEX_LP_MSTSolverIF.cpp ***********************************//
 	//**************** Trace ****************//
 	CPLPMSTIF_INIT,
@@ -107,6 +161,7 @@ enum LogBundleKey {
 	CPLPMSTIF_SOLVER_ERROR,
 
 	//**************** Fatal ****************//
+
 
 	//*********************************** CPLEX_LP_MSTSolver_v2.cpp ***********************************//
 	//**************** Trace ****************//
@@ -136,6 +191,7 @@ enum LogBundleKey {
 
 	//**************** Error ****************//
 	//**************** Fatal ****************//
+
 
 	//*********************************** CPLEX_LP_MSTSolver_v3.cpp ***********************************//
 	//**************** Trace ****************//
@@ -175,6 +231,7 @@ enum LogBundleKey {
 	//**************** Error ****************//
 	//**************** Fatal ****************//
 
+
 	//*********************************** CPLEXUtils.cpp ***********************************//
 	//**************** Trace ****************//
 	//**************** Debug ****************//
@@ -185,6 +242,7 @@ enum LogBundleKey {
 	//**************** Error ****************//
 	//**************** Fatal ****************//
 
+
 	//*********************************** FibonacciHeap ***********************************//
 	//**************** Trace ****************//
 	VERTEX_PUSHED_INTO_FIB_HEAP,
@@ -194,6 +252,7 @@ enum LogBundleKey {
 	//**************** Warn *****************//
 	//**************** Error ****************//
 	//**************** Fatal ****************//
+
 
 	//*********************************** GraphIF ***********************************//
 	//**************** Trace ****************//
@@ -208,6 +267,7 @@ enum LogBundleKey {
 	//**************** Error ****************//
 	//**************** Fatal ****************//
 
+
 	//*********************************** Graph ***********************************//
 	//**************** Trace ****************//
 	GRAPH_CONSTRUCTOR,
@@ -220,6 +280,7 @@ enum LogBundleKey {
 	//**************** Error ****************//
 	//**************** Fatal ****************//
 
+
 	//*********************************** EdgeArray ***********************************//
 	//**************** Trace ****************//
 	EDGE_ARRAY_CONSTRUCTOR,
@@ -230,6 +291,7 @@ enum LogBundleKey {
 	//**************** Error ****************//
 	//**************** Fatal ****************//
 
+
 	//*********************************** EdgeList ***********************************//
 	//**************** Trace ****************//
 	EDGE_LIST_CONSTRUCTOR,
@@ -239,6 +301,7 @@ enum LogBundleKey {
 	//**************** Warn *****************//
 	//**************** Error ****************//
 	//**************** Fatal ****************//
+
 
 	//*********************************** IOUtils.cpp ***********************************//
 	//**************** Trace ****************//
@@ -272,6 +335,7 @@ enum LogBundleKey {
 	IOU_INVALID_ARC_LINE_READ,
 	IOU_INVALID_ARC_LINE_WRITE,
 
+
 	//*********************************** MSTSolverIF.cpp ***********************************//
 	//**************** Trace ****************//
 	//**************** Debug ****************//
@@ -285,6 +349,7 @@ enum LogBundleKey {
 	MSTS_IF_GRAPH_NOT_CONNECTED,
 
 	//**************** Fatal ****************//
+
 
 	//*********************************** PrimeHeap.cpp ***********************************//
 	//**************** Trace ****************//
@@ -305,6 +370,7 @@ enum LogBundleKey {
 	//**************** Warn *****************//
 	//**************** Error ****************//
 	//**************** Fatal ****************//
+
 
 	//*********************************** GraphUtils.cpp ***********************************//
 	//**************** Trace ****************//
@@ -438,6 +504,7 @@ enum LogBundleKey {
 	//**************** Error ****************//
 	//**************** Fatal ****************//
 
+
 	//*********************************** BinarySearch_v2.cpp ***********************************//
 	//**************** Trace ****************//
 	BS_V2_GEN_LAMBDA_SET,
@@ -500,6 +567,7 @@ enum LogBundleKey {
 	//**************** Error ****************//
 	//**************** Fatal ****************//
 
+
 	//*********************************** RIMSTSolverIF.cpp ***********************************//
 	//**************** Trace ****************//
 	//**************** Debug ****************//
@@ -545,6 +613,7 @@ enum LogBundleKey {
 	TS_RESOLVE_INIT,
 	TS_RESOLVE_INIT_RANDOM,
 	TS_RESOLVE_INIT_SOL,
+	TS_RESOLVE_INIT_SOL_NO_SCENARIO,
 	TS_RESOLVE_NEIGHBOR_SOL,
 	TS_RESOLVE_STATE,
 	TS_RESOLVE_BETTER,

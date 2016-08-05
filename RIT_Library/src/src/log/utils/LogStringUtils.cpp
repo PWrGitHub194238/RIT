@@ -138,12 +138,12 @@ std::string LogStringUtils::graphDescription(GraphIF* const graph,
 }
 
 std::string LogStringUtils::edgeCostSetDescription(
-		GraphEdgeCostsIF * const egeCostSet, const char* newLinePrefix) {
+		GraphEdgeCostsIF * const edgeCostSet, const char* newLinePrefix) {
 	std::ostringstream oss { };
-	egeCostSet->begin();
-	while (egeCostSet->hasNext()) {
-		oss << newLinePrefix << egeCostSet->next() << std::flush;
-		oss << (egeCostSet->hasNext() ? ", " : "") << std::flush;
+	edgeCostSet->begin();
+	while (edgeCostSet->hasNext()) {
+		oss << newLinePrefix << edgeCostSet->next() << std::flush;
+		oss << (edgeCostSet->hasNext() ? ", " : "") << std::flush;
 	}
 	return oss.str();
 }

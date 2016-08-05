@@ -44,7 +44,7 @@
 	</appender>
 	
 	<category name="aimstsolver.AIMSTSolver" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -52,7 +52,7 @@
 	</category>
 	
 	<category name="aimstsolver.AIMSTSolverIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -60,7 +60,7 @@
 	</category>
 	
 	<category name="cplex.LP_IMSTSolver_v2" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -68,7 +68,7 @@
 	</category>
 	
 	<category name="cplex.LP_IMSTSolver_v3" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -76,7 +76,7 @@
 	</category>
 	
 	<category name="cplex.LP_IMSTSolverIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -84,7 +84,7 @@
 	</category>
 	
 	<category name="cplex.LP_MSTSolver_v2" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -92,7 +92,7 @@
 	</category>
 	
 	<category name="cplex.LP_MSTSolver_v3" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -100,7 +100,7 @@
 	</category>
 	
 	<category name="cplex.LP_MSTSolverIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -108,7 +108,7 @@
 	</category>
 	
 	<category name="cplex.CPLEXUtils" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -116,7 +116,7 @@
 	</category>
 	
 	<category name="rimstsolver.RIMSTSolverIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -124,7 +124,7 @@
 	</category>
 	
 	<category name="rimstsolver.TabuSearch" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -132,7 +132,7 @@
 	</category>
 	
 	<category name="heap.FibonacciHeap" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -140,7 +140,7 @@
 	</category>
 	
 	<category name="heap.VertexHeapIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -148,7 +148,7 @@
 	</category>
 	
 	<category name="heap.VertexHeapItem" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -156,7 +156,7 @@
 	</category>
 	
 	<category name="imstsolver.BinarySearch_v1" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -164,7 +164,7 @@
 	</category>
 	
 	<category name="imstsolver.BinarySearch_v2" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -172,7 +172,7 @@
 	</category>
 	
 	<category name="imstsolver.IMSTSolverIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -180,7 +180,7 @@
 	</category>
 	
 	<category name="mstsolver.MSTSolverIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -188,7 +188,7 @@
 	</category>
 	
 	<category name="mstsolver.PrimeHeap" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -196,7 +196,7 @@
 	</category>
 	
 	<category name="structures.Edge" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -204,7 +204,7 @@
 	</category>
 	
 	<category name="structures.EdgeByVertexMap" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -212,7 +212,7 @@
 	</category>
 	
 	<category name="structures.EdgeArray" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -220,7 +220,7 @@
 	</category>
 	
 	<category name="structures.EdgeList" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -228,7 +228,7 @@
 	</category>
 	
 	<category name="structures.Graph" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -236,7 +236,7 @@
 	</category>
 	
 	<category name="structures.GraphEdgeCostsArray" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -244,7 +244,7 @@
 	</category>
 	
 	<category name="structures.GraphEdgeCostsList" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -252,7 +252,7 @@
 	</category>
 	
 	<category name="structures.Vertex" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -260,7 +260,7 @@
 	</category>
 	
 	<category name="structures.VertexArray" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -268,7 +268,7 @@
 	</category>
 	
 	<category name="structures.VertexList" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -276,7 +276,7 @@
 	</category>
 	
 	<category name="structures.EdgeByVertexSetIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -284,7 +284,7 @@
 	</category>
 	
 	<category name="structures.EdgeIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -292,7 +292,7 @@
 	</category>
 	
 	<category name="structures.EdgeSetIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -300,7 +300,7 @@
 	</category>
 	
 	<category name="structures.GraphEdgeCostsIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -308,7 +308,7 @@
 	</category>
 	
 	<category name="structures.GraphIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -316,7 +316,7 @@
 	</category>
 	
 	<category name="structures.IterableIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -324,7 +324,7 @@
 	</category>
 	
 	<category name="structures.JSONIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -332,7 +332,7 @@
 	</category>
 	
 	<category name="structures.VertexIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -340,7 +340,7 @@
 	</category>
 	
 	<category name="structures.VertexSetIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -348,7 +348,7 @@
 	</category>
 	
 	<category name="structures.VisibleElementIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -356,7 +356,7 @@
 	</category>
 	
 	<category name="structures.VisibleIterableIF" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -364,7 +364,7 @@
 	</category>
 	
 	<category name="utils.BundleUtils" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -372,7 +372,7 @@
 	</category>
 	
 	<category name="utils.EdgeSetUtils" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -380,7 +380,7 @@
 	</category>
 	
 	<category name="utils.EnumUtils" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -388,7 +388,7 @@
 	</category>
 	
 	<category name="utils.GraphUtils" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -396,7 +396,7 @@
 	</category>
 	
 	<category name="utils.GraphVizUtils" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -404,7 +404,7 @@
 	</category>
 	
 	<category name="utils.IOUtils" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -412,7 +412,7 @@
 	</category>
 	
 	<category name="utils.JSONUtils" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -420,7 +420,7 @@
 	</category>
 	
 	<category name="utils.MemoryUtils" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -428,7 +428,7 @@
 	</category>
 	
 	<category name="utils.SolverFactory" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -436,7 +436,7 @@
 	</category>
 	
 	<category name="utils.StringUtils" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -444,7 +444,7 @@
 	</category>
 	
 	<category name="utils.TabuSearchUtils" additivity="false">
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->
@@ -452,7 +452,7 @@
 	</category>
 	
 	<root>
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="appxFileAppender" />
 		<appender-ref ref="appxConsoleAppender" />
 		<!-- 		<appender-ref ref="appxXMLAppender" /> -->

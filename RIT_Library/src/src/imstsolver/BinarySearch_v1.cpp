@@ -305,7 +305,7 @@ EdgeSetIF* BinarySearch_v1::binarySearchForSolution(EdgeCount k,
 			if (differentEdges > feasibleBackupEdgeDiff) {
 				hasFeasibleBackupSolution = true;
 				MemoryUtils::removeCollection(feasibleBackupSolution, false);
-				feasibleBackupSolution = new EdgeSetImpl { mstSolution };
+				feasibleBackupSolution = new EdgeSetImpl { mstSolution, false };
 				feasibleBackupEdgeDiff = differentEdges;
 			}
 			INFO(logger, LogBundleKey::BS_V1_MST_BIN_SEARCH_TO_SMALLER_LAMBDA,

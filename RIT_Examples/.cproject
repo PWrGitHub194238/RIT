@@ -21,8 +21,8 @@
 							<builder buildPath="${workspace_loc:/RIT_Examples}/Debug" id="cdt.managedbuild.target.gnu.builder.exe.debug.1808958462" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1032154321" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.143231019" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
-								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1050268933" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.377261569" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1050268933" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.377261569" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.dialect.std.876582144" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.c++1y" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.782395324" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../include"/>

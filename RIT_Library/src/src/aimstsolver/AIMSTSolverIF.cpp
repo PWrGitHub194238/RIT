@@ -10,6 +10,8 @@
 #include <log4cxx/logger.h>
 #include <set>
 
+#include "../../include/log/bundle/Bundle.hpp"
+#include "../../include/log/utils/LogUtils.hpp"
 #include "../../include/structures/GraphEdgeCostsInclude.hpp"
 #include "../../include/utils/GraphUtils.hpp"
 
@@ -42,6 +44,9 @@ AIMSTSolverIF::AIMSTSolverIF(IMSTSolverEnum imstSolverType,
 	this->graph = graph;
 	this->adversarialScenarioSet = adversarialScenarioSet;
 	this->k = k;
+	if (this->adversarialScenarioSet.size() == 0) {
+		WARN_NOARG(logger, LogBundleKey::AIMSTIF_INIT_NO_SCENARIO);
+	}
 }
 
 AIMSTSolverIF::AIMSTSolverIF(IMSTSolverEnum imstSolverType,

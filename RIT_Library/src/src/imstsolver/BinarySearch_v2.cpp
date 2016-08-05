@@ -279,7 +279,7 @@ EdgeSetIF* BinarySearch_v2::binarySearchForSolution(EdgeCount k,
 			if (differentEdges > feasibleBackupEdgeDiff) {
 				hasFeasibleBackupSolution = true;
 				MemoryUtils::removeCollection(feasibleBackupSolution, false);
-				feasibleBackupSolution = new EdgeSetImpl { mstSolution };
+				feasibleBackupSolution = new EdgeSetImpl { mstSolution, false };
 				feasibleBackupEdgeDiff = differentEdges;
 			}
 			INFO(logger, LogBundleKey::BS_V2_MST_BIN_SEARCH_TO_SMALLER_LAMBDA,
@@ -421,7 +421,6 @@ EdgeSetIF * BinarySearch_v2::resolve(IncrementalParam k) {
 	INFO_NOARG(logger, LogBundleKey::BS_V2_IMST_BINARY_SEARCH);
 
 	while (lowerBound <= upperBound) {
-		std::cout << std::endl << std::endl;
 		INFO(logger, LogBundleKey::BS_V2_IMST_NEW_ITERATION, lowerBound,
 				upperBound);
 

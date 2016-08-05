@@ -15,6 +15,7 @@
 #include "../../include/log/bundle/Bundle.hpp"
 #include "../../include/log/utils/LogUtils.hpp"
 #include "../../include/structures/EdgeSetInclude.hpp"
+#include "../../include/structures/GraphEdgeCostsInclude.hpp"
 #include "../../include/structures/GraphIF.hpp"
 #include "../../include/structures/VertexIF.hpp"
 #include "../../include/typedefs/struct.hpp"
@@ -57,7 +58,7 @@ EdgeSetIF * MSTSolverIF::getMST()
 	}
 }
 
-EdgeSetIF * MSTSolverIF::getMST(GraphEdgeCostsIF * graphScenario)
+EdgeSetIF * MSTSolverIF::getMST(GraphEdgeCostsIF * const & graphScenario)
 		throw (GraphExceptions::DisconnectedGraphException) {
 	GraphEdgeCostsIF* graphEdgeCostsBackup = new GraphEdgeCostsImpl { graph };
 	GraphUtils::changeGraphCosts(graph, graphScenario);
@@ -67,7 +68,7 @@ EdgeSetIF * MSTSolverIF::getMST(GraphEdgeCostsIF * graphScenario)
 	return mstForScenario;
 }
 
-EdgeSetIF * MSTSolverIF::getMST(EdgeSetIF* visibleSet)
+EdgeSetIF * MSTSolverIF::getMST(EdgeSetIF * const & visibleSet)
 		throw (GraphExceptions::DisconnectedGraphException) {
 	ConnectivityList connectivityList = GraphUtils::shrinkConnectivityToSet(
 			graph, visibleSet);
@@ -76,7 +77,7 @@ EdgeSetIF * MSTSolverIF::getMST(EdgeSetIF* visibleSet)
 	return minimumSpanningTree;
 }
 
-EdgeSetIF * MSTSolverIF::getMST(VertexIF * const initialVertex)
+EdgeSetIF * MSTSolverIF::getMST(VertexIF * const & initialVertex)
 		throw (GraphExceptions::DisconnectedGraphException) {
 	if (initialVertex == nullptr) {
 		return getMST();
@@ -93,8 +94,8 @@ EdgeSetIF * MSTSolverIF::getMST(VertexIF * const initialVertex)
 	}
 }
 
-EdgeSetIF * MSTSolverIF::getMST(VertexIF * const initialVertex,
-		EdgeSetIF* visibleSet)
+EdgeSetIF * MSTSolverIF::getMST(VertexIF * const & initialVertex,
+		EdgeSetIF * const & visibleSet)
 				throw (GraphExceptions::DisconnectedGraphException) {
 	VisibilityList visibilityList = GraphUtils::shrinkVisibilityToSet(graph,
 			visibleSet);

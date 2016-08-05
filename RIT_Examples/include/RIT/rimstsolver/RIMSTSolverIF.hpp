@@ -38,7 +38,7 @@ protected:
 	IMSTSolverEnum imstSolverType;
 	MSTSolverEnum mstSolverType;
 
-	MSTSolverEnum innerMstSolverType;
+	//MSTSolverEnum innerMstSolverType;
 	AIMSTSolverIF* aimstSolver;
 	MSTSolverIF* mstSolver;
 	GraphIF * graph;
@@ -69,23 +69,10 @@ public:
 
 	RIMSTSolverIF(AIMSTSolverEnum aimstSolverType,
 			IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
-			MSTSolverEnum innerMstSolverType, GraphIF * const graph,
-			GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k);
-
-	RIMSTSolverIF(AIMSTSolverEnum aimstSolverType,
-			IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
 			GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
 			IncrementalParam k);
 
 	RIMSTSolverIF(IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
-			MSTSolverEnum innerMstSolverType, GraphIF * const graph,
-			GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k);
-
-	RIMSTSolverIF(IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
-			GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
-			IncrementalParam k);
-
-	RIMSTSolverIF(MSTSolverEnum mstSolverType, MSTSolverEnum innerMstSolverType,
 			GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
 			IncrementalParam k);
 

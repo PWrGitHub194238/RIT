@@ -34,7 +34,6 @@
 #include "../../include/utils/MemoryUtils.hpp"
 #include "../../include/utils/TabuSearchUtils.hpp"
 
-#include <iostream>
 #include <fstream>
 
 const static log4cxx::LoggerPtr logger(
@@ -178,8 +177,9 @@ NeighborSolution TabuSearch::findMinimumInNeighborhood(
 	EdgeIF * noMSTedge { };
 	EdgeIF * pathEdge { };
 
+	neighborSolutionSet = getSolutionForTree(rootSpanningTree);
 	EdgeCost oldSolutionCost = rootSpanningTree->getTotalEdgeCost()
-			+ AIMSTUtils::getSolutionCost(getSolutionForTree(rootSpanningTree));
+			+ AIMSTUtils::getSolutionCost(neighborSolutionSet);
 	EdgeCost newSolutionCost { };
 
 	double oldMVal { 0 };
@@ -213,6 +213,8 @@ NeighborSolution TabuSearch::findMinimumInNeighborhood(
 			addEdgeIdx = noMSTedge->getEdgeIdx();
 			dropEdgeIdx = pathEdge->getEdgeIdx();
 
+			MemoryUtils::removeCollection(
+					AIMSTUtils::getEdgeSet(neighborSolutionSet), false);
 			neighborSolutionSet = getSolutionForTree(rootSpanningTree);
 			neighborCost = rootSpanningTree->getTotalEdgeCost()
 					+ AIMSTUtils::getSolutionCost(neighborSolutionSet);
@@ -256,15 +258,16 @@ NeighborSolution TabuSearch::findMinimumInNeighborhood(
 				}
 			}
 			rootSpanningTree->push_back(pathEdge);
-			MemoryUtils::removeCollection(
-					AIMSTUtils::getEdgeSet(neighborSolutionSet), false);
 		}
 		rootSpanningTree->remove(noMSTedge);
 		MemoryUtils::removeCollection(path, false);
 	}
+	MemoryUtils::removeCollection(AIMSTUtils::getEdgeSet(neighborSolutionSet),
+			false);
 	graph->removeEdgeIterator(pathIteratorId);
 	graph->removeEdgeIterator(edgeIteratorId);
 	graph->restoreVisibilityAllEdges(visibilityList);
+
 	INFO(logger, LogBundleKey::TS_FIND_NEIGHBORHOOD_END,
 			LogStringUtils::edgeSetVisualization(rootSpanningTree, "\t").c_str(),
 			LogStringUtils::edgeSetVisualization(bestNeighbourEdgeSet, "\t").c_str(),
@@ -272,11 +275,11 @@ NeighborSolution TabuSearch::findMinimumInNeighborhood(
 	return neighbor;
 }
 
-TabuMoveValue TabuSearch::calculateMoveValue(EdgeCost& oldSolutionCost,
-		EdgeCost& newSolutionCost, const VertexIdx& addEdgeIdxI,
-		const VertexIdx& addEdgeIdxJ, const VertexIdx& dropEdgeIdxK,
-		const VertexIdx& dropEdgeIdxL,
-		const TabuIterationCount& globalIterationCount) {
+TabuMoveValue TabuSearch::calculateMoveValue(const EdgeCost oldSolutionCost,
+		const EdgeCost newSolutionCost, const VertexIdx addEdgeIdxI,
+		const VertexIdx addEdgeIdxJ, const VertexIdx dropEdgeIdxK,
+		const VertexIdx dropEdgeIdxL,
+		const TabuIterationCount globalIterationCount) {
 	return 0.1 * (oldSolutionCost - newSolutionCost)
 			+ 1.2 * r[addEdgeIdxI][addEdgeIdxJ] / globalIterationCount
 			+ 1.2 * r[dropEdgeIdxK][dropEdgeIdxL] / globalIterationCount
@@ -370,7 +373,7 @@ EdgeSetIF * TabuSearch::resolve() {
 	NeighborSolution bestNeighbor { };
 	EdgeSetIF* bestNeighborSpanningTree { };
 	TabuIterationCount iterationCount { 0 };
-	TabuIterationCount globalIterationCount { 0 };
+	TabuIterationCount globalIterationCount { 1 };
 
 	EdgeCost best = GraphUtils::MAX_EDGE_COST;
 	EdgeCost cost = 0;
@@ -392,12 +395,19 @@ EdgeSetIF * TabuSearch::resolve() {
 	solutionCost = spanningTreeCost
 			+ AIMSTUtils::getSolutionCost(initialSolution);
 
-	INFO(logger, LogBundleKey::TS_RESOLVE_INIT_SOL,
+	GraphEdgeCostsIF* ss = AIMSTUtils::getScenario(initialSolution);
+	EdgeSetIF* sss = AIMSTUtils::getEdgeSet(initialSolution);
+
+	INFO(logger,
+			ss != nullptr ?
+					LogBundleKey::TS_RESOLVE_INIT_SOL :
+					LogBundleKey::TS_RESOLVE_INIT_SOL_NO_SCENARIO,
 			LogStringUtils::edgeSetVisualization(solution, "\t").c_str(),
-			LogStringUtils::edgeCostSetDescription(
-					AIMSTUtils::getScenario(initialSolution), "\t").c_str(),
-			AIMSTUtils::getSolutionCost(initialSolution), spanningTreeCost,
-			solutionCost);
+			ss != nullptr ?
+					LogStringUtils::edgeCostSetDescription(
+							AIMSTUtils::getScenario(initialSolution), "\t").c_str() :
+					"", AIMSTUtils::getSolutionCost(initialSolution),
+			spanningTreeCost, solutionCost);
 
 	worstCaseScenario = getWorstCaseScenario(solution);
 	nextEdgeSet = this->mstSolver->getMST(worstCaseScenario);
@@ -408,34 +418,40 @@ EdgeSetIF * TabuSearch::resolve() {
 
 		MemoryUtils::removeCollection(spanningTree, false);
 		spanningTree = TabuSearchUtils::getEdgeSet(bestNeighbor);
-		spanningTreeCost = TabuSearchUtils::getEdgeSetCost(bestNeighbor);
 
-		updateMValTables(spanningTree, spanningTreeCost);
+		// Jeśli nie znaleziono żadnego ruchu - jesteśmy w lokalnym minimum
+		if (spanningTree != nullptr) {
+			spanningTreeCost = TabuSearchUtils::getEdgeSetCost(bestNeighbor);
 
-		INFO(logger, LogBundleKey::TS_RESOLVE_NEIGHBOR_SOL,
-				LogStringUtils::edgeSetVisualization(spanningTree, "\t").c_str(),
-				spanningTreeCost, solutionCost);
+			updateMValTables(spanningTree, spanningTreeCost);
 
-		globalIterationCount += 1;
-		iterationCount += 1;
-
-		INFO(logger, LogBundleKey::TS_RESOLVE_STATE, iterationCount,
-				numberOfPathIterations, globalIterationCount);
-
-		if (spanningTreeCost < solutionCost) {
-			MemoryUtils::removeCollection(solution, false);
-			solution = new EdgeSetImpl { spanningTree, false };
-			INFO(logger, LogBundleKey::TS_RESOLVE_BETTER,
-					LogStringUtils::edgeSetVisualization(solution, "\t").c_str(),
+			INFO(logger, LogBundleKey::TS_RESOLVE_NEIGHBOR_SOL,
+					LogStringUtils::edgeSetVisualization(spanningTree, "\t").c_str(),
 					spanningTreeCost, solutionCost);
-			solutionCost = spanningTreeCost;
-			delete worstCaseScenario;
-			worstCaseScenario = getWorstCaseScenario(solution);
-			treeWorstCaseAlternative = this->mstSolver->getMST(
-					worstCaseScenario);
-			nextEdgeSet = EdgeSetUtils::getSetUnion(nextEdgeSet,
-					treeWorstCaseAlternative, true);
-			iterationCount = 0;
+
+			globalIterationCount += 1;
+			iterationCount += 1;
+
+			INFO(logger, LogBundleKey::TS_RESOLVE_STATE, iterationCount,
+					numberOfPathIterations, globalIterationCount);
+
+			if (spanningTreeCost < solutionCost) {
+				MemoryUtils::removeCollection(solution, false);
+				solution = new EdgeSetImpl { spanningTree, false };
+				INFO(logger, LogBundleKey::TS_RESOLVE_BETTER,
+						LogStringUtils::edgeSetVisualization(solution, "\t").c_str(),
+						spanningTreeCost, solutionCost);
+				solutionCost = spanningTreeCost;
+				delete worstCaseScenario;
+				worstCaseScenario = getWorstCaseScenario(solution);
+				treeWorstCaseAlternative = this->mstSolver->getMST(
+						worstCaseScenario);
+				nextEdgeSet = EdgeSetUtils::getSetUnion(nextEdgeSet,
+						treeWorstCaseAlternative, true);
+				iterationCount = 0;
+			}
+		} else {
+			iterationCount = numberOfPathIterations + 1;
 		}
 
 		if (iterationCount > numberOfPathIterations) {
@@ -497,13 +513,12 @@ EdgeSetIF * TabuSearch::resolve() {
 
 TabuSearch::TabuSearch(AIMSTSolverEnum aimstSolverType,
 		IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
-		MSTSolverEnum innerMstSolverType, GraphIF * const graph,
-		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k,
-		TabuIterationCount tabuPeriod,
+		GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
+		IncrementalParam k, TabuIterationCount tabuPeriod,
 		TabuIterationCount numberOfPathIterations,
 		TabuIterationCount numberOfIterations) :
-		RIMSTSolverIF(aimstSolverType, imstSolverType, mstSolverType,
-				innerMstSolverType, graph, adversarialScenarioSet, k) {
+		RIMSTSolverIF(aimstSolverType, imstSolverType, mstSolverType, graph,
+				adversarialScenarioSet, k) {
 	this->vertexCount = graph->getNumberOfVertices();
 	this->tabuPeriod = tabuPeriod;
 	this->numberOfPathIterations = numberOfPathIterations;
@@ -520,54 +535,10 @@ TabuSearch::TabuSearch(AIMSTSolverEnum aimstSolverType,
 
 TabuSearch::TabuSearch(AIMSTSolverEnum aimstSolverType,
 		IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
-		MSTSolverEnum innerMstSolverType, GraphIF * const graph,
-		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
-		TabuSearch(aimstSolverType, imstSolverType, mstSolverType,
-				innerMstSolverType, graph, adversarialScenarioSet, k,
-				TabuSearchUtils::TABU_ELEMENT_DEFAULT_PERIOD,
-				TabuSearchUtils::PATH_ITER_NUM_DEFAULT,
-				TabuSearchUtils::ITER_NUM_DEFAULT) {
-}
-
-TabuSearch::TabuSearch(AIMSTSolverEnum aimstSolverType,
-		IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
-		GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
-		IncrementalParam k, TabuIterationCount tabuPeriod,
-		TabuIterationCount numberOfPathIterations,
-		TabuIterationCount numberOfIterations) :
-		TabuSearch(aimstSolverType, imstSolverType, mstSolverType,
-				MSTSolverEnum::DEFAULT, graph, adversarialScenarioSet, k,
-				tabuPeriod, numberOfPathIterations, numberOfIterations) {
-}
-
-TabuSearch::TabuSearch(AIMSTSolverEnum aimstSolverType,
-		IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
 		GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
 		IncrementalParam k) :
-		TabuSearch(aimstSolverType, imstSolverType, mstSolverType,
-				MSTSolverEnum::DEFAULT, graph, adversarialScenarioSet, k,
-				TabuSearchUtils::TABU_ELEMENT_DEFAULT_PERIOD,
-				TabuSearchUtils::PATH_ITER_NUM_DEFAULT,
-				TabuSearchUtils::ITER_NUM_DEFAULT) {
-}
-
-TabuSearch::TabuSearch(IMSTSolverEnum imstSolverType,
-		MSTSolverEnum mstSolverType, MSTSolverEnum innerMstSolverType,
-		GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
-		IncrementalParam k, TabuIterationCount tabuPeriod,
-		TabuIterationCount numberOfPathIterations,
-		TabuIterationCount numberOfIterations) :
-		TabuSearch(AIMSTSolverEnum::DEFAULT, imstSolverType, mstSolverType,
-				innerMstSolverType, graph, adversarialScenarioSet, k,
-				tabuPeriod, numberOfPathIterations, numberOfIterations) {
-}
-
-TabuSearch::TabuSearch(IMSTSolverEnum imstSolverType,
-		MSTSolverEnum mstSolverType, MSTSolverEnum innerMstSolverType,
-		GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
-		IncrementalParam k) :
-		TabuSearch(AIMSTSolverEnum::DEFAULT, imstSolverType, mstSolverType,
-				innerMstSolverType, graph, adversarialScenarioSet, k,
+		TabuSearch(aimstSolverType, imstSolverType, mstSolverType, graph,
+				adversarialScenarioSet, k,
 				TabuSearchUtils::TABU_ELEMENT_DEFAULT_PERIOD,
 				TabuSearchUtils::PATH_ITER_NUM_DEFAULT,
 				TabuSearchUtils::ITER_NUM_DEFAULT) {
@@ -580,80 +551,53 @@ TabuSearch::TabuSearch(IMSTSolverEnum imstSolverType,
 		TabuIterationCount numberOfPathIterations,
 		TabuIterationCount numberOfIterations) :
 		TabuSearch(AIMSTSolverEnum::DEFAULT, imstSolverType, mstSolverType,
-				MSTSolverEnum::DEFAULT, graph, adversarialScenarioSet, k,
-				tabuPeriod, numberOfPathIterations, numberOfIterations) {
+				graph, adversarialScenarioSet, k, tabuPeriod,
+				numberOfPathIterations, numberOfIterations) {
 }
 
 TabuSearch::TabuSearch(IMSTSolverEnum imstSolverType,
 		MSTSolverEnum mstSolverType, GraphIF * const graph,
 		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
 		TabuSearch(AIMSTSolverEnum::DEFAULT, imstSolverType, mstSolverType,
+				graph, adversarialScenarioSet, k,
+				TabuSearchUtils::TABU_ELEMENT_DEFAULT_PERIOD,
+				TabuSearchUtils::PATH_ITER_NUM_DEFAULT,
+				TabuSearchUtils::ITER_NUM_DEFAULT) {
+}
+
+TabuSearch::TabuSearch(MSTSolverEnum mstSolverType, GraphIF * const graph,
+		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k,
+		TabuIterationCount tabuPeriod,
+		TabuIterationCount numberOfPathIterations,
+		TabuIterationCount numberOfIterations) :
+		TabuSearch(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
+				mstSolverType, graph, adversarialScenarioSet, k, tabuPeriod,
+				numberOfPathIterations, numberOfIterations) {
+}
+
+TabuSearch::TabuSearch(MSTSolverEnum mstSolverType, GraphIF * const graph,
+		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
+		TabuSearch(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
+				mstSolverType, graph, adversarialScenarioSet, k,
+				TabuSearchUtils::TABU_ELEMENT_DEFAULT_PERIOD,
+				TabuSearchUtils::PATH_ITER_NUM_DEFAULT,
+				TabuSearchUtils::ITER_NUM_DEFAULT) {
+}
+
+TabuSearch::TabuSearch(GraphIF * const graph,
+		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k,
+		TabuIterationCount tabuPeriod,
+		TabuIterationCount numberOfPathIterations,
+		TabuIterationCount numberOfIterations) :
+		TabuSearch(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
 				MSTSolverEnum::DEFAULT, graph, adversarialScenarioSet, k,
-				TabuSearchUtils::TABU_ELEMENT_DEFAULT_PERIOD,
-				TabuSearchUtils::PATH_ITER_NUM_DEFAULT,
-				TabuSearchUtils::ITER_NUM_DEFAULT) {
-}
-
-TabuSearch::TabuSearch(MSTSolverEnum mstSolverType,
-		MSTSolverEnum innerMstSolverType, GraphIF * const graph,
-		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k,
-		TabuIterationCount tabuPeriod,
-		TabuIterationCount numberOfPathIterations,
-		TabuIterationCount numberOfIterations) :
-		TabuSearch(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
-				mstSolverType, innerMstSolverType, graph,
-				adversarialScenarioSet, k, tabuPeriod, numberOfPathIterations,
-				numberOfIterations) {
-}
-
-TabuSearch::TabuSearch(MSTSolverEnum mstSolverType,
-		MSTSolverEnum innerMstSolverType, GraphIF * const graph,
-		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
-		TabuSearch(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
-				mstSolverType, innerMstSolverType, graph,
-				adversarialScenarioSet, k,
-				TabuSearchUtils::TABU_ELEMENT_DEFAULT_PERIOD,
-				TabuSearchUtils::PATH_ITER_NUM_DEFAULT,
-				TabuSearchUtils::ITER_NUM_DEFAULT) {
-}
-
-TabuSearch::TabuSearch(MSTSolverEnum mstSolverType, GraphIF * const graph,
-		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k,
-		TabuIterationCount tabuPeriod,
-		TabuIterationCount numberOfPathIterations,
-		TabuIterationCount numberOfIterations) :
-		TabuSearch(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
-				mstSolverType, MSTSolverEnum::DEFAULT, graph,
-				adversarialScenarioSet, k, tabuPeriod, numberOfPathIterations,
-				numberOfIterations) {
-}
-
-TabuSearch::TabuSearch(MSTSolverEnum mstSolverType, GraphIF * const graph,
-		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
-		TabuSearch(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
-				mstSolverType, MSTSolverEnum::DEFAULT, graph,
-				adversarialScenarioSet, k,
-				TabuSearchUtils::TABU_ELEMENT_DEFAULT_PERIOD,
-				TabuSearchUtils::PATH_ITER_NUM_DEFAULT,
-				TabuSearchUtils::ITER_NUM_DEFAULT) {
-}
-
-TabuSearch::TabuSearch(GraphIF * const graph,
-		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k,
-		TabuIterationCount tabuPeriod,
-		TabuIterationCount numberOfPathIterations,
-		TabuIterationCount numberOfIterations) :
-		TabuSearch(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
-				MSTSolverEnum::DEFAULT, MSTSolverEnum::DEFAULT, graph,
-				adversarialScenarioSet, k, tabuPeriod, numberOfPathIterations,
-				numberOfIterations) {
+				tabuPeriod, numberOfPathIterations, numberOfIterations) {
 }
 
 TabuSearch::TabuSearch(GraphIF * const graph,
 		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
 		TabuSearch(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
-				MSTSolverEnum::DEFAULT, MSTSolverEnum::DEFAULT, graph,
-				adversarialScenarioSet, k,
+				MSTSolverEnum::DEFAULT, graph, adversarialScenarioSet, k,
 				TabuSearchUtils::TABU_ELEMENT_DEFAULT_PERIOD,
 				TabuSearchUtils::PATH_ITER_NUM_DEFAULT,
 				TabuSearchUtils::ITER_NUM_DEFAULT) {

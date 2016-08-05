@@ -1,0 +1,36 @@
+\documentclass{article}
+
+
+\usepackage[T1]{fontenc}
+
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\usepackage{psfrag}
+\begin{document}
+	
+	\pagestyle{empty}
+	\psfrag{\{EMPTY TITLE\}}{
+		$ $
+	}
+	\psfrag{\{X LABEL\}}{
+		\begin{picture}(0,0)
+		\put(-95, -5){Liczba wierzchołków w grafie $G$ ($\left| E \right| = \binom{\left| V \right|}{2}$)}
+		\end{picture}
+	}
+	\psfrag{\{Y LABEL\}}{
+		\begin{picture}(0,0)
+		\put(-30, 10){Czas działania $ \left[ ms \right] $}
+		\end{picture}
+	}
+	
+	\psfrag{CZASDZIALANIAXXXXXXXXXXXXXXXXXXXX}{\scriptsize czas działania algorytmu \textsc{AIMST}}
+	\psfrag{ALOKACJAPAMIECIYYYYYYYYYYYYYYYYYYYYY}{\scriptsize rezerwowanie pamięci / tworzenie struktur}
+	\psfrag{CZASMINUSPAMIECZZZZZZZZZZZZ}{\scriptsize rzeczywisty czas działania}
+	
+	\includegraphics[width=\textwidth]{out}
+\end{document}

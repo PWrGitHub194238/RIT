@@ -68,6 +68,7 @@ function clean() {
 function cleanDoc() {
 	rm -fr "$BASE_DIR/html/"
 	rm -fr "$BASE_DIR/latex/"
+	rm -f "$BASE_DIR/doc.html"
 }
 
 function cleanProject() {

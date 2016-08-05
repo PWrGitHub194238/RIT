@@ -1,0 +1,2 @@
+bash generatePlot.bash -d r30_1/TS_k_3_TP_0_PI_50_OI_1000_a1_0.1_a2_0.2.data b- WARTOSCROZWIAZANIA r30_1/TS_k_3_TP_0_PI_50_OI_1000_a1_0.1_a2_0.2.dataopt r-- NAJLEPSZEROZWIAZANIE r30_1/TS_k_3_TP_0_PI_50_OI_1000_a1_0.1_a2_0.2.datalb g-. DOLNEOSZACOWANIE
+

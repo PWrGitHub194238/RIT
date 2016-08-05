@@ -1,18 +1,26 @@
 #include <log4cxx/logger.h>
 #include <iostream>
+#include <set>
 #include <sstream>
 #include <string>
+#include <utility>
 
+#include "../include/enums/AIMSTSolverEnum.hpp"
 #include "../include/enums/Connectivity.hpp"
+#include "../include/enums/IMSTSolverEnum.hpp"
+#include "../include/enums/MSTSolverEnum.hpp"
 #include "../include/enums/Visibility.hpp"
 #include "../include/log/utils/LocaleEnum.hpp"
 #include "../include/log/utils/LogUtils.hpp"
+#include "../include/rimstsolver/RIMSTSolverInclude.hpp"
 #include "../include/structures/EdgeIF.hpp"
+#include "../include/structures/EdgeSetIF.hpp"
 #include "../include/structures/GraphEdgeCostsIF.hpp"
 #include "../include/structures/GraphIF.hpp"
 #include "../include/typedefs/primitive.hpp"
-#include "../include/utils/enums/OutputFormat.hpp"
-#include "../include/utils/GraphUtils.hpp"
+#include "../include/typedefs/struct.hpp"
+#include "../include/utils/enums/InputFormat.hpp"
+#include "../include/utils/enums/InputMode.hpp"
 #include "../include/utils/IOUtils.hpp"
 #include "../include/utils/MemoryUtils.hpp"
 
@@ -63,10 +71,9 @@ int main(int argc, char **argv) {
 	LogUtils::setLocale(LocaleEnum::EN_US_UTF8);
 
 
-
 	// Generowanie grafów od 100 do 10000 wierzchołków, z gęstością = 1.0
 
-	GraphIF* g { };
+	/*GraphIF* g { };
 	std::ostringstream oss { };
 
 	for ( int i = 100; i <= 10000; i += 100) {
@@ -78,7 +85,7 @@ int main(int argc, char **argv) {
 		oss.clear();
 		MemoryUtils::removeGraph(g);
 	}
-
+*/
 
 
 
