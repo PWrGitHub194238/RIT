@@ -5,15 +5,9 @@
 %
 % ***************************************************************************************************
 
-
-
-
 % Styl dwustronny z domyślną wielkością czcionki 10pt oraz oddzieloną stroną tytułową (titlepage).
 % Domyślnie rodziały rozpoczynają się na stronie prawej (openright).
 \documentclass[]{book}
-
-
-
 
 % ***************************************************************************************************
 % Ustawienia języka																					*
@@ -67,6 +61,18 @@
 \usepackage{amssymb}
 
 
+% Dodatkowa, ,,kręcona'' czcionka matematyczna
+\usepackage{mathrsfs}
+
+
+% Dodatkowe wsparcie dla środowiska mathbb, które nie wspiera domyślnie cyfr (\mathbb{})
+\usepackage{bbold}
+
+
+% Fixes/improves amsmath
+\usepackage{mathtools}
+
+
 
 
 % ***************************************************************************************************
@@ -75,6 +81,13 @@
 
 
 
+% Umożliwia kolorowanie poszczególnych komórek tabeli
+\usepackage[table]{xcolor}% http://ctan.org/pkg/
+
+
+% Umożliwia łatwą zmianę koloru linii w tabeli
+\usepackage{tabu}
+
 
 % Umożliwia rozszerzoną kontrolę nad kolorami.
 \usepackage{xcolor}
@@ -82,6 +95,7 @@
 
 % Definicje kolorów
 \definecolor{lgray}{HTML}{CCCCCC}
+\definecolor{dgray}{HTML}{666666}
 % lgray				-	nazwa nowo zdefiniowanego koloru
 % HTML				-	model kolorów
 % CCCCCC			-	wartość koloru zgodna z modelem
@@ -119,10 +133,9 @@
 \newenvironment{pseudokod}[1][htb]{
 	\renewcommand{\algorithmcfname}{Pseudokod}
 	\begin{algorithm}[#1]%
-}{
-	\end{algorithm}
+	}{
+\end{algorithm}
 }
-
 
 % Zdefiniowanie słów kluczowych
 \newcommand\KwTrue[0]{
@@ -150,9 +163,29 @@
 \SetCommentSty{algcomment}
 
 
-% Listowanie kodów źródłowych (C, bash, perl)
+% Wyśrodkowana tylda
+\usepackage{textcomp}%
+\newcommand{\textapprox}{\raisebox{0.5ex}{\texttildelow}}
+
+% Listowanie kodów źródłowych (bash, perl)
+\usepackage{minted}
+
+
+% Listowanie kodów źródłowych (C, C++)
 \usepackage{listings} 
 
+\lstdefinestyle{BashInputStyle}{
+	language=bash,
+	basicstyle=\small\sffamily,
+	numbers=left,
+	numberstyle=\tiny,
+	numbersep=3pt,
+	frame=tb,
+	columns=fullflexible,
+	backgroundcolor=\color{yellow!20},
+	linewidth=0.9\linewidth,
+	xleftmargin=0.1\linewidth
+}
 
 % Styl wyświetlania listingów dla języka C
 \lstdefinestyle{customc}{
@@ -224,14 +257,14 @@
 
 % Usunięcie górnego marginesu dla środowisk
 \makeatletter
-	\setlength\@fptop{0\p@}	
+\setlength\@fptop{0\p@}	
 \makeatother
 
 
 
 
 % ***************************************************************************************************
-% Style																								*
+% Styl																								*
 % ***************************************************************************************************
 
 
@@ -368,9 +401,9 @@
 	\bfseries
 }												% formatowanie elementów przed modyfikowanym tytułem
 [
-	\vspace{2ex}
-	\rule{\textwidth}{0.4pt}
-	\vspace{-4ex}
+\vspace{2ex}
+\rule{\textwidth}{0.4pt}
+\vspace{-4ex}
 ]												% dodatkowe formatowanie stosowane poniżej modyfikowanego tytułu
 
 
@@ -396,15 +429,15 @@
 
 
 % ***************************************************************************************************
-% Hiperłącza																						*
+% Linki																								*
 % ***************************************************************************************************
 
 
 
 
 % Umożliwia wstawianie hiperłączy do dokumentu
-%\usepackage[draft]{hyperref}					% Wyłączenie linków (pewna wersja do druku)
-\usepackage{hyperref}							% Aktywuje linki
+\usepackage[draft]{hyperref}					% Wyłączenie linków (pewna wersja do druku)
+%\usepackage{hyperref}							% Aktywuje linki
 
 
 \hypersetup{
@@ -414,8 +447,8 @@
 	filecolor		=	magenta,				% łączy do plików,
 	urlcolor		=	cyan					% hiperlinków.
 }
- 
- 
+
+
 % Do stworzenia hiperłączy zostanie użyta ta sama (same) czcionka co dla reszty dokumentu
 \urlstyle{same}
 
@@ -488,6 +521,10 @@
 \usepackage{multirow}
 
 
+% Precyzyjne obliczenia szerokości/wysokości dowolnego fragmentu wygenerowanego przez LaTeX
+\usepackage{calc}
+
+
 
 
 % ***************************************************************************************************
@@ -554,9 +591,9 @@
 \newenvironment{proof}{
 	\par\noindent \textbf{Dowód.}
 }{
-	\begin{flushright}
-		\vspace*{-6mm}\mbox{$\blacklozenge$}
-	\end{flushright}
+\begin{flushright}
+	\vspace*{-6mm}\mbox{$\blacklozenge$}
+\end{flushright}
 }
 
 
@@ -564,9 +601,9 @@
 \newenvironment{remark}{
 	\bigskip \par\noindent \small \textbf{Uwaga.}
 }{
-	\begin{small}
-		\vspace*{4mm}
-	\end{small}
+\begin{small}
+	\vspace*{4mm}
+\end{small}
 }
 
 
@@ -581,14 +618,14 @@
 
 % Prawidłowe dzielenie wyrazów
 \hyphenation{wszy-stkich ko-lu-mnę każ-da od-leg-łość
-   dzie-dzi-ny dzie-dzi-na rów-nych rów-ny
-   pole-ga zmie-nna pa-ra-met-rów wzo-rem po-cho-dzi
-   o-trzy-ma wte-dy wa-run-ko-wych lo-gicz-nie
-   skreś-la-na skreś-la-ną cał-ko-wi-tych wzo-rów po-rzą-dek po-rząd-kiem
-   przy-kład pod-zbio-rów po-mię-dzy re-pre-zen-to-wa-ne
-   rów-no-waż-ne bi-blio-te-kach wy-pro-wa-dza ma-te-ria-łów
-   prze-ka-za-nym skoń-czo-nym moż-esz na-tu-ral-na cią-gu tab-li-cy
-   prze-ka-za-nej od-po-wied-nio}
+	dzie-dzi-ny dzie-dzi-na rów-nych rów-ny
+	pole-ga zmie-nna pa-ra-met-rów wzo-rem po-cho-dzi
+	o-trzy-ma wte-dy wa-run-ko-wych lo-gicz-nie
+	skreś-la-na skreś-la-ną cał-ko-wi-tych wzo-rów po-rzą-dek po-rząd-kiem
+	przy-kład pod-zbio-rów po-mię-dzy re-pre-zen-to-wa-ne
+	rów-no-waż-ne bi-blio-te-kach wy-pro-wa-dza ma-te-ria-łów
+	prze-ka-za-nym skoń-czo-nym moż-esz na-tu-ral-na cią-gu tab-li-cy
+	prze-ka-za-nej od-po-wied-nio}
 
 
 

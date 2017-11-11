@@ -25,9 +25,8 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.764758743" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.dialect.std.311297966" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.c++1y" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1701960506" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/cplex/include"/>
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/concert/include"/>
-									<listOptionValue builtIn="false" value="/home/tomasz/Pobrane/boost_1_60_0"/>
+									<listOptionValue builtIn="false" value="../include"/>
+									<listOptionValue builtIn="false" value="../../lib/boost_1_60_0"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.140672307" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.nowarn.1809790983" name="Inhibit all warnings (-w)" superClass="gnu.cpp.compiler.option.warnings.nowarn" value="true" valueType="boolean"/>
@@ -62,9 +61,8 @@
 									<listOptionValue builtIn="false" value="cdt"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.112188502" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value=""/>
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/cplex/lib/x86-64_linux/static_pic"/>
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/concert/lib/x86-64_linux/static_pic"/>
+									<listOptionValue builtIn="false" value="../lib/cplex/lib/x86-64_linux/static_pic"/>
+									<listOptionValue builtIn="false" value="../lib/concert/lib/x86-64_linux/static_pic"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.1665721473" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.503389932" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
@@ -111,9 +109,8 @@
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.79146490" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.2065172392" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1330770623" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/cplex/include"/>
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/concert/include"/>
-									<listOptionValue builtIn="false" value="/home/tomasz/Pobrane/boost_1_60_0"/>
+									<listOptionValue builtIn="false" value="../include"/>
+									<listOptionValue builtIn="false" value="../../lib/boost_1_60_0"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.2026432413" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__cplusplus=201103L"/>
@@ -141,8 +138,8 @@
 									<listOptionValue builtIn="false" value="cdt"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1198920229" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/cplex/lib/x86-64_linux/static_pic"/>
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/concert/lib/x86-64_linux/static_pic"/>
+									<listOptionValue builtIn="false" value="../lib/cplex/lib/x86-64_linux/static_pic"/>
+									<listOptionValue builtIn="false" value="../lib/concert/lib/x86-64_linux/static_pic"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.993951409" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -187,9 +184,8 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.994472337" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.dialect.std.894607022" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.c++1y" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.665336141" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/cplex/include"/>
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/concert/include"/>
-									<listOptionValue builtIn="false" value="/home/tomasz/Pobrane/boost_1_60_0"/>
+									<listOptionValue builtIn="false" value="../include"/>
+									<listOptionValue builtIn="false" value="../../lib/boost_1_60_0"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.967093377" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.nowarn.1255354091" name="Inhibit all warnings (-w)" superClass="gnu.cpp.compiler.option.warnings.nowarn" value="true" valueType="boolean"/>
@@ -208,6 +204,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1802952403" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1977533708" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.debug.option.debugging.level.1249474845" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.dialect.std.1757773956" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1423777588" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.369440880" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
@@ -264,9 +261,8 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1241289175" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.dialect.std.494323266" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.c++1y" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1011278814" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/cplex/include"/>
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/concert/include"/>
-									<listOptionValue builtIn="false" value="/home/tomasz/Pobrane/boost_1_60_0"/>
+									<listOptionValue builtIn="false" value="../include"/>
+									<listOptionValue builtIn="false" value="../../lib/boost_1_60_0"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.219647660" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.nowarn.1180676993" name="Inhibit all warnings (-w)" superClass="gnu.cpp.compiler.option.warnings.nowarn" value="true" valueType="boolean"/>
@@ -303,8 +299,8 @@
 									<listOptionValue builtIn="false" value="cdt"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1054708472" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/cplex/lib/x86-64_linux/static_pic"/>
-									<listOptionValue builtIn="false" value="/opt/ibm/ILOG/CPLEX_Studio126/concert/lib/x86-64_linux/static_pic"/>
+									<listOptionValue builtIn="false" value="../lib/cplex/lib/x86-64_linux/static_pic"/>
+									<listOptionValue builtIn="false" value="../lib/concert/lib/x86-64_linux/static_pic"/>
 								</option>
 								<option defaultValue="true" id="gnu.cpp.link.option.shared.2061379890" name="Shared (-shared)" superClass="gnu.cpp.link.option.shared" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.110282984" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">

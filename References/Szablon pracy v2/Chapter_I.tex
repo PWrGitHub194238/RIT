@@ -20,10 +20,10 @@ Wszelkie bardziej szczegółowe informacje są dostępne z poziomu właściwych 
 
 Sam początek dokumentu \href{Thesis-book.tex}{,,Thesis-book.tex''} jest podzielony na dwie główne części: zawierającą wszelkie pakiety, ich konfiguracje oraz definiującą strony tytułowe, dołączające resztę rozdziałów pracy dyplomowej wraz z bibliografią i dodatkami.
 
-Dokument jest formatowany z myślą o wydruku po obu stronach kartki --- wersję odpowiadającą drukowi jednostronnemu można znaleźć w dokumencie~\LaTeX'a \href{Thesis-article.tex}{,,Thesis-article.tex''}.
+Dokument jest formatowany z myślą o wydruku po obu stronach kartki~--- wersję odpowiadającą drukowi jednostronnemu można znaleźć w dokumencie~\LaTeX'a \href{Thesis-article.tex}{,,Thesis-article.tex''}.
 Nie różni się on od tego dokumentu niczym poza zmienionym formatowaniem stron.
 
-W pierwszej części wspomnianego dokumentu znajdują się wszystkie wykorzystane pakiety uporządkowane ze względu na ich funkcjonalność.
+W pierwszej części wspomnianego dokumentu znajdują się wszystkie wykorzystane pakiety, uporządkowane ze względu na ich funkcjonalność.
 Każdy z nich jest pobieżnie opisany i przypisany do jednej z grup:
 
 \begin{itemize}
@@ -52,33 +52,38 @@ Każdy nowy rozdział/dodatek powinien być dołączany do tego dokumentu tak ja
 
 \section{Jak pisać, o czym pamiętać}
 
-Jeśli piszesz po polsku, pamiętaj --- polski to bardzo dziwy język, rządzący się zasadami, których gołym okiem się nie dostrzega na co dzień.
+Jeśli piszesz po polsku, pamiętaj~--- polski to bardzo dziwy język, rządzący się zasadami, których gołym okiem się nie dostrzega na co dzień.
 Do takich niuansów językowych z pewnością można zaliczyć:
 
 \begin{itemize}
-	\item cudzysłów --- prawidłowo postawiony polski cudzysłów to dwa postawione po sobie przecinki, cytowana wypowiedź, dwa postawione po sobie apostrofy (za niezbyt chwalebne źródło wiedzy może w tym przypadku posłóżyć \href{https://en.wikipedia.org/wiki/Quotation_mark}{Wikipedia}). Reasumując: po polsku cudzysłów stawiamy ,,tak'', a nie "tak" (wiem, krócej się stawia dwa znaczki zamiast czterech --- jeśli mimo to chcesz stawiać tylko dwa to przynajmniej na samym końcu wykorzystaj wyrażenia regularne do zamiany wszystkich cudzysłowów na te poprawne, programy to potrafią).
-	\item Przecinek --- może tego nie widzisz, ale w dokumencie został zastosowany specjalny pakiet, który przecinki użyte to wyrażenia liczb zmiennoprzecinkowych traktuje jako TE przecinki, nie jakieś przypadkowe, które nie wiadomo co oznaczają.
+	\item cudzysłów~--- prawidłowo postawiony polski cudzysłów to dwa postawione po sobie przecinki, cytowana wypowiedź, dwa postawione po sobie apostrofy (za niezbyt chwalebne źródło wiedzy może w tym przypadku posłużyć \href{https://en.wikipedia.org/wiki/Quotation_mark}{Wikipedia}). Tak wstawione symbole,~\LaTeX skompiluje jako nasze, polskie znaki.
+	Reasumując: po polsku cudzysłów stawiamy ,,tak'', a nie "tak" (wiem, krócej się stawia dwa znaczki zamiast czterech~--- jeśli mimo to chcesz stawiać tylko dwa, to przynajmniej na samym końcu wykorzystaj wyrażenia regularne do zamiany wszystkich cudzysłowów na te poprawne, programy to potrafią).
+	\item Przecinek~--- może tego nie widzisz, ale w dokumencie został zastosowany specjalny pakiet, który przecinki, użyte do wyrażenia liczb zmiennoprzecinkowych, traktuje jako TE przecinki, nie jakieś przypadkowe, które nie wiadomo co oznaczają.
 	Standardowo bowiem przyjęło się, że w liczbach zmiennoprzecinkowych używa się kropki.
 	W polskiej kulturze bardziej zakorzenił się jednak przecinek.
+	Dodatkowo pamiętajmy o dwóch sprawach: w sytuacji, gdy mamy rozdzielony przecinkami pojedynczy spójnik, stawianie tego drugiego przecinka jest zbyteczne, jeżeli nie traktowane jako błąd.
+	Pamiętajmy też, że wymienianie po sobie przymiotników też rządzi się swoimi dziwnymi prawami~--- jeżeli wymieniamy kolejno przymioty, gdzie każdy kolejny jest dookoreśleniem poprzedniego, wtedy przecinków pomiędzy nimi nie stawiamy (np. ,,studia stacjonarne licencjackie'').
 	\item Myślnik - znak stojący po lewej stronie to wcale nie jest myślnik w myśl zasad typograficznych tylko ,,dywiz'', którego używa się do składania wyrazów np. czarno-biały (jedna ,,kreska'').
 	Dwie ,,kreski'' stosujemy, gdy chcemy podać jakiś zakres np. $1$--$2$.
 	Trzy (!) kreski \LaTeX~dopiero zamieni na myślnik.
 	Dodatkowo zaleca się także na sam koniec obróbki dokumentu zamienić wszystkie myślniki na myślniki poprzedzone znakiem tyldy, gdyż nie powinny one znaleźć się na początku linii.
-	\item Znaki mniejszości, większości --- polski, prawidłowo postawiony znak ,,mniejszy-równy'': $\leqslant$.
+	\item Znaki mniejszości, większości~--- polski, prawidłowo postawiony znak ,,mniejszy-równy'': $\leqslant$.
 	Polski, prawidłowo postawiony znak ,,większy równy'': $\geqslant$.
 	Zero wyjątków.
-	\item Wielokropki --- w wyrażeniach matematycznych najlepiej zrobimy, jeżeli zostawimy to \LaTeX'owi, stosując polecenie ,,\textbackslash dots''.
-	Zależnie od kontekstu w to miejsce zostaną przy kompilacji wstawione odpowiednie wielokropków.
-	\item Końcówki --- znowu, nie warto zaprzątać sobie głowy przenoszeniem wszystkich sierot z końca linii do początku następnej.
+	\item Wielokropki~--- w wyrażeniach matematycznych najlepiej zrobimy, jeżeli zostawimy to \LaTeX'owi, stosując polecenie ,,\textbackslash dots''.
+	Zależnie od kontekstu w to miejsce zostaną przy kompilacji wstawione odpowiednie wersje wielokropków.
+	\item Końcówki~--- znowu, nie warto zaprzątać sobie głowy przenoszeniem wszystkich sierot z końca linii do początku następnej.
 	Najlepiej zostawić to sobie na sam koniec i pozamieniać z pomocą wyrażeń regularnych wszystkie ,, ([zauiow]) '' na ,, \textbackslash1\textasciitilde'' (jeśli nie wiesz co to wyrażenia regularne i nie chcesz się dowiadywać to nie pozostaje nic lepszego niż pilnowanie spraw na bieżąco).
-	\item Iterowanie, numerowanie --- każde zdanie w języku polskim (i śmiem podejrzewać, że nie tylko w nim) zaczyna się wielką (nie dużą, ale to na marginesie) literą i kończy jednym z prawidłowych znaków interpunkcyjnych.
+	\item Znak tyldy~--- tylda tyldzie nie równa.
+	Jeśli chcemy mieć ,,ładną, normalną'' tyldę to polecam pisać tak: ,,\textapprox'', a nie tak: ,,\textasciitilde''.
+	\item Iterowanie, numerowanie~--- każde zdanie w języku polskim (i śmiem podejrzewać, że nie tylko w nim) zaczyna się wielką (nie dużą, ale to na marginesie) literą i kończy jednym z prawidłowych znaków interpunkcyjnych.
 	Bezpośrednią konsekwencją tak odkrywczego stwierdzenia jest to, że
 \end{itemize}
 bez względu na to co nam się wydaje (np. czy skończyliśmy pisać w środowisku) zdania należy budować właśnie w ten sposób.
 Przestudiuj powyższą listę a będziesz wiedział o co mi chodzi.
 
-Warto tutaj zaznaczyć, że \LaTeX~bierze pod uwagę liczbę pustych linii między kolejnymi wierszami --- ja osobiście przywykłem do pisania KAŻDEGO zdania w nowej linii, gdyż \LaTeX'owi nie robi to żadnej różnicy, akapity oddzielam jedną pustą linią, podrozdziały czterema, rozdziały pięcioma itd.
-Stąd też, jeżeli kontynuujemy zdanie po opuszczeniu jakiegoś środowiska to nie możemy zostawić między jego końcem a kontynuacją zdania żadnej pustej linii, gdyż wtedy \LaTeX nieuchronnie wykona za nas wcięcie, tworząc nowy akapit.
+Warto tutaj zaznaczyć, że \LaTeX~bierze pod uwagę liczbę pustych linii między kolejnymi wierszami~--- ja osobiście przywykłem do pisania KAŻDEGO zdania w nowej linii, gdyż \LaTeX'owi nie robi to żadnej różnicy, akapity oddzielam jedną pustą linią, podrozdziały czterema, rozdziały pięcioma itd.
+Stąd też, jeżeli kontynuujemy zdanie po opuszczeniu jakiegoś środowiska, to nie możemy zostawić między jego końcem a kontynuacją zdania żadnej pustej linii, gdyż wtedy \LaTeX nieuchronnie wykona za nas wcięcie, tworząc nowy akapit.
 Warto też zwrócić uwagę na to, że niektóre specjalne symbole lubią się do wszystkiego przyklejać, tak jak polecenie ,,\textbackslash LaTeX''.
 Aby temu zapobiec należy oddzielać te znakiem tyldy od następnego wyrazu.
 
@@ -97,9 +102,13 @@ Przykładowo:
 	\item \textbf{tekstem pogrubionym} oznaczać nowe pojęcia, które pierwszy raz wystąpiły w tekście.
 	\item \textit{Oryginalne sformułowania z danego języka} oznaczać kursywą np. ,,lista sąsiedztwa (ang. \textit{Adjacency list})''.
 	\item \textsc{Taką czcionką} oznaczać nazwy własne (programów, funkcji) oraz argumenty tych drugich.
-	\item  \texttt{CRTL + ALT + T} --- taką skróty klawiszowe takie jak ten.
+	\item  \texttt{CRTL + ALT + T}~--- taką skróty klawiszowe takie jak ten.
 	\item \textsf{Ścieżki do plików/adresów} oznaczać taką czcionką.
 \end{itemize}
 
 Taki schemat ułatwia życie i autorowi i czytającemu.
 Jest to oczywiście jedna z wielu możliwych propozycji.
+
+\subsection{Kompilacja}
+
+Wypada jeszcze zwrócić uwagę, że pakiet od algorytmów ,,minted'' wymaga od nas kompilowania dokumentów z flagą \textsc{-shell-escape}, np. \textsc{pdflatex -shell-escape -synctex=1 -interaction=nonstopmode "Thesis-book".tex}.

@@ -6,7 +6,7 @@
 
 
 Chcąc podjąć próbę formalnego opisania przedstawionych wcześniej problemów, należy najpierw zapoznać się z~ogólnymi zasadami ich zapisywania.
-Jak mogliśmy zaobserwować w~poprzednim rozdziale, opisując problem typu \textsc{Incremental}, uciekliśmy się do przedstawienia go za pomocą serii nierówności oraz równości (\ref{mod:lpmodel1}) --- innymi słowy zapisaliśmy go w~postaci \textbf{modelu programowania liniowego}.
+Jak mogliśmy zaobserwować w~poprzednim rozdziale, opisując problem typu \textsc{Incremental}, uciekliśmy się do przedstawienia go za pomocą serii nierówności oraz równości (\ref{mod:lpmodel1})~--- innymi słowy zapisaliśmy go w~postaci \textbf{modelu programowania liniowego}.
 Możliwość przekształcenia dowolnie zadanego problemu do takiej postaci może nam zagwarantować odnalezienie jego istniejącego rozwiązania w~czasie wielomianowym i~takie narzędzie może stanowić doskonały punkt wyjściowy do dalszych rozważań.
 W tym rozdziale omówimy ten sposób podejścia do problemów oraz przedstawimy narzędzia, które posłużą nam do konstrukcji algorytmu, rozwiązującego problem odpornej optymalizacji dla wyszukiwania minimalnego drzewa rozpinającego w~wersji \textsc{Incremental}, w rozdziale następnym.
 Po drodze przedstawimy także alternatywne sposoby na radzenie sobie z problemami \textsc{MST} oraz \textsc{IMST}.
@@ -41,14 +41,14 @@ Schemat takiego modelu wygląda następująco:
 	& & & \phantom{\sum} x_{i} \leqslant x_{i}^{\textrm{UB}}, &\quad & & x_{i} \in \textbf{x}\textrm{,}
 	\end{alignat}
 \end{subequations}\label{eq:lp}
-gdzie znak $\Diamond_{i}$ zastępuje dowolny znak ze zbioru $\left\{ =, \leqslant, \geqslant \right\}$, funkcja $f \left( \textbf{x}, \dots \right)$ jest funkcją celu i~przyjmuje postać $\sum_{i=1}^{n} c_{i} \cdot x_{i}$, $\textbf{x}$ jest wektorem symbolizującym rozwiązanie, $\textbf{c}$ --- zbiorem kosztów ($\left| \textbf{x} \right| = \left| \textbf{c} \right| = n$).
+gdzie znak $\Diamond_{i}$ zastępuje dowolny znak ze zbioru $\left\{ =, \leqslant, \geqslant \right\}$, funkcja $f \left( \textbf{x}, \dots \right)$ jest funkcją celu i~przyjmuje postać $\sum_{i=1}^{n} c_{i} \cdot x_{i}$, $\textbf{x}$ jest wektorem symbolizującym rozwiązanie, $\textbf{c}$~--- zbiorem kosztów ($\left| \textbf{x} \right| = \left| \textbf{c} \right| = n$).
 Zbiór funkcji $\left\{ g_{1} \left( \textbf{x}, \dots \right), \dots, g_{m} \left( \textbf{x}, \dots \right) \right\}$ oraz, odpowiadające im, wartości $\left\{ b_{1}, \dots, b_{m} \right\}$ będziemy zaś odpowiednio nazywać \textbf{ograniczeniami} modelu oraz \textbf{wartościami prawych stron}.
-O~spełnieniu danej relacji $\Diamond_{i}$ przez parę $\left( g_{i} \left( \textbf{x}, \dots \right), b_{i} \right)$ będziemy mówić, że zaszło ograniczenie $i$ --- oczywiście rozwiązanie dowolnego modelu jest dopuszczalne tylko wtedy, gdy spełnia ono je wszystkie.
+O~spełnieniu danej relacji $\Diamond_{i}$ przez parę $\left( g_{i} \left( \textbf{x}, \dots \right), b_{i} \right)$ będziemy mówić, że zaszło ograniczenie $i$~--- oczywiście rozwiązanie dowolnego modelu jest dopuszczalne tylko wtedy, gdy spełnia ono je wszystkie.
 Wektor $\textbf{x}$ będziemy nazywać zbiorem \textbf{zmiennych decyzyjnych} modelu.
-Dla wszystkich do tej pory opisanych problemów w~poprzednim rozdziale wykorzystywaliśmy podobne oznaczenia --- zmienna decyzyjna $x_{i}$ przyjmowała odpowiednio wartość $0$, gdy krawędź $e_{i}$ nie należała do poszukiwanego rozwiązania, oraz $1$ w~przeciwnym przypadku.
-Tutaj generalizujemy tę ideę, dopuszczając przyjmowanie przez te zmienne wartości z~zakresu od $x_{i}^{\textrm{LB}}$ do $x_{i}^{\textrm{UB}}$, gdzie odpowiednio $x_{i}^{\textrm{LB}}$ oznacza dolne ograniczenie na wartość zmiennej $x_{i}$ (ang. \textit{lower bound}), zaś $x_{i}^{\textrm{UB}}$ --- górne (ang. \textit{upper bound}).
-Od rodzaju wartości, jakie mogą przyjmować te zmienne, zależy z~jakiego typu problemem mamy do czynienia --- w~przypadku, gdy wartości $x_{i} \in \left\langle x_{i}^{\textrm{LB}}, x_{i}^{\textrm{UB}} \right\rangle$, model, w~którym występują tylko takie zmienne, będziemy nazywali modelem programowania liniowego (ang. \textsc{LP} --- \textit{Linear Programming}).
-W~przeciwnym przypadku, gdy w~modelu pojawią się zmienne o~wartościach dyskretnych ($x_{i} \in \left[ x_{i}^{\textrm{LB}}, x_{i}^{\textrm{UB}} \right]$), mówimy o~modelu \textbf{całkowitoliczbowym} (ang. \textsc{IP} --- \textit{Integer Programming}).
+Dla wszystkich do tej pory opisanych problemów w~poprzednim rozdziale wykorzystywaliśmy podobne oznaczenia~--- zmienna decyzyjna $x_{i}$ przyjmowała odpowiednio wartość $0$, gdy krawędź $e_{i}$ nie należała do poszukiwanego rozwiązania, oraz $1$ w~przeciwnym przypadku.
+Tutaj generalizujemy tę ideę, dopuszczając przyjmowanie przez te zmienne wartości z~zakresu od $x_{i}^{\textrm{LB}}$ do $x_{i}^{\textrm{UB}}$, gdzie odpowiednio $x_{i}^{\textrm{LB}}$ oznacza dolne ograniczenie na wartość zmiennej $x_{i}$ (ang. \textit{lower bound}), zaś $x_{i}^{\textrm{UB}}$~--- górne (ang. \textit{upper bound}).
+Od rodzaju wartości, jakie mogą przyjmować te zmienne, zależy z~jakiego typu problemem mamy do czynienia~--- w~przypadku, gdy wartości $x_{i} \in \left\langle x_{i}^{\textrm{LB}}, x_{i}^{\textrm{UB}} \right\rangle$, model, w~którym występują tylko takie zmienne, będziemy nazywali modelem programowania liniowego (ang. \textsc{LP}~--- \textit{Linear Programming}).
+W~przeciwnym przypadku, gdy w~modelu pojawią się zmienne o~wartościach dyskretnych ($x_{i} \in \left[ x_{i}^{\textrm{LB}}, x_{i}^{\textrm{UB}} \right]$), mówimy o~modelu \textbf{całkowitoliczbowym} (ang. \textsc{IP}~--- \textit{Integer Programming}).
 Ma to o~tyle duże znaczenie, że w~pierwszym przypadku jesteśmy w~stanie zagwarantować, że o~ile dla zdefiniowanego modelu istnieje \textbf{rozwiązanie optymalne} (minimalizujące funkcję celu $f \left( \textbf{x}, \dots \right)$), otrzymamy je w~czasie wielomianowym od wielkości modelu.
 Informację o~braku takiego rozwiązania również uzyskamy w~takim czasie (często dużo szybciej, gdy algorytm, służący do rozwiązywania tak zdefiniowanych problemów, znajdzie się w~stanie, który będzie tożsamy z~brakiem istnienia jakiegokolwiek rozwiązania\footnote{
 	Dla przykładu: ograniczenia w~postaci funkcji $g \left( \textbf{x}, \dots \right)$ mogą tak ograniczyć zbiór wartości, które może przyjąć dana zmienna decyzyjna $x_{i}$, że w~pewnym momencie $x_{i} \in \emptyset$ (co jest sygnałem dla algorytmu, że dalsze obliczenia są bezcelowe).
@@ -103,7 +103,7 @@ Aby zilustrować działanie tak opisanego modelu, wyjaśnić jak go należy rozu
 	\hfill\null
 	\caption{
 		Przykładowy problem sformułowany jako model programowania liniowego.
-		\textbf{(a)}~Jawnie zapisany model --- w~takiej formie będzie rozwiązywany przez wyspecjalizowany algorytm do rozwiązywania zagadnień programowania liniowego.
+		\textbf{(a)}~Jawnie zapisany model~--- w~takiej formie będzie rozwiązywany przez wyspecjalizowany algorytm do rozwiązywania zagadnień programowania liniowego.
 		\textbf{(b)}~Reprezentacja wszystkich elementów modelu w~zwartej formie funkcji z~następująco zdefiniowanymi zbiorami wartości: $\textbf{x} = \left\{ x_{1}, x_{2} \right\}$, $x_{1} \in \left\langle 0, 3 \right\rangle$, $x_{2} \in \left\langle 0, 4 \right\rangle$, $\textbf{c} = \left[ 2, 3 \right]$, $\textbf{b} = \left[ 12, 2 \right]$, $\textbf{a}_{1} = \left[ 3, 2 \right]$ i~$\textbf{a}_{2} = \left[ 1, -4 \right]$.
 		\textbf{(c)}~Zwarty zapis modelu.
 	}
@@ -130,9 +130,9 @@ Na tej podstawie będziemy chcieli skonstruować modele odpowiadające problemow
 
 
 Pierwszym i~zarazem najbardziej naturalnym sposobem podejścia do zamodelowania interesującego nas problemu jest model przedstawiony poniżej.
-Opiera się on na ogólnie znanych właściwościach drzew rozpinających i~ich podstruktury --- jeśli dane drzewo $T$ jest drzewem rozpinającym dla grafu $G = \left( V, E \right)$ (między innymi składa się z~$\left| V \right| - 1$ krawędzi), to każdy podzbiór wierzchołków $S \subseteq V$ grafu jest połączony ze sobą co najwyżej $\left| S \right| - 1$ krawędziami (zobacz rysunek \ref{fig:mst1Example:a}).
+Opiera się on na ogólnie znanych właściwościach drzew rozpinających i~ich podstruktury~--- jeśli dane drzewo $T$ jest drzewem rozpinającym dla grafu $G = \left( V, E \right)$ (między innymi składa się z~$\left| V \right| - 1$ krawędzi), to każdy podzbiór wierzchołków $S \subseteq V$ grafu jest połączony ze sobą co najwyżej $\left| S \right| - 1$ krawędziami (zobacz rysunek \ref{fig:mst1Example:a}).
 Niech zbiór $E \left( S \right)$ będzie zdefiniowany jako $E \left( S \right) = \left\{ \left\{ i, j \right\} : v_{i} \overset{1}\leadsto v_{j} \in E \; \wedge \; v_{i} \in S \; \wedge \; v_{j} \in S \right\}$ i~oznacza zbiór wszystkich krawędzi łączących dowolne dwa różne wierzchołki ze zbioru $S$.
-Niech dodatkowo dla każdej krawędzi w~grafie $e \in E$ będzie zdefiniowana zmienna decyzyjna $x_{e}$, której wartość odpowiada decyzji o~przynależności danej krawędzi do minimalnego drzewa rozpinającego, będącego rozwiązaniem $T$ dla modelu \ref{mod:mst1} (innymi słowy, minimalne drzewo rozpinające $T$ składa się z~krawędzi $e$, dla których $x_{e} = 1$ --- $T = \left\{ e : x_{e} = 1 \right\}$).
+Niech dodatkowo dla każdej krawędzi w~grafie $e \in E$ będzie zdefiniowana zmienna decyzyjna $x_{e}$, której wartość odpowiada decyzji o~przynależności danej krawędzi do minimalnego drzewa rozpinającego, będącego rozwiązaniem $T$ dla modelu \ref{mod:mst1} (innymi słowy, minimalne drzewo rozpinające $T$ składa się z~krawędzi $e$, dla których $x_{e} = 1$~--- $T = \left\{ e : x_{e} = 1 \right\}$).
 W~takiej sytuacji równanie \ref{eq:modmst1:c} w~naturalny sposób opisuje wskazaną przez nas własność.
 W~szczególności dla zbioru $S = V$ mamy $E \left( S \right) = E$, a~wspomniane równanie sprowadza się do wyrażenia \ref{eq:modmst1:b}, które w~dobitny sposób wyraża podstawową własność, posiadaną przez drzewa rozpinające dowolny graf.
 Teraz, aby uzyskać minimalne takie drzewo, wystarczy byśmy zdefiniowali funkcję celu, która będzie dążyć do zminimalizowania kosztów znalezionego rozwiązania (\ref{eq:modmst1:a}).
@@ -162,19 +162,19 @@ Teraz, aby uzyskać minimalne takie drzewo, wystarczy byśmy zdefiniowali funkcj
 	\caption{
 		Minimalne drzewo rozpinające, uzyskane za pomocą, przedstawionego obok, modelu programowania liniowego.
 		\textbf{(a)}~Przykładowe drzewo rozpinające $T = \left\{ e_{1}, e_{3}, e_{4}, e_{6}, e_{9} \right\}$ dla grafu $G = \left( V, E \right)$.
-		Dla dowolnego podzbioru $S \subseteq V$ liczba krawędzi $\left\{ e_{ij} : e_{ij} \in T \; \wedge \; v_{i} \in S \; \wedge \; v_{j} \in S \right\}$ jest co najwyżej równa $\left| S \right| - 1$ (żaden podzbiór $S \subseteq V$ wraz z odpowiadającymi mu krawędziami $E \left( S \right)$ nie tworzy cykli --- innymi słowy każdy graf $G_{S} = \left( S, E \left( S \right) \right)$ jest acykliczny).
+		Dla dowolnego podzbioru $S \subseteq V$ liczba krawędzi $\left\{ e_{ij} : e_{ij} \in T \; \wedge \; v_{i} \in S \; \wedge \; v_{j} \in S \right\}$ jest co najwyżej równa $\left| S \right| - 1$ (żaden podzbiór $S \subseteq V$ wraz z odpowiadającymi mu krawędziami $E \left( S \right)$ nie tworzy cykli~--- innymi słowy każdy graf $G_{S} = \left( S, E \left( S \right) \right)$ jest acykliczny).
 		\textbf{(b)}~Model liniowego programowania dla problemu minimalnego drzewa rozpinającego.
 	}
 	\label{fig:mst1Example}
 \end{figure}
 
 Niestety model, którego idea wydaje się być bardzo prosta, jest równie intuicyjny co niepraktyczny w~zastosowaniu.
-Wystarczy spojrzeć na definicję zbioru $E \left( S \right)$ bądź na rysunek \ref{fig:mst1Example:a} oraz jego opis, by dojść do wniosku, że liczba wymaganych przez model ograniczeń jest ponad-wielomianowa --- znacznie większa niż czas, w~którym spodziewalibyśmy się otrzymać rozwiązanie dla takiego modelu programowania liniowego (przypomnijmy, że modelem \textsc{LP} nazywamy model, którego zmienne decyzyjne nie są ograniczone do dyskretnego zbioru liczb)\footnote{
+Wystarczy spojrzeć na definicję zbioru $E \left( S \right)$ bądź na rysunek \ref{fig:mst1Example:a} oraz jego opis, by dojść do wniosku, że liczba wymaganych przez model ograniczeń jest ponad-wielomianowa~--- znacznie większa niż czas, w~którym spodziewalibyśmy się otrzymać rozwiązanie dla takiego modelu programowania liniowego (przypomnijmy, że modelem \textsc{LP} nazywamy model, którego zmienne decyzyjne nie są ograniczone do dyskretnego zbioru liczb)\footnote{
 	Z wiedzy ogólnej wiemy, że wszystkich podzbiorów zbioru, składającego się z~$n$ elementów, jest $2^{n}$ ($\sum_{i=0}^{n} \binom{n}{i}$).
-	Wzór ten doskonale opisuje naszą sytuację --- chcemy mieć ograniczenie dla wszystkich możliwych zbiorów $S$ jedno-, dwu-, $\dots$, $n$-elementowych.
+	Wzór ten doskonale opisuje naszą sytuację~--- chcemy mieć ograniczenie dla wszystkich możliwych zbiorów $S$ jedno-, dwu-, $\dots$, $n$-elementowych.
 	Z~drugiej zaś strony powiedzieliśmy (rozdzielając pojęcia programowania liniowego od całkowitoliczbowego), że wykorzystanie modelu \textsc{LP} gwarantuje nam możliwość otrzymania jego rozwiązania w~czasie wielomianowym \textbf{od rozmiaru problemu}.
 	W~związku z~czym algorytm, rozwiązujący dany model, będzie zwracał interesujący nas wynik w~nieakceptowalnym dla nas czasie.
-	Aby mimo wszystko uzyskać chciane rozwiązanie w~czasie wielomianowym, musimy zrezygnować z~algorytmów, które czasem działania płacą za swoją uniwersalność (taki jak przez nas przyjęty algorytm \textsc{simplex}~\cite{Gass2011}, którym potrafimy rozwiązać dowolne zagadnienie z~\textsc{LP}), na rzecz bardziej złożonych metod, które do działania nie potrzebują pełnego opisu problemu, tak jak wspomniany przez nas algorytm (a zatem ich czas działania nie jest na samym początku ograniczony z~dołu wielkością zadanego modelu, lecz występującą w~nim liczbą zmiennych decyzyjnych, a~tych w~omawianym przypadku jest niewiele --- $\left| E \right|$)~\cite{DBLP:conf/icalp/BeiCZ15}.
+	Aby mimo wszystko uzyskać chciane rozwiązanie w~czasie wielomianowym, musimy zrezygnować z~algorytmów, które czasem działania płacą za swoją uniwersalność (taki jak przez nas przyjęty algorytm \textsc{simplex}~\cite{Gass2011}, którym potrafimy rozwiązać dowolne zagadnienie z~\textsc{LP}), na rzecz bardziej złożonych metod, które do działania nie potrzebują pełnego opisu problemu, tak jak wspomniany przez nas algorytm (a zatem ich czas działania nie jest na samym początku ograniczony z~dołu wielkością zadanego modelu, lecz występującą w~nim liczbą zmiennych decyzyjnych, a~tych w~omawianym przypadku jest niewiele~--- $\left| E \right|$)~\cite{DBLP:conf/icalp/BeiCZ15}.
 }
 
 
@@ -187,7 +187,7 @@ Innym sposobem podejścia do problemu minimalnego drzewa rozpinającego jest jeg
 W~tej interpretacji węzłami są miejsca, w~których dozwolony jest skład pewnych towarów, zaś krawędzie między nimi symbolizują ścieżki, którymi dane towary możemy przemieszczać pomiędzy dwoma sąsiednimi punktami, ponosząc tego koszty proporcjonalnie do wagi wybranej krawędzi, która je łączy.
 Załóżmy, że mamy dany graf $G$, taki jak przedstawiono na rysunku \ref{fig:mst2Example}.
 Dodatkowo niech jeden z~węzłów w~grafie ($v_{1}$) będzie wyróżniony i~posiada tyle jednostek towarów, ile w~grafie jest wierzchołków.
-Naszym celem jest dystrybucja wszystkich towarów z~wykorzystaniem dostępnych krawędzi w~taki sposób, aby każdy z~transportów dotarł w~efekcie końcowym do innego wierzchołka --- biorąc pod uwagę, że życzymy sobie, aby przy okazji ponieść tego jak najmniejsze koszty, okaże się że droga, która zostanie w~ten sposób wytyczona z~punktu startowego $v_{1}$ do wszystkich $v_{j} \in V \setminus \left\{ v_{1} \right\}$, jest minimalnym drzewem rozpinającym ten graf, a~fakt rozdzielenia towarów pomiędzy wszystkie węzły w~oczywisty sposób świadczy o~spójności tak wygenerowanego drzewa.
+Naszym celem jest dystrybucja wszystkich towarów z~wykorzystaniem dostępnych krawędzi w~taki sposób, aby każdy z~transportów dotarł w~efekcie końcowym do innego wierzchołka~--- biorąc pod uwagę, że życzymy sobie, aby przy okazji ponieść tego jak najmniejsze koszty, okaże się że droga, która zostanie w~ten sposób wytyczona z~punktu startowego $v_{1}$ do wszystkich $v_{j} \in V \setminus \left\{ v_{1} \right\}$, jest minimalnym drzewem rozpinającym ten graf, a~fakt rozdzielenia towarów pomiędzy wszystkie węzły w~oczywisty sposób świadczy o~spójności tak wygenerowanego drzewa.
 
 \begin{figure}[!htbp]
 	\null\hfill
@@ -217,26 +217,26 @@ Naszym celem jest dystrybucja wszystkich towarów z~wykorzystaniem dostępnych k
 	\hfill\null
 	\caption{
 		Rysunek przedstawiający wygenerowany przepływ dla problemu znalezienia minimalnego drzewa rozpinającego.
-		Szarymi ciągłymi liniami zostało zaznaczone optymalne rozwiązanie problemu, przerywanymi --- pozostałe krawędzie w~grafie, zaś czarnymi oznaczone są łuki, które do tej pory były wykorzystane do transportu towarów.
+		Szarymi ciągłymi liniami zostało zaznaczone optymalne rozwiązanie problemu, przerywanymi~--- pozostałe krawędzie w~grafie, zaś czarnymi oznaczone są łuki, które do tej pory były wykorzystane do transportu towarów.
 		\textbf{(a)}~Sytuacja początkowa z~wszystkimi pięcioma elementami zgromadzonymi przy węźle $v_{1}$.
 		\textbf{(b)}~Z wierzchołka $v_{1}$ została przekazana piątka elementów z~wykorzystaniem krawędzi $e_{1}$.
-		\textbf{(c)}~Z wierzchołkiem $v_{2}$ połączone są jeszcze dwie krawędzie należące do minimalnego drzewa rozpinającego danego grafu przy tak zdefiniowanych kosztach --- wykorzystując krawędzie $e_{3}$ oraz $e_{4}$, do nowych wierzchołków zostały w~sumie przemieszczone cztery elementy, pozostawiając jeden w~wierzchołku $v_{2}$.
+		\textbf{(c)}~Z wierzchołkiem $v_{2}$ połączone są jeszcze dwie krawędzie należące do minimalnego drzewa rozpinającego danego grafu przy tak zdefiniowanych kosztach~--- wykorzystując krawędzie $e_{3}$ oraz $e_{4}$, do nowych wierzchołków zostały w~sumie przemieszczone cztery elementy, pozostawiając jeden w~wierzchołku $v_{2}$.
 		\textbf{(d)}~W wyniku rozdystrybuowania wszystkich elementów tak, aby każdy wierzchołek posiadał dokładnie jeden spośród nich, otrzymano minimalne drzewo rozpinające dla prezentowanego grafu. 
 	}
 	\label{fig:mst2Example}
 \end{figure}
 
-Niech teraz z~każdą krawędzią $e_{ij}$ ($e_{ij} \equiv v_{i} \overset{1}{\leadsto} v_{j} \; \wedge \; v_{j} \overset{1}{\leadsto} v_{i}$) będą związane dwie dodatkowe zmienne: $f_{ij}$ oraz $f_{ji}$, symbolizujące przepływ (ang. \textit{flow}) na tej krawędzi w~danym kierunku (wartość zmiennej $f_{ij}$ oznacza więc liczbę elementów, które z~wierzchołka $v_{i}$ przesunęliśmy do $v_{j}$ przy wykorzystaniu krawędzi $e_{ij}$, zaś zmienna $f_{ji}$ symbolizuje odwrotną zależność --- liczbę transportowanych elementów po tym samym łuku, lecz z~$v_{j}$ do $v_{i}$).
-Tak jak to sobie powiedzieliśmy i~jak mogliśmy zaobserwować na rysunku \ref{fig:mst2Example:a}, naszym celem jest wyjście z~sytuacji, gdzie w~jednym wierzchołku znajduje się $n = \left| V \right|$ elementów, i~zakończenie w~takiej, w~której do każdego wierzchołka przyporządkowany jest jeden z~nich --- innymi słowy chcemy, aby z~wyróżnionego wierzchołka wysłanych zostało $n - 1$ posiadanych przez niego elementów, przy jednoczesnym upewnieniu się, że żaden z~nich do niego nie wróci.
+Niech teraz z~każdą krawędzią $e_{ij}$ ($e_{ij} \equiv v_{i} \overset{1}{\leadsto} v_{j} \; \wedge \; v_{j} \overset{1}{\leadsto} v_{i}$) będą związane dwie dodatkowe zmienne: $f_{ij}$ oraz $f_{ji}$, symbolizujące przepływ (ang. \textit{flow}) na tej krawędzi w~danym kierunku (wartość zmiennej $f_{ij}$ oznacza więc liczbę elementów, które z~wierzchołka $v_{i}$ przesunęliśmy do $v_{j}$ przy wykorzystaniu krawędzi $e_{ij}$, zaś zmienna $f_{ji}$ symbolizuje odwrotną zależność~--- liczbę transportowanych elementów po tym samym łuku, lecz z~$v_{j}$ do $v_{i}$).
+Tak jak to sobie powiedzieliśmy i~jak mogliśmy zaobserwować na rysunku \ref{fig:mst2Example:a}, naszym celem jest wyjście z~sytuacji, gdzie w~jednym wierzchołku znajduje się $n = \left| V \right|$ elementów, i~zakończenie w~takiej, w~której do każdego wierzchołka przyporządkowany jest jeden z~nich~--- innymi słowy chcemy, aby z~wyróżnionego wierzchołka wysłanych zostało $n - 1$ posiadanych przez niego elementów, przy jednoczesnym upewnieniu się, że żaden z~nich do niego nie wróci.
 W~równaniu \ref{eq:mst2:flowArray} możemy wyróżnić dwie sumy, które kolejno oznaczają:
 
 \begin{itemize}
-	\item $\sum_{ \left( i, j \right ) \in E } f_{ij}$ --- sumę wartości wszystkich przepływów, których kierunek jest wyznaczony w~stronę wierzchołków innych niż $v_{i}$ (mówimy wtedy o~sumie przepływów \textbf{wyjściowych} wierzchołka $v_{i}$),
-	\item $\sum_{ \left( j, i \right ) \in E } f_{ji}$ --- sumę wartości przepływów skierowanych w~stronę wierzchołka $v_{i}$ (sumę przepływów przychodzących do danego wierzchołka).
+	\item $\sum_{ \left( i, j \right ) \in E } f_{ij}$~--- sumę wartości wszystkich przepływów, których kierunek jest wyznaczony w~stronę wierzchołków innych niż $v_{i}$ (mówimy wtedy o~sumie przepływów \textbf{wyjściowych} wierzchołka $v_{i}$),
+	\item $\sum_{ \left( j, i \right ) \in E } f_{ji}$~--- sumę wartości przepływów skierowanych w~stronę wierzchołka $v_{i}$ (sumę przepływów przychodzących do danego wierzchołka).
 \end{itemize}
 
 Innymi słowy wartość pierwszego wyrażenia będzie równa liczbie ładunków, które wysłaliśmy z~wierzchołka $v_{i}$ do pozostałych węzłów, zaś wartość drugiej sumy oznacza liczbę tych ładunków, które do wierzchołka $v_{i}$ dotarły.
-Widzimy zatem, że wartość wyrażenia z~równania \ref{eq:mst2:flowArray} dla parametru $i = 1$ odpowiada opisanej przez nas sytuacji --- wierzchołek początkowy wysyła w~kierunku pozostałych wierzchołków łącznie $n - 1$ ładunków (sobie pozostawiając jeden --- $\sum_{ \left( 1, j \right ) \in E } f_{1j} = n - 1$), zaś sam nie przyjmuje żadnych --- $\sum_{ \left( j, 1 \right ) \in E } f_{j1} = 0$.
+Widzimy zatem, że wartość wyrażenia z~równania \ref{eq:mst2:flowArray} dla parametru $i = 1$ odpowiada opisanej przez nas sytuacji~--- wierzchołek początkowy wysyła w~kierunku pozostałych wierzchołków łącznie $n - 1$ ładunków (sobie pozostawiając jeden~--- $\sum_{ \left( 1, j \right ) \in E } f_{1j} = n - 1$), zaś sam nie przyjmuje żadnych~--- $\sum_{ \left( j, 1 \right ) \in E } f_{j1} = 0$.
 Dla wszystkich pozostałych przypadków, tak jak to mogliśmy zaobserwować na rysunkach \ref{fig:mst2Example:a}--\ref{fig:mst2Example:d}, każdy wierzchołek, z~otrzymanych od sąsiada elementów, wybierał dla siebie jeden a~resztę przekazywał dalej, co natychmiast prowadzi do równości $\sum_{ \left( j, i \right ) \in E } f_{ji} - \sum_{ \left( i, j \right ) \in E } f_{ij} = 1$ (i oczywiście $\sum_{ \left( i, j \right ) \in E } f_{ij} - \sum_{ \left( j, i \right ) \in E } f_{ji} = -1$, gdyż w~takiej formie najwygodniej jest nam zastosować tą równość w~prezentowanym modelu \ref{mod:mst2}~\cite[$35$]{robustSTP}).
 
 \begin{subequations}
@@ -256,10 +256,10 @@ Dla wszystkich pozostałych przypadków, tak jak to mogliśmy zaobserwować na r
 	\end{alignat}\label{mod:mst2}
 \end{subequations}
 
-Reszta ograniczeń w~modelu \ref{mod:mst2} wydaje się być intuicyjna --- poprzez ograniczenia takie jak \ref{eq:mst2:flow1} czy \ref{eq:mst2:flow2} gwarantujemy sobie, że w~przypadku krawędzi $e$, która należy do minimalnego drzewa rozpinającego ($x_{e} = 1$), liczba przesyłanych przezeń elementów wynosić może maksymalnie $n - 1$ (czyli tyle, ile przesyłałby wierzchołek początkowy, gdyby posiadał tylko jednego sąsiada), w~przeciwnym zaś razie wykorzystanie tej krawędzi jest zabronione ($x_{ij} = 0 \rightarrow f_{ij} = 0$).
+Reszta ograniczeń w~modelu \ref{mod:mst2} wydaje się być intuicyjna~--- poprzez ograniczenia takie jak \ref{eq:mst2:flow1} czy \ref{eq:mst2:flow2} gwarantujemy sobie, że w~przypadku krawędzi $e$, która należy do minimalnego drzewa rozpinającego ($x_{e} = 1$), liczba przesyłanych przezeń elementów wynosić może maksymalnie $n - 1$ (czyli tyle, ile przesyłałby wierzchołek początkowy, gdyby posiadał tylko jednego sąsiada), w~przeciwnym zaś razie wykorzystanie tej krawędzi jest zabronione ($x_{ij} = 0 \rightarrow f_{ij} = 0$).
 Dodatkowo posiadamy ograniczenie, które determinuje liczbę krawędzi tworzących rozwiązanie, oraz ograniczenia wartości samych zmiennych decyzyjnych.
 Te ostatnie widzimy, że ograniczają ich dziedzinę do jedynie dwóch wartości ($0$ oraz $1$), co wskazuje na to, że przedstawiony w~\ref{mod:mst2} model opisuje problem programowania całkowitoliczbowego, w~związku z~czym oczekiwany czas otrzymania rozwiązania tak postawionego problemu, przy wykorzystaniu naszego modelu \ref{mod:mst2}, nie jest w~żaden sposób z góry ograniczony funkcją wielomianową od wielkości problemu.
-Możemy oczywiście zignorować ograniczenia całkowitoliczbowości, licząc na prawidłowe zachowanie się modelu bez tego ograniczenia --- choć brzmi to niedorzecznie, w~rzeczywistości (np. dla grafu i~kosztów zaprezentowanych na rysunkach \ref{fig:mst2Example:a}--\ref{fig:mst2Example:d}) może się okazać, że otrzymamy identyczne rozwiązanie co w~przypadku zastosowania ograniczeń na całkowitoliczbowość, co może sugerować, że tak zbudowany model również jest poprawny.
+Możemy oczywiście zignorować ograniczenia całkowitoliczbowości, licząc na prawidłowe zachowanie się modelu bez tego ograniczenia~--- choć brzmi to niedorzecznie, w~rzeczywistości (np. dla grafu i~kosztów zaprezentowanych na rysunkach \ref{fig:mst2Example:a}--\ref{fig:mst2Example:d}) może się okazać, że otrzymamy identyczne rozwiązanie co w~przypadku zastosowania ograniczeń na całkowitoliczbowość, co może sugerować, że tak zbudowany model również jest poprawny.
 
 \begin{figure}[!h]
 	\null\hfill
@@ -284,7 +284,7 @@ Możemy oczywiście zignorować ograniczenia całkowitoliczbowości, licząc na 
 	\label{fig:mst3Example}
 \end{figure}
 
-Niestety, jak widzimy na rysunkach \ref{fig:mst3Example:a} oraz \ref{fig:mst3Example:b}~\cite[$41$]{Magnanti1995503}, nawet w~najprostszych przypadkach zniesienie wspomnianego ograniczenia może spowodować, że zwracane rozwiązania będą niedopuszczalne w~myśl problemu minimalnego drzewa rozpinającego (choć oczywiście wszystkie ograniczenia tak zbudowanego modelu są spełnione --- po prostu nie modeluje on już więcej problemu, którego rozwiązania byśmy oczekiwali~\cite[$39$]{Magnanti1995503}).
+Niestety, jak widzimy na rysunkach \ref{fig:mst3Example:a} oraz \ref{fig:mst3Example:b}~\cite[$41$]{Magnanti1995503}, nawet w~najprostszych przypadkach zniesienie wspomnianego ograniczenia może spowodować, że zwracane rozwiązania będą niedopuszczalne w~myśl problemu minimalnego drzewa rozpinającego (choć oczywiście wszystkie ograniczenia tak zbudowanego modelu są spełnione~--- po prostu nie modeluje on już więcej problemu, którego rozwiązania byśmy oczekiwali~\cite[$39$]{Magnanti1995503}).
 W~związku z~tym będziemy chcieli zaproponować trzeci wariant rozwiązania, który w~znacznym stopniu opiera się na idei powyższego modelu, jednak w~odróżnieniu od swojego poprzednika, optymalne rozwiązania przez niego zwracane będą poprawne nawet, jeżeli zaniechamy ograniczenia na całkowitoliczbowość zmiennych decyzyjnych $\left\{ x_{i} : e_{i} \in E \right\}$.
 
 
@@ -294,7 +294,7 @@ W~związku z~tym będziemy chcieli zaproponować trzeci wariant rozwiązania, kt
 
 
 W tej części będziemy chcieli pokazać wariację na temat poprzednio prezentowanego modelu (patrz model \ref{mod:mst2}), która pozwoli nam na stwierdzenie, że dla tak zbudowanego modelu, jego rozwiązania (punkty ekstremalne~\cite{Papadimitriou:1982:COA:31027}) są liczbami całkowitymi~\cite[$42$--$46$]{Magnanti1995503}, bez względu na to, jakie ograniczenia zostaną nałożone na zmienne decyzyjne tego modelu.
-To z~kolei pozwoli nam na zdefiniowanie dziedzin wszystkich zmiennych decyzyjnych jako nieograniczonego zakresu liczb rzeczywistych większych od zera --- z~omówionych wcześniej własności problemu modelowania wiemy zaś, że w~takim przypadku mamy do czynienia z~modelem programowania liniowego, rozwiązywalnego w~czasie wielomianowym (a to jest właśnie naszym celem --- pokazanie modelu, dla którego rozwiązanie otrzymamy w~opisanym przez nas czasie).
+To z~kolei pozwoli nam na zdefiniowanie dziedzin wszystkich zmiennych decyzyjnych jako nieograniczonego zakresu liczb rzeczywistych większych od zera~--- z~omówionych wcześniej własności problemu modelowania wiemy zaś, że w~takim przypadku mamy do czynienia z~modelem programowania liniowego, rozwiązywalnego w~czasie wielomianowym (a to jest właśnie naszym celem~--- pokazanie modelu, dla którego rozwiązanie otrzymamy w~opisanym przez nas czasie).
 Zanim jednak przedstawimy pełen model (\ref{mod:mst3}), zaproponowany w~\cite[$42$--$46$]{Magnanti1995503}, omówimy kolejno znaczenie wszystkich najistotniejszych jego ograniczeń, które wymagają pochylenia się nad nimi.
 
 
@@ -302,7 +302,7 @@ Zanim jednak przedstawimy pełen model (\ref{mod:mst3}), zaproponowany w~\cite[$
 
 
 Zasadniczą różnicą pomiędzy tym (ang. \textit{directed multicommodity flow model}) a~poprzednio przedstawionym modelem jest odmienny sposób organizacji przepływu pomiędzy wierzchołkami grafu.
-Spójrzmy na rysunki \ref{fig:mst4Example:a}--\ref{fig:mst4Example:d} --- przedstawiają one niemal tę samą sytuację co na rysunku \ref{fig:mst2Example}, lecz skupiają się one jedynie na pojedynczym elemencie do przetransportowania, w~odróżnieniu od przytoczonego przykładu.
+Spójrzmy na rysunki \ref{fig:mst4Example:a}--\ref{fig:mst4Example:d}~--- przedstawiają one niemal tę samą sytuację co na rysunku \ref{fig:mst2Example}, lecz skupiają się one jedynie na pojedynczym elemencie do przetransportowania, w~odróżnieniu od przytoczonego przykładu.
 
 \begin{subequations}
 	\begin{alignat}{4}
@@ -345,12 +345,12 @@ Spójrzmy na rysunki \ref{fig:mst4Example:a}--\ref{fig:mst4Example:d} --- przeds
 	\hfill\null
 	\caption{
 		Przepływ towarów z~perspektywy wyróżnionego elementu $t_{5}$.
-		\textbf{(a)}~Sytuacja początkowa: wierzchołkiem startowym jest wierzchołek $v_{1} = v_{s}$, końcowym dla wyróżnionego towaru --- $v_{5}$.
+		\textbf{(a)}~Sytuacja początkowa: wierzchołkiem startowym jest wierzchołek $v_{1} = v_{s}$, końcowym dla wyróżnionego towaru~--- $v_{5}$.
 		\textbf{(b)}~Towar $t_{5}$ został przesunięty w~kierunku następnego wierzchołka.
 		Suma przepływów wychodzących dla danego towaru z~wierzchołka startowego wynosi $1$.
 		Wszystkie wierzchołki pośrednie (nie będące ani początkowym, ani końcowym dla branego pod uwagę towaru), które otrzymują towar $t_{5}$ w~czasie jego drogi do $v_{5}$, otrzymawszy go,
-		\textbf{(c)}~natychmiast przesyłają go dalej --- bilans przepływu dla takiego wierzchołka względem towaru $t_{5}$ wynosi $0$.
-		\textbf{(d)}~Różnica przepływów wchodzących oraz wychodzących do wierzchołka będącego odbiorcą swojego towaru wynosi $1$ --- jeśli wierzchołek nie jest wierzchołkiem początkowym, akceptuje on tylko przeznaczony dla siebie element, resztę zaś przesyła dalej w~chwili ich otrzymania (równość \ref{mod:mst3:d}).
+		\textbf{(c)}~natychmiast przesyłają go dalej~--- bilans przepływu dla takiego wierzchołka względem towaru $t_{5}$ wynosi $0$.
+		\textbf{(d)}~Różnica przepływów wchodzących oraz wychodzących do wierzchołka będącego odbiorcą swojego towaru wynosi $1$~--- jeśli wierzchołek nie jest wierzchołkiem początkowym, akceptuje on tylko przeznaczony dla siebie element, resztę zaś przesyła dalej w~chwili ich otrzymania (równość \ref{mod:mst3:d}).
 	}
 	\label{fig:mst4Example}
 \end{figure}
@@ -365,11 +365,11 @@ Analogicznie wszystkie wierzchołki $v_{i}$, nie będące wierzchołkiem począt
 Dla wszystkich pozostałych wierzchołków, które nie są ani wierzchołkiem początkowym, ani docelowym węzłem danego towaru $t_{i}$, suma przepływów wchodzących do danego wierzchołka i~z niego wychodzących dla towaru $t_{i}$ powinna być taka sama.
 Własności te są zachowane dla wszystkich towarów, poza tym znajdującym się w~wierzchołku początkowym ($t_{s}$).
 Oczywistym jest również, że w~przypadku, gdy dana krawędź nie należy do rozwiązania, przepływ dla tej krawędzi i~dowolnego towaru nie występuje ($y_{ij} = 0 \rightarrow \forall f_{ij}^{k} = 0$), zaś ograniczenie \ref{mod:mst3:f} redukuje nam przestrzeń dopuszczalnych przez model rozwiązań do drzew rozpinających zadany graf.
-Dzięki funkcji celu spośród nich wybierane jest zaś rozwiązanie optymalne --- minimalne drzewo rozpinające.
+Dzięki funkcji celu spośród nich wybierane jest zaś rozwiązanie optymalne~--- minimalne drzewo rozpinające.
 Warto zwrócić uwagę na fakt, że do problemu, który zdefiniowaliśmy tylko dla grafów nieskierowanych\footnote{
 	Problem minimalnego drzewa rozpinającego dla grafów skierowanych nosi nazwę optymalnego rozgałęziania (ang. \textit{optimum branching}) i~jest także rozwiązywalny w~czasie porównywalnym do czasu działania algorytmu Prima dla grafów nieskierowanych~\cite{NET:NET3230070103}.
 }, wykorzystujemy model, który rozróżnia kierunki przepływu na krawędziach (który jest przystosowany do grafów skierowanych).
-Wiąże się to z~koniecznością zastosowania funkcji celu, która za wartość zmiennej decyzyjnej $x_{ij}$ (z poprzedniego modelu) przyjmuję sumę zmiennych $y_{ij}$ oraz $y_{ji}$ --- dzięki tak prostemu zabiegowi otrzymujemy wyrażenie, którego wartość jest niezależna od kierunku przepływów i~może być traktowana jako wartość rozwiązania problemu minimalnego drzewa rozpinającego dla grafu nieskierowanego.
+Wiąże się to z~koniecznością zastosowania funkcji celu, która za wartość zmiennej decyzyjnej $x_{ij}$ (z poprzedniego modelu) przyjmuję sumę zmiennych $y_{ij}$ oraz $y_{ji}$~--- dzięki tak prostemu zabiegowi otrzymujemy wyrażenie, którego wartość jest niezależna od kierunku przepływów i~może być traktowana jako wartość rozwiązania problemu minimalnego drzewa rozpinającego dla grafu nieskierowanego.
 
 
 
@@ -391,7 +391,7 @@ Zatem, tak jak zdefiniowaliśmy to w~\ref{eq:imst}, naszym celem jest znalezieni
 gdzie za $T^{\ast}_{\textbf{s}}$ przyjmujemy drzewo będące minimalnym drzewem rozpinającym grafu $G$, którego koszty krawędzi definiowane są przez scenariusz $\textbf{s}$, $\mathcal{T}^{k}_{T^{\ast}_{\textbf{s}}}$ jest zbiorem zbiorów krawędzi (drzew), zdefiniowanym jako $\left\{ T : f \left( T, T^{\ast}_{\textbf{s}} \right) \leqslant k \right\}$ (gdzie $f: X \times X \rightarrow \ZZ^{+}$ była zdefiniowana jako $f \left( T^{0}, T^{1} \right) = \left| T^{0} \setminus T^{1} \right|$\footnote{
 	Zbiorem $X$ w~tym przypadku będziemy oznaczać przestrzeń wszystkich możliwych drzew rozpinających graf.}
 ), zaś my szukamy pośród tego zbioru takiego drzewa $T^{\ast}$, którego suma kosztów krawędzi dla nowego scenariusza $\textbf{s}^{\prime}$ będzie jak najmniejsza.
-Przyjmując, że pierwsze rozwiązanie problemu minimalnego drzewa rozpinającego $T^{\ast}_{\textbf{s}}$ opisują zmienne decyzyjne $x_{ij}$ ($T^{\ast}_{\textbf{s}} = \left\{ e_{ij} \; : \; x_{ij} = 1 \right\}$), nowego zaś --- $y_{ij}$ ($T^{\ast}_{\textbf{s}^{\prime}} = \left\{ e_{ij} \; : \; y_{ij} = 1 \right\}$), to bez głębszego zastanowienia możemy napisać następujący model:
+Przyjmując, że pierwsze rozwiązanie problemu minimalnego drzewa rozpinającego $T^{\ast}_{\textbf{s}}$ opisują zmienne decyzyjne $x_{ij}$ ($T^{\ast}_{\textbf{s}} = \left\{ e_{ij} \; : \; x_{ij} = 1 \right\}$), nowego zaś~--- $y_{ij}$ ($T^{\ast}_{\textbf{s}^{\prime}} = \left\{ e_{ij} \; : \; y_{ij} = 1 \right\}$), to bez głębszego zastanowienia możemy napisać następujący model:
 
 \begin{subequations}
 	\begin{alignat}{4}
@@ -402,30 +402,30 @@ Przyjmując, że pierwsze rozwiązanie problemu minimalnego drzewa rozpinająceg
 	\end{alignat}\label{mod:mst4}
 \end{subequations}
 gdzie równanie \ref{mod:mst4:b} symbolizuje dowolny układ ograniczeń, który posłużył nam w~poprzednim rozdziale do zamodelowania problemu minimalnego drzewa rozpinającego.
-Nierówność \ref{mod:mst4:c} w~naturalny sposób opisuje dodatkowe ograniczenie w~problemie typu \textsc{Incremental} --- jesteśmy zainteresowani rozwiązaniami, które nie zawierają więcej niż $k$ krawędzi, których nie ma w~rozwiązaniu bazowym ($x_{ij} = 0 \wedge y_{ij} = 1 \rightarrow \left| x_{e} - y_{e} \right| = 1$)\footnote{
+Nierówność \ref{mod:mst4:c} w~naturalny sposób opisuje dodatkowe ograniczenie w~problemie typu \textsc{Incremental}~--- jesteśmy zainteresowani rozwiązaniami, które nie zawierają więcej niż $k$ krawędzi, których nie ma w~rozwiązaniu bazowym ($x_{ij} = 0 \wedge y_{ij} = 1 \rightarrow \left| x_{e} - y_{e} \right| = 1$)\footnote{
 	Weźmy pod uwagę, że skoro oba rozwiązania zawierają z~definicji tą samą liczbę krawędzi, to fakt pojawienia się łuku należącego tylko do jednego z~nich, pociąga za sobą fakt pojawienia się w~drugim rozwiązaniu krawędzi, która nie jest częścią rozwiązania pierwszego.
 	Innymi słowy jesteśmy zmuszeni do podwojenia wartości parametru $k$ ($x_{ij} = 0 \wedge y_{ij} = 1 \; \rightarrow \; \exists e_{kl} \in E \; x_{kl} = 1 \wedge y_{kl} = 0$).
 }.
-Przyglądając się tak zdefiniowanemu modelowi, od razu możemy dostrzec pierwszy poważny problem --- funkcji $g \left( x_{ij}, y_{ij} \right) = \left| x_{ij} - y_{ij} \right|$ (zobacz pierwszy model \ref{eq:lp}) nie jesteśmy w~stanie przedstawić za pomocą dostępnych nam narzędzi, gdyż w~zależności od wartości zmiennych decyzyjnych, zmianom ulega nasza macierz współczynników dla modelu (gdy $x_{ij} \geqslant y_{ij}$, współczynnikami dla tego ograniczenia są $\left[ 1, -1 \right]$, zaś w~przypadku gdy $x_{ij} < y_{ij}$ --- sytuacja jest odwrotna), co oczywiście nie może mieć miejsca (nie możemy uzależniać struktury modelu od jego własnego rozwiązania).
+Przyglądając się tak zdefiniowanemu modelowi, od razu możemy dostrzec pierwszy poważny problem~--- funkcji $g \left( x_{ij}, y_{ij} \right) = \left| x_{ij} - y_{ij} \right|$ (zobacz pierwszy model \ref{eq:lp}) nie jesteśmy w~stanie przedstawić za pomocą dostępnych nam narzędzi, gdyż w~zależności od wartości zmiennych decyzyjnych, zmianom ulega nasza macierz współczynników dla modelu (gdy $x_{ij} \geqslant y_{ij}$, współczynnikami dla tego ograniczenia są $\left[ 1, -1 \right]$, zaś w~przypadku gdy $x_{ij} < y_{ij}$~--- sytuacja jest odwrotna), co oczywiście nie może mieć miejsca (nie możemy uzależniać struktury modelu od jego własnego rozwiązania).
 Aby rozwiązać ten problem, wprowadźmy dodatkowe zmienne decyzyjne:
 
 \begin{itemize}
-	\item $z_{ij}^{+}$ --- dla każdej krawędzi jej wartość wynosi $1$, gdy dana krawędź $e_{ij} \in T^{\ast}_{\textbf{s}^{\prime}}$ ($y_{ij} = 1$), lecz $e_{ij} \notin T^{\ast}_{\textbf{s}}$ ($x_{ij} = 0$).
+	\item $z_{ij}^{+}$~--- dla każdej krawędzi jej wartość wynosi $1$, gdy dana krawędź $e_{ij} \in T^{\ast}_{\textbf{s}^{\prime}}$ ($y_{ij} = 1$), lecz $e_{ij} \notin T^{\ast}_{\textbf{s}}$ ($x_{ij} = 0$).
 	W~przeciwnym wypadku $z_{ij}^{+} = 0$.
 	Wartość tak zdefiniowanej zmiennej zatem będzie udzielać informacji, czy dana krawędź nie występowała w~oryginalnym rozwiązaniu i~została dodana do nowego rozwiązania w~wyniku zmiany kosztów w~grafie,
-	\item $z_{ij}^{-}$ --- analogicznie do wyżej zdefiniowanej zmiennej wartość tej wskazuje na krawędzie, które zostały usunięte z~rozwiązania na rzecz tych, dla których $z_{ij}^{+} = 1$ (w przypadku, gdy dana krawędź $e_{ij} \notin T^{\ast}_{\textbf{s}^{\prime}}$, ale $e_{ij} \in T^{\ast}_{\textbf{s}}$ --- $z_{ij}^{-} = 1$),
+	\item $z_{ij}^{-}$~--- analogicznie do wyżej zdefiniowanej zmiennej wartość tej wskazuje na krawędzie, które zostały usunięte z~rozwiązania na rzecz tych, dla których $z_{ij}^{+} = 1$ (w przypadku, gdy dana krawędź $e_{ij} \notin T^{\ast}_{\textbf{s}^{\prime}}$, ale $e_{ij} \in T^{\ast}_{\textbf{s}}$~--- $z_{ij}^{-} = 1$),
 \end{itemize}
 które mają następujące własności:
 \begin{itemize}
-	\item jeśli dana krawędź $e_{ij}$ należy do pierwotnego rozwiązania (dla starych kosztów grafu), wtedy $z_{ij}^{+} = 0$ (nie możemy ponownie dodać do rozwiązania tego samego łuku --- \ref{mod:mst5:h}),
-	\item jeśli krawędź $e_{ij}$ nie należy do drzewa $T^{\ast}_{\textbf{s}}$, wtedy $z_{ij}^{-} = 0$ (analogicznie nie możemy z~rozwiązania usunąć krawędzi, której w~nim nie ma --- \ref{mod:mst5:i}),
+	\item jeśli dana krawędź $e_{ij}$ należy do pierwotnego rozwiązania (dla starych kosztów grafu), wtedy $z_{ij}^{+} = 0$ (nie możemy ponownie dodać do rozwiązania tego samego łuku~--- \ref{mod:mst5:h}),
+	\item jeśli krawędź $e_{ij}$ nie należy do drzewa $T^{\ast}_{\textbf{s}}$, wtedy $z_{ij}^{-} = 0$ (analogicznie nie możemy z~rozwiązania usunąć krawędzi, której w~nim nie ma~--- \ref{mod:mst5:i}),
 	\item nowa zmienna decyzyjna, generująca nam optymalne rozwiązanie problemu \textsc{IMST} ($T^{\ast} = \left\{ e_{ij} \; : \; z_{ij} = 1 \right\}$), jest zależna od obu tych zmiennych i~przybiera formę $z_{e} = z^{+}_{e} - z^{-}_{e} + x_{e}$.
 \end{itemize}
 
-Widzimy, że w~łatwy sposób możemy związać ze sobą informacje o~zmianach w~zbiorze krawędzi będących rozwiązaniem, z~informacjami niesionymi przez wektor zmiennych $\textbf{x}$ --- do modelu przedstawionego w~\ref{mod:mst2} dołączymy dodatkowe ograniczenia: \ref{mod:mst5:f}, \ref{mod:mst5:g}, \ref{mod:mst5:h} oraz \ref{mod:mst5:i} a~także za wektor zmiennych, wyznaczających rozwiązanie dla modelu, przyjmiemy $\textbf{z}$ (wektor $\textbf{x}$ w~tym przypadku symbolizuje stare rozwiązanie).
-Jak wskazaliśmy wyżej, jedynym miejscem, w~którym wiążemy nowe zależności ze starym modelem, jest zbiór równości \ref{mod:mst5:g} (gdybyśmy je usunęli, otrzymywane rozwiązania dla tego modelu niczym by się nie różniły od tych otrzymywanych dla \ref{mod:mst2} --- ograniczenia od \ref{mod:mst5:f} do \ref{mod:mst5:i} po prostu nie miałyby na rozwiązanie żadnego wpływu).
-Bardzo łatwo też można dostrzec, że jeżeli $\forall e_{ij} \in E \; z_{ij}^{+} = 0 \wedge z_{ij}^{-} = 0$, to otrzymany model również niczym nie różni się od przedstawionego wyżej \ref{mod:mst2} --- wartości zmiennych decyzyjnych $z_{ij}$ będą po prostu przyrównane do starych wartości a~model bez zastanowienia powinien zwrócić nam identyczne rozwiązanie.
-W~zależności od parametru $k$ dla problemu \textsc{IMST} wiele ograniczeń zajdzie właśnie w~takiej formie --- $z_{ij} = 0 - 0 + x_{ij}$ (jeśli $k$ jest małe w~stosunku do liczby krawędzi w~grafie).
+Widzimy, że w~łatwy sposób możemy związać ze sobą informacje o~zmianach w~zbiorze krawędzi będących rozwiązaniem, z~informacjami niesionymi przez wektor zmiennych $\textbf{x}$~--- do modelu przedstawionego w~\ref{mod:mst2} dołączymy dodatkowe ograniczenia: \ref{mod:mst5:f}, \ref{mod:mst5:g}, \ref{mod:mst5:h} oraz \ref{mod:mst5:i} a~także za wektor zmiennych, wyznaczających rozwiązanie dla modelu, przyjmiemy $\textbf{z}$ (wektor $\textbf{x}$ w~tym przypadku symbolizuje stare rozwiązanie).
+Jak wskazaliśmy wyżej, jedynym miejscem, w~którym wiążemy nowe zależności ze starym modelem, jest zbiór równości \ref{mod:mst5:g} (gdybyśmy je usunęli, otrzymywane rozwiązania dla tego modelu niczym by się nie różniły od tych otrzymywanych dla \ref{mod:mst2}~--- ograniczenia od \ref{mod:mst5:f} do \ref{mod:mst5:i} po prostu nie miałyby na rozwiązanie żadnego wpływu).
+Bardzo łatwo też można dostrzec, że jeżeli $\forall e_{ij} \in E \; z_{ij}^{+} = 0 \wedge z_{ij}^{-} = 0$, to otrzymany model również niczym nie różni się od przedstawionego wyżej \ref{mod:mst2}~--- wartości zmiennych decyzyjnych $z_{ij}$ będą po prostu przyrównane do starych wartości a~model bez zastanowienia powinien zwrócić nam identyczne rozwiązanie.
+W~zależności od parametru $k$ dla problemu \textsc{IMST} wiele ograniczeń zajdzie właśnie w~takiej formie~--- $z_{ij} = 0 - 0 + x_{ij}$ (jeśli $k$ jest małe w~stosunku do liczby krawędzi w~grafie).
 Ogólnie $\sum_{e \in E} z_{e}^{+} = \sum_{e \in E} z_{e}^{-} = k$).
 
 \begin{subequations}
@@ -449,13 +449,13 @@ Ogólnie $\sum_{e \in E} z_{e}^{+} = \sum_{e \in E} z_{e}^{-} = k$).
 	\end{alignat}\label{mod:mst5}
 \end{subequations}
 
-Wracając zaś do problemu wyrażenia wartości bezwzględnej w~modelu programowania \textsc{LP}/\textsc{MIP}, widzimy, że dla tak zdefiniowanych zmiennych zachodzi $\left| x_{ij} - y_{ij} \right| = z_{ij}^{+} - z_{ij}^{-}$ --- wystarczy zauważyć, że w~przypadku gdy $x_{ij} < y_{ij}$ bądź $y_{ij} < x_{ij}$ (odpowiednio $e_{ij} \notin T^{\ast}_{\textbf{s}}$ i~$e_{ij} \in T^{\ast}_{\textbf{s}^{\prime}}$ lub $e_{ij} \notin T^{\ast}_{\textbf{s}^{\prime}}$ i~$e_{ij} \in T^{\ast}_{\textbf{s}}$ --- krawędź $e_{ij}$ należy tylko do pierwszego bądź tylko do drugiego rozwiązania), suma zmiennych $z_{e_{ij}}^{+}$ oraz $z_{e_{ij}}^{-}$ wynosi dokładnie $1$ --- dzięki ograniczeniom \ref{mod:mst5:h} oraz \ref{mod:mst5:i} mamy pewność, że gdy jedna z~tych zmiennych równa się $1$, w~tym czasie wartość drugiej jest z~góry ograniczona przez $0$ ($z^{+}_{e_{ij}}$ i~$z^{-}_{e_{ij}}$ są zmiennymi o~wartościach nieujemnych).
-Dodatkowo, aby któraś z~nierówności ($x_{e_{ij}} < y_{e_{ij}}$ lub $y_{e_{ij}} < x_{e_{ij}}$) mogła zajść, wartość którejkolwiek ze zmiennych $z_{e_{ij}}^{+}$ lub $z_{e_{ij}}^{-}$ musi się różnić od zera --- zakładając zaś, że wartości zmiennych $x_{ij} \in \textbf{x}$ ze starego rozwiązania należą do zbioru $\left\{ 0 , 1 \right\}$, oraz że domeny zmiennych należących do wektora $\textbf{z}$ wymuszają te same zakresy dopuszczalnych wartości (\ref{mod:mst5:k}), dochodzimy do wniosku, że jedynymi dopuszczalnymi w~takim wypadku wartościami zmiennych $z_{e_{ij}}^{+}$ lub $z_{e_{ij}}^{-}$ są te, należące do $\left\{ 0, 1 \right\}$\footnote{
+Wracając zaś do problemu wyrażenia wartości bezwzględnej w~modelu programowania \textsc{LP}/\textsc{MIP}, widzimy, że dla tak zdefiniowanych zmiennych zachodzi $\left| x_{ij} - y_{ij} \right| = z_{ij}^{+} - z_{ij}^{-}$~--- wystarczy zauważyć, że w~przypadku gdy $x_{ij} < y_{ij}$ bądź $y_{ij} < x_{ij}$ (odpowiednio $e_{ij} \notin T^{\ast}_{\textbf{s}}$ i~$e_{ij} \in T^{\ast}_{\textbf{s}^{\prime}}$ lub $e_{ij} \notin T^{\ast}_{\textbf{s}^{\prime}}$ i~$e_{ij} \in T^{\ast}_{\textbf{s}}$~--- krawędź $e_{ij}$ należy tylko do pierwszego bądź tylko do drugiego rozwiązania), suma zmiennych $z_{e_{ij}}^{+}$ oraz $z_{e_{ij}}^{-}$ wynosi dokładnie $1$~--- dzięki ograniczeniom \ref{mod:mst5:h} oraz \ref{mod:mst5:i} mamy pewność, że gdy jedna z~tych zmiennych równa się $1$, w~tym czasie wartość drugiej jest z~góry ograniczona przez $0$ ($z^{+}_{e_{ij}}$ i~$z^{-}_{e_{ij}}$ są zmiennymi o~wartościach nieujemnych).
+Dodatkowo, aby któraś z~nierówności ($x_{e_{ij}} < y_{e_{ij}}$ lub $y_{e_{ij}} < x_{e_{ij}}$) mogła zajść, wartość którejkolwiek ze zmiennych $z_{e_{ij}}^{+}$ lub $z_{e_{ij}}^{-}$ musi się różnić od zera~--- zakładając zaś, że wartości zmiennych $x_{ij} \in \textbf{x}$ ze starego rozwiązania należą do zbioru $\left\{ 0 , 1 \right\}$, oraz że domeny zmiennych należących do wektora $\textbf{z}$ wymuszają te same zakresy dopuszczalnych wartości (\ref{mod:mst5:k}), dochodzimy do wniosku, że jedynymi dopuszczalnymi w~takim wypadku wartościami zmiennych $z_{e_{ij}}^{+}$ lub $z_{e_{ij}}^{-}$ są te, należące do $\left\{ 0, 1 \right\}$\footnote{
 	Dla przykładu: jeśli $z_{ij} = 1$, $x_{ij} = 0$, to wiemy, że $z_{e_{ij}}^{+} - z_{e_{ij}}^{-} = 1$, zaś z~ograniczenia \ref{mod:mst5:i} mamy dodatkowo, że $z_{e_{ij}}^{-} \leqslant 0$, co razem z~\ref{mod:mst5:j} ($z_{e_{ij}}^{-} \geqslant 0$) doprowadza nas do jedynego słusznego wniosku, że $z_{e_{ij}}^{+} = 0$.
 }.
 Oczywiście, gdy $\left| x_{e} - y_{e} \right| = 0$, $x_{e} = y_{e}$, co pociąga za sobą $z_{e}^{+} = z_{e}^{-} = 0$.
 
-Możemy całkowicie zrezygnować z~ograniczenia \ref{mod:mst5:g}, pozbywając się w~ten sposób nadmiaru zmiennych z~modelu oraz znacznie redukując liczbę potrzebnych ograniczeń, tak jak to pokazano poniżej (\ref{mod:mst6}), gdzie w~miejsce zmiennych $z_{e}$ dla każdej krawędzi pojawiły się jego podwyrażenia --- $\sum_{e \in E} c_{e} \cdot x_{e} + \sum_{e \in E} c_{e} \cdot \left( z^{+}_{e} - z^{-}_{e} \right) = \sum_{e \in E} c_{e} \cdot z_{ij}$, gdzie $z_{ij}$ to zmienne odnoszące się do poprzedniego modelu (\ref{mod:mst5:g}).
+Możemy całkowicie zrezygnować z~ograniczenia \ref{mod:mst5:g}, pozbywając się w~ten sposób nadmiaru zmiennych z~modelu oraz znacznie redukując liczbę potrzebnych ograniczeń, tak jak to pokazano poniżej (\ref{mod:mst6}), gdzie w~miejsce zmiennych $z_{e}$ dla każdej krawędzi pojawiły się jego podwyrażenia~--- $\sum_{e \in E} c_{e} \cdot x_{e} + \sum_{e \in E} c_{e} \cdot \left( z^{+}_{e} - z^{-}_{e} \right) = \sum_{e \in E} c_{e} \cdot z_{ij}$, gdzie $z_{ij}$ to zmienne odnoszące się do poprzedniego modelu (\ref{mod:mst5:g}).
 Równość \ref{mod:mst6:b} także pokrywa się z~równością \ref{mod:mst4:b} dla modelu \ref{mod:mst4}:
 
 \begin{equation}
@@ -491,9 +491,9 @@ Przyglądając się modelowi zdefiniowanemu w~\ref{mod:mst4} (przytoczymy go pon
 	\end{alignat}\label{mod:mst4dup}
 \end{subequations}
 
-możemy zauważyć, że gdyby nie obecność ograniczenia \ref{mod:mst4dup:c}, prezentowany model niczym nie różniłby się od dowolnego modelu rozwiązującego problem minimalnego drzewa rozpinającego (byłby dokładnie jego uogólnionym zapisem --- jak powiedzieliśmy przy omawianiu rzeczonego modelu, równość \ref{mod:mst4dup:b} symbolizuje ograniczenia dla tego problemu).
+możemy zauważyć, że gdyby nie obecność ograniczenia \ref{mod:mst4dup:c}, prezentowany model niczym nie różniłby się od dowolnego modelu rozwiązującego problem minimalnego drzewa rozpinającego (byłby dokładnie jego uogólnionym zapisem~--- jak powiedzieliśmy przy omawianiu rzeczonego modelu, równość \ref{mod:mst4dup:b} symbolizuje ograniczenia dla tego problemu).
 Naturalnym pytaniem zatem jest: ,,Czy możemy za pomocą posiadanego już modelu rozwiązywać inne, podobne do siebie problemy?''.
-Zanim odpowiemy na to pytanie, przekształćmy jeszcze model \ref{mod:mst4dup} do najprostszej, najbardziej wymownej postaci jaką możemy uzyskać --- zauważmy, że zgodnie z~definicją funkcji $f: X \times X \rightarrow \ZZ^{+}$, jej wartość zależy tylko od dwóch zbiorów krawędzi (w naszym przypadku od drzew $T^{\ast}_{\textbf{s}}$ oraz $T^{\ast}$, gdzie pierwszym z~nich jest optymalne (minimalne) drzewo rozpinające dla grafu z~kosztami krawędzi zgodnymi ze scenariuszem początkowym $\textbf{s}$, drugie zaś jest optymalnym rozwiązaniem problemu \textsc{IMST}).
+Zanim odpowiemy na to pytanie, przekształćmy jeszcze model \ref{mod:mst4dup} do najprostszej, najbardziej wymownej postaci jaką możemy uzyskać~--- zauważmy, że zgodnie z~definicją funkcji $f: X \times X \rightarrow \ZZ^{+}$, jej wartość zależy tylko od dwóch zbiorów krawędzi (w naszym przypadku od drzew $T^{\ast}_{\textbf{s}}$ oraz $T^{\ast}$, gdzie pierwszym z~nich jest optymalne (minimalne) drzewo rozpinające dla grafu z~kosztami krawędzi zgodnymi ze scenariuszem początkowym $\textbf{s}$, drugie zaś jest optymalnym rozwiązaniem problemu \textsc{IMST}).
 Skoro zaś $f \left( T^{\ast}_{\textbf{s}}, T^{\ast} \right) = \left| T^{\ast} \setminus T^{\ast}_{\textbf{s}} \right|$ (oraz $f \left( T^{\ast}_{\textbf{s}}, T^{\ast} \right) = \left| T^{\ast}_{\textbf{s}} \setminus T^{\ast} \right|$)\footnote{
 	Zatem kolejność argumentów funkcji $f: X \times X \rightarrow \ZZ^{+}$ nie ma żadnego znaczenia.
 }, możemy dojść do wniosku, że wyliczanie wartości $\left| x_{e} - y_{e} \right|$ dla wszystkich krawędzi nie jest najszybszym sposobem narzucenia ograniczeń zgodnie z~wymogami problemu minimalnego drzewa rozpinającego w~wersji \textsc{Incremental}.
@@ -501,12 +501,12 @@ Szybko możemy zauważyć, że tak naprawdę jesteśmy zainteresowani tylko wart
 
 \begin{equation}
 	\sum_{\mathclap{e \in E}} \left| x_{e} - y_{e} \right| \leqslant 2 \cdot k \leftrightarrow \sum_{\mathclap{e_{i} \in E \setminus T^{\ast}_{\textbf{s}}}} z_{i} \leqslant k \leftrightarrow \sum_{\mathclap{e_{i} \in T^{\ast} \setminus T^{\ast}_{\textbf{s}}}} z_{i} \leqslant k\text{.}\footnote{
-		Zauważyliśmy tutaj, że sumy $\sum_{e_{i} \in E \setminus T^{\ast}_{\textbf{s}}} z_{i}$ oraz $\sum_{e_{i} \in T^{\ast} \setminus T^{\ast}_{\textbf{s}}} z_{i}$ są identyczne --- wynika to z~prostego faktu, że dla wszystkich krawędzi $e \in E \setminus T^{\ast} \; z_{i} = 0$.
+		Zauważyliśmy tutaj, że sumy $\sum_{e_{i} \in E \setminus T^{\ast}_{\textbf{s}}} z_{i}$ oraz $\sum_{e_{i} \in T^{\ast} \setminus T^{\ast}_{\textbf{s}}} z_{i}$ są identyczne~--- wynika to z~prostego faktu, że dla wszystkich krawędzi $e \in E \setminus T^{\ast} \; z_{i} = 0$.
 	}
 \end{equation}
 
 Przyjrzyjmy się zatem następującemu modelowi\footnote{
-	Jako że nie będziemy już rozróżniać zmiennych z~wektorów $\textbf{x}$, $\textbf{y}$ i~$\textbf{z}$ (odpowiednio jako zmienne wskazujące krawędzie należące do zbiorów $T^{\ast}_{\textbf{s}}$, $T^{\ast}_{\textbf{s}^{\prime}}$ --- dla problemu \textsc{MST} --- oraz $T^{\ast}$ --- dla problemu \textsc{IMST}), w~dalszej części będziemy na powrót posługiwać się oznaczeniami $\textbf{x}$, by podkreślić odrębność omawianego zagadnienia.
+	Jako że nie będziemy już rozróżniać zmiennych z~wektorów $\textbf{x}$, $\textbf{y}$ i~$\textbf{z}$ (odpowiednio jako zmienne wskazujące krawędzie należące do zbiorów $T^{\ast}_{\textbf{s}}$, $T^{\ast}_{\textbf{s}^{\prime}}$~--- dla problemu \textsc{MST}~--- oraz $T^{\ast}$~--- dla problemu \textsc{IMST}), w~dalszej części będziemy na powrót posługiwać się oznaczeniami $\textbf{x}$, by podkreślić odrębność omawianego zagadnienia.
 }~\cite[$588$]{incNetOpt}:
 
 \begin{subequations}
@@ -517,7 +517,7 @@ Przyjrzyjmy się zatem następującemu modelowi\footnote{
 	& & & \phantom{\sum} x_{e} \geqslant 0\text{,} & \forall e \in E\text{,}&&&
 	\end{alignat}\label{mod:mst7}
 \end{subequations}
-a następnie dokonajmy \textbf{relaksacji} jego ograniczeń --- innymi słowy usuniemy z~niego ograniczenie \ref{mod:mst7:c} (tak aby powstały w~ten sposób model był identyczny, co model rozwiązujący problem minimalnego drzewa rozpinającego) a~następnie dodamy to ograniczenie do wartości funkcji celu:
+a następnie dokonajmy \textbf{relaksacji} jego ograniczeń~--- innymi słowy usuniemy z~niego ograniczenie \ref{mod:mst7:c} (tak aby powstały w~ten sposób model był identyczny, co model rozwiązujący problem minimalnego drzewa rozpinającego) a~następnie dodamy to ograniczenie do wartości funkcji celu:
 
 \begin{subequations}
 	\begin{alignat}{4}
@@ -528,9 +528,9 @@ a następnie dokonajmy \textbf{relaksacji} jego ograniczeń --- innymi słowy us
 \end{subequations}
 gdzie $\lambda$ jest parametrem.
 Idea, stojąca za takim postępowaniem, jest bardzo prosta.
-Załóżmy, że ograniczenie \ref{mod:mst7:c} nie zaszło (czyli $\sum_{e \in T^{\ast} \setminus T^{\ast}_{\textbf{s}}} x_{e} > k$) --- sami na to zezwoliliśmy, usuwając dane ograniczenie z~modelu.
-Bezpośrednią konsekwencją niespełnienia danego ograniczenia jest wzrost wartości rozwiązania, jaką zwróci nam tak zmodyfikowana funkcja celu --- zwracana wartość będzie tym większa, im bardziej będziemy oddalać się od przestrzeni rozwiązań dopuszczalnych ($\sum_{e \in T^{\ast} \setminus T^{\ast}_{\textbf{s}}} x_{e}$ będzie coraz bardziej oddalone od $k$) lub im większą wartość parametru $\lambda$ przyjmiemy.
-Naszą motywacją w~tak podjętym działaniu jest naturalne wymuszenie na modelu odrzucania niedopuszczalnych rozwiązań (ściślej mówiąc --- traktowania ich jako rozwiązania nieoptymalne, dla których funkcja celu nie zwraca najmniejszej wartości spośród wszystkich dostępnych rozwiązań) przy jednoczesnym zachowaniu jego uproszczonej struktury.
+Załóżmy, że ograniczenie \ref{mod:mst7:c} nie zaszło (czyli $\sum_{e \in T^{\ast} \setminus T^{\ast}_{\textbf{s}}} x_{e} > k$)~--- sami na to zezwoliliśmy, usuwając dane ograniczenie z~modelu.
+Bezpośrednią konsekwencją niespełnienia danego ograniczenia jest wzrost wartości rozwiązania, jaką zwróci nam tak zmodyfikowana funkcja celu~--- zwracana wartość będzie tym większa, im bardziej będziemy oddalać się od przestrzeni rozwiązań dopuszczalnych ($\sum_{e \in T^{\ast} \setminus T^{\ast}_{\textbf{s}}} x_{e}$ będzie coraz bardziej oddalone od $k$) lub im większą wartość parametru $\lambda$ przyjmiemy.
+Naszą motywacją w~tak podjętym działaniu jest naturalne wymuszenie na modelu odrzucania niedopuszczalnych rozwiązań (ściślej mówiąc~--- traktowania ich jako rozwiązania nieoptymalne, dla których funkcja celu nie zwraca najmniejszej wartości spośród wszystkich dostępnych rozwiązań) przy jednoczesnym zachowaniu jego uproszczonej struktury.
 Pokażemy teraz słuszność takiego postępowania w~ogólnym przypadku.
 
 \begin{lemma}~\cite[$607$]{Ahuja:1993:NFT:137406}\label{lm:lagrange}
@@ -539,7 +539,7 @@ Pokażemy teraz słuszność takiego postępowania w~ogólnym przypadku.
 	Jeśli $\textbf{x}^{\ast}$ jest rozwiązaniem dopuszczalnym w~$\mathcal{P}$ i~spełnia założenia warunku komplementarności $\boldsymbol{\lambda} \cdot \left( A \cdot \textbf{x}^{\ast} - b \right) = \textbf{0}$, wtedy rozwiązanie $\textbf{x}^{\ast}$ jest rozwiązaniem optymalnym dla problemu $\mathcal{P}$.
 \end{lemma}
 
-W naszym przypadku, jak można było zauważyć w~modelu \ref{mod:mst8}, użyty przez nas parametr $\lambda$ nie jest wektorem (zwykliśmy je oznaczać pogrubioną czcionką), co ma swoje uzasadnienie w~tym, że wartość, przez którą go mnożymy, też nim nie jest (usunięte z~modelu \ref{mod:mst7} ograniczenie nie jest agregatorem dla większej liczby ograniczeń --- tyczy się pojedynczej sumy).
+W naszym przypadku, jak można było zauważyć w~modelu \ref{mod:mst8}, użyty przez nas parametr $\lambda$ nie jest wektorem (zwykliśmy je oznaczać pogrubioną czcionką), co ma swoje uzasadnienie w~tym, że wartość, przez którą go mnożymy, też nim nie jest (usunięte z~modelu \ref{mod:mst7} ograniczenie nie jest agregatorem dla większej liczby ograniczeń~--- tyczy się pojedynczej sumy).
 Naszym celem zatem jest pokazać, że o~ile model \ref{mod:mst8} zwróci rozwiązanie spełniające podane w~lemacie kryteria, będzie ono szukanym przez nas rozwiązaniem optymalnym, co pozwoli nam się następnie skupić na sposobie obliczania samego parametru $\lambda$ dla minimalizującej funkcji celu.
 
 \begin{proof}
@@ -571,7 +571,7 @@ Naszym celem zatem jest pokazać, że o~ile model \ref{mod:mst8} zwróci rozwią
 	\end{equation}
 	
 	Możemy zatem o~wartości $L \left( \boldsymbol{\lambda} \right)$ powiedzieć, że jest dolnym ograniczeniem na wartość $v^{\ast}$, jako że zawsze $L \left( \boldsymbol{\lambda} \right) \leqslant v^{\ast}$.
-	Wartość wyrażenia $v^{\ast}$ jest najmniejsza spośród wszystkich innych rozwiązań ($v^{\ast} = \textbf{c} \cdot \textbf{x}^{\ast}$, gdzie $\textbf{x}^{\ast}$ jest optymalnym rozwiązaniem problemu opisanego przez model \ref{mod:relax1}), zatem $L \left( \boldsymbol{\lambda} \right)$ --- jeśli jest mniejsza od $v^{\ast}$ --- jest rozwiązaniem na pewno niedopuszczalnym (wartość $L \left( \boldsymbol{\lambda} \right)$ reprezentuje rozwiązanie niedopuszczalne).
+	Wartość wyrażenia $v^{\ast}$ jest najmniejsza spośród wszystkich innych rozwiązań ($v^{\ast} = \textbf{c} \cdot \textbf{x}^{\ast}$, gdzie $\textbf{x}^{\ast}$ jest optymalnym rozwiązaniem problemu opisanego przez model \ref{mod:relax1}), zatem $L \left( \boldsymbol{\lambda} \right)$~--- jeśli jest mniejsza od $v^{\ast}$~--- jest rozwiązaniem na pewno niedopuszczalnym (wartość $L \left( \boldsymbol{\lambda} \right)$ reprezentuje rozwiązanie niedopuszczalne).
 	Co nas w~związku z~tym powinno interesować, to jak najdokładniejsze dolne ograniczenie na wartość $v^{\ast}$, najlepiej takie, że $v^{\ast} = L \left( \boldsymbol{\lambda} \right)$: $L^{\ast} = \max_{\boldsymbol{\lambda}} L \left( \boldsymbol{\lambda} \right)$, które spełnia $L \left( \boldsymbol{\lambda} \right) \leqslant L^{\ast} \leqslant v^{\ast}$.
 	Dodatkowo z~faktu optymalności rozwiązania $\textbf{x}^{\ast}$ wiemy, że dla dowolnego $\textbf{x} \in X$ zachodzi także $L \left( \boldsymbol{\lambda} \right) \leqslant L^{\ast} \leqslant v^{\ast} = \textbf{c} \cdot \textbf{x}^{\ast} \leqslant \textbf{c} \cdot \textbf{x}$.
 	Załóżmy teraz, że rozwiązanie $\textbf{x} \in X$ spełnia warunek komplementarności, to znaczy $\boldsymbol{\lambda} \cdot \left( A \cdot \textbf{x} - \textbf{b} \right) = \textbf{0}$, w~związku z~tym wyrażenie $L \left( \boldsymbol{\lambda} \right)$ upraszcza się do $\textbf{c} \cdot \textbf{x}$.
@@ -585,11 +585,11 @@ Naszym celem zatem jest pokazać, że o~ile model \ref{mod:mst8} zwróci rozwią
 	Z powyższego zaś wynika, że drugi z~podanych wzorów przedstawia szereg równości, tak więc ostatecznie otrzymujemy, że $L \left( \boldsymbol{\lambda} \right) = v^{\ast} = \textbf{c} \cdot \textbf{x}$, gdzie $\textbf{x} = \textbf{x}^{\ast}$.
 \end{proof}
 
-Powyższy lemat jest bardzo potężnym narzędziem --- okazuje się bowiem, że dzięki spełnieniu warunku komplementarności możemy bezkarnie uprościć nasz model rozwiązujący problem minimalnego drzewa rozpinającego w~wersji \textsc{Incremental}\footnote{
-	Powstało bardzo dużo prac naukowych na temat użyteczności zaprezentowanego lematu i~polach do zastosowania relaksacji Lagrange'a, których nie będziemy tu przytaczać --- głównym polem, na którym eksploatowana jest ta metoda, jest problem transformacji modeli programowania \textsc{IP}/\textsc{MIP} do postaci \textsc{LP} tak, aby bez pogorszenia stopnia użyteczności danego modelu, móc uzyskiwać rozwiązania problemów w~rozsądnym, wielomianowym czasie.
+Powyższy lemat jest bardzo potężnym narzędziem~--- okazuje się bowiem, że dzięki spełnieniu warunku komplementarności możemy bezkarnie uprościć nasz model rozwiązujący problem minimalnego drzewa rozpinającego w~wersji \textsc{Incremental}\footnote{
+	Powstało bardzo dużo prac naukowych na temat użyteczności zaprezentowanego lematu i~polach do zastosowania relaksacji Lagrange'a, których nie będziemy tu przytaczać~--- głównym polem, na którym eksploatowana jest ta metoda, jest problem transformacji modeli programowania \textsc{IP}/\textsc{MIP} do postaci \textsc{LP} tak, aby bez pogorszenia stopnia użyteczności danego modelu, móc uzyskiwać rozwiązania problemów w~rozsądnym, wielomianowym czasie.
 }.
-W~naszym przypadku zastosowanie tej metody jest bardzo proste, gdyż liczba relaksowanych przez nas ograniczeń to zaledwie $1$ --- w~związku z~tym przedstawimy teraz cały proces transformacji modelu rozwiązującego problem \textsc{IMST} do prostszego, radzącego sobie z~problemem \textsc{MST}, zwracającego zaś te same rozwiązania\footnote{
-	W~przypadku dobrania odpowiedniej wartości parametru $\lambda$ --- jako że jesteśmy zainteresowani na razie samą ideą takiego podejścia, nie będziemy skupiać się na tym problemie.
+W~naszym przypadku zastosowanie tej metody jest bardzo proste, gdyż liczba relaksowanych przez nas ograniczeń to zaledwie $1$~--- w~związku z~tym przedstawimy teraz cały proces transformacji modelu rozwiązującego problem \textsc{IMST} do prostszego, radzącego sobie z~problemem \textsc{MST}, zwracającego zaś te same rozwiązania\footnote{
+	W~przypadku dobrania odpowiedniej wartości parametru $\lambda$~--- jako że jesteśmy zainteresowani na razie samą ideą takiego podejścia, nie będziemy skupiać się na tym problemie.
 	Poruszymy go zaś w~następnym rozdziale, gdzie będzie on głównym punktem naszych rozważań.
 }.
 
