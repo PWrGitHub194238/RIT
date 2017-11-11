@@ -95,7 +95,7 @@ gdzie $\left| T \right|$ symbolizuje liczbę krawędzi w zbiorze $T$, $v \overse
 
 \section{Problem minimalnego drzewa rozpinającego}\label{sec:mst}
 
-Niech $\mathcal{T}_{G}$ oznacza zbiór wszystkich drzew rozpinających dla grafu $G$. Problem \textbf{minimalnego drzewa rozpinającego} (dalej \textsc{mst}) polega na znalezieniu takiego zbioru krawędzi $T^{\ast} \in \mathcal{T}_{G}$, że ich całkowity koszt jest najmniejszy spośród wszystkich możliwych rozwiązań. Zanim jednak bezpośrednio przejdziemy do omawiania algorytmów, które służą do odnajdywania konstrukcji o takich właściwościach, przedstawimy warunki jakie musi spełniać drzewo, abyśmy mieli pewność, że suma kosztów jego krawędzi rzeczywiście jest najmniejsza.
+Niech $\mathcal{T}_{G}$ oznacza zbiór wszystkich drzew rozpinających dla grafu $G$. Problem \textbf{minimalnego drzewa rozpinającego} (dalej \textsc{mst}) polega na znalezieniu takiego zbioru krawędzi $T^{\ast} \in \mathcal{T}_{G}$, że ich całkowity koszt jest najmniejszy spośród wszystkich pozostałych, możliwych rozwiązań. Zanim jednak bezpośrednio przejdziemy do omawiania algorytmów, które służą do odnajdywania konstrukcji o takich właściwościach, przedstawimy warunki jakie musi spełniać drzewo, abyśmy mieli pewność, że suma kosztów jego krawędzi rzeczywiście jest najmniejsza.
 
 Pierwszym takim podejściem do zdefiniowania warunków optymalności rozwiązania $T$ jest warunek \textbf{optymalnych cięć} (ang. \textit{cut optimality conditions}). Znajdujący się na rysunku \ref{fig:defExample:c} przykład prezentuje cięcie grafu $G$ --- w przypadku cięcia drzew rozpinających, takie posunięcie spowoduje jego podział na dwie części, tak jak to pokazano na rysunkach \ref{fig:cut:a}--\ref{fig:cut:c}, gdyż w wyniku zastosowania cięcia przez wybraną krawędź, jest ona usuwana z ciętego zbioru. Optymalnym cięciem natomiast będziemy nazywali takie cięcie, w wyniku którego z grafu usuwana jest krawędź o jak najmniejszym (w przypadku problemów minimalizacyjnych) koszcie ze wszystkich, znajdujących się na drodze takiego cięcia (np. na rysunku \ref{fig:defExample:c} cięcie przechodzi przez krawędzie $\left\{ e_{1}, e_{6}, e_{10} \right\}$). W przypadku cięcia drzewa rozpinającego $T$ (patrz rysunek \ref{fig:cut}) przez krawędź $e_{6}$, zbiór taki będziemy oznaczać przez $\mathcal{Q} \left( T, e_{6} \right)$ i będą do niego należeć wszystkie krawędzie $e^{\prime} \in E$ łączące ze sobą dwa, powstałe w wyniku cięcia, zbiory wierzchołków, zgodnie z poniższą definicją.
 
@@ -115,19 +115,19 @@ Innymi słowy, przyglądając się rysunkowi \ref{fig:cut:b}, koszt krawędzi pr
 
 \begin{figure}[!htbp]
 	\null\hfill
-	\begin{subfigure}[b]{0.3\textwidth}
+	\begin{subfigure}[b]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{Chapter_I/CUT-example/a}
 		\caption{}
 		\label{fig:cut:a}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.3\textwidth}
+	\begin{subfigure}[b]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{Chapter_I/CUT-example/b}
 		\caption{}
 		\label{fig:cut:b}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.3\textwidth}
+	\begin{subfigure}[b]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{Chapter_I/CUT-example/c}
 		\caption{}
 		\label{fig:cut:c}

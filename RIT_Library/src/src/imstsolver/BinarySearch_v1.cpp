@@ -161,12 +161,12 @@ void BinarySearch_v1::checkLambdaBounds(EdgeCount k) {
 				lowerBound, upperBound);
 
 		graphCostBackup = tempUpdateGraphEdgeCosts(lowerBound);
-		lowerBoundMST = mstSolver->getMST();
+		lowerBoundMST = mstSolver->getSolution();
 		GraphUtils::changeGraphCosts(graph, graphCostBackup);
 		delete graphCostBackup;
 
 		graphCostBackup = tempUpdateGraphEdgeCosts(upperBound);
-		upperBoundMST = mstSolver->getMST();
+		upperBoundMST = mstSolver->getSolution();
 		GraphUtils::changeGraphCosts(graph, graphCostBackup);
 		delete graphCostBackup;
 	}
@@ -285,7 +285,7 @@ EdgeSetIF* BinarySearch_v1::binarySearchForSolution(EdgeCount k,
 		graphCostBackup = tempUpdateGraphEdgeCosts(
 				lambdaFeasibleParameterSet.at(lambdaIdx));
 
-		mstSolution = mstSolver->getMST();
+		mstSolution = mstSolver->getSolution();
 		differentEdges = getMSTDiff(mstSolution);
 		GraphUtils::changeGraphCosts(graph, graphCostBackup);
 		delete graphCostBackup;
@@ -362,7 +362,7 @@ EdgeSetIF* BinarySearch_v1::resolve(IncrementalParam k,
 	if (this->isCostChanged && k > 0) {
 		this->isCostChanged = false;
 		INFO(logger, LogBundleKey::BS_V1_UNBOUNDED_SOLVE, k);
-		unboundedMSTSolution = mstSolver->getMST(initialVertex);
+		unboundedMSTSolution = mstSolver->getSolution(initialVertex);
 
 		if (getMSTDiff(unboundedMSTSolution) <= k) {
 			INFO(logger, LogBundleKey::BS_V1_UNBOUNDED_OPTIMAL, k,
@@ -602,7 +602,7 @@ EdgeSetIF * BinarySearch_v1::resolve(IncrementalParam k) {
 
 	graphCostBackup = tempUpdateGraphEdgeCosts(lambdaCurrentValue);
 
-	newMSTSolution = mstSolver->getMST();
+	newMSTSolution = mstSolver->getSolution();
 	differentEdges = getMSTDiff(newMSTSolution);
 
 	GraphUtils::changeGraphCosts(graph, graphCostBackup);

@@ -5,8 +5,8 @@
  *      Author: tomasz
  */
 
-#ifndef SRC_INCLUDE_RIMSTSOLVER_TABUSEARCH_HPP_
-#define SRC_INCLUDE_RIMSTSOLVER_TABUSEARCH_HPP_
+#ifndef SRC_INCLUDE_RRIMSTSOLVER_TABUSEARCH_HPP_
+#define SRC_INCLUDE_RRIMSTSOLVER_TABUSEARCH_HPP_
 
 #include "../enums/AIMSTSolverEnum.hpp"
 #include "../enums/IMSTSolverEnum.hpp"
@@ -14,9 +14,8 @@
 #include "../typedefs/primitive.hpp"
 #include "../typedefs/struct.hpp"
 #include "../utils/enums/TabuMapEnum.hpp"
-#include "RIMSTSolverIF.hpp"
-
 #include <sstream>
+#include "../rrimstsolver/RRIMSTSolverIF.hpp"
 
 class MSTSolverIF;
 
@@ -25,7 +24,7 @@ class IMSTSolverIF;
 
 /** @brief Implements TabuSearch algorithm for Robust Recoverable Incremental Minimum Spanning Tree.
  *
- * @details It shears common interface RIMSTSolverIF that allows user to use it like any other solver-type class.
+ * @details It shears common interface RRIMSTSolverIF that allows user to use it like any other solver-type class.
  *
  * Example below shows how to solve RRIMST problem with TabuSearch:
  *
@@ -49,12 +48,12 @@ class IMSTSolverIF;
  *		oss.clear();
  *	}
  *
- *	RIMSTSolverIF* rimstSolver = new RIMSTSolverImpl { AIMSTSolverEnum::DEFAULT,
+ *	RRIMSTSolverIF* rimstSolver = new RIMSTSolverImpl { AIMSTSolverEnum::DEFAULT,
  *		IMSTSolverEnum::DEFAULT, MSTSolverEnum::DEFAULT, g, adversarialScenarios, k,
  *		tabuPeriod, numberOfPathIterations, numberOfIterations
  *	};
  *
- *	EdgeSetIF* solution = rimstSolver->getMST();
+ *	EdgeSetIF* solution = rimstSolver->getSolution();
  *	delete rimstSolver;
  *
  *	std::cout << solution->toString() << std::endl;
@@ -66,16 +65,14 @@ class IMSTSolverIF;
  * @endcode
  *
  */
-class TabuSearch: public RIMSTSolverIF {
+class TabuSearch: public RRIMSTSolverIF {
 private:
 
 	//************************************ PRIVATE CONSTANT FIELDS *************************************//
 
 	//************************************** PRIVATE CLASS FIELDS **************************************//
 
-	/// @brief Value r[i][k] determines how many times edge \f$\left( i, j \right)\f$ belonged to solutions
-	///
-	/// that was found by TabuSearch algorithm up to now.
+	/// @brief Value r[i][k] determines how many times edge \f$\left( i, j \right)\f$ belonged to solutions that was found by TabuSearch algorithm up to now.
 	unsigned int **r;
 
 	/// @brief Value r[i][k] represents a sum of every solution's cost that includes edge \f$\left( i, j \right)\f$.
@@ -86,7 +83,7 @@ private:
 
 	/// @brief List of forbidden moves.
 	///
-	/// TabuMap is build from two TabuSupMap where first contains list
+	/// @details TabuMap is build from two TabuSupMap where first contains list
 	/// of those edges that cannot be dropped from solution for some remaining time.
 	/// Second sublist contains edges that cannot be added to new solution.
 	/// To get correct list, use getTabuList(TabuMapEnum).
@@ -94,7 +91,7 @@ private:
 
 	/// @brief Cadency for every element in tabu list.
 	///
-	/// By performing one move i.e. form edge \f$\left( i, j \right)\f$ to \f$\left( k, l \right)\f$,
+	/// @details By performing one move i.e. form edge \f$\left( i, j \right)\f$ to \f$\left( k, l \right)\f$,
 	/// both edges will be added to tabu list for the next tabuPeriod iterations of TabuSearch.
 	/// Arc \f$\left( i, j \right)\f$ will be added to the tabu list described by TabuMapEnum::DROP
 	/// and edge \f$\left( k, l \right)\f$  to the tabu list described by TabuMapEnum::ADD.
@@ -102,12 +99,12 @@ private:
 
 	/// @brief Number of overall iterations of TabuSearch algorithm.
 	///
-	/// After it reaches this number, algorithm will end.
+	/// @details After it reaches this number, algorithm will end.
 	TabuIterationCount numberOfIterations;
 
 	/// @brief Number of iterations for each algorithm's path.
 	///
-	/// After this number of iterations algorithm will
+	/// @details After this number of iterations algorithm will
 	/// try to find another solution to start from.
 	TabuIterationCount numberOfPathIterations;
 
@@ -118,8 +115,8 @@ private:
 
 	/** @brief Returns the worst case alternative for given spanning tree.
 	 *
-	 * @details Based on RIMSTSolverIF::adversarialScenarioSet, this method will chose a new cost
-	 * for every edge in given graph RIMSTSolverIF::graph. That is for every edge
+	 * @details Based on RRIMSTSolverIF::adversarialScenarioSet, this method will chose a new cost
+	 * for every edge in given graph RRIMSTSolverIF::graph. That is for every edge
 	 * that belongs to given spanningTree, it cost will match the highest cost
 	 * of this edge among adversarial scenarios, lowest otherwise.
 	 *
@@ -187,12 +184,12 @@ private:
 
 	/** @brief Returns a solution for Adversarial Incremental Minimum Spanning Tree problem for given initial solution initialSolution.
 	 *
-	 * @details Using RIMSTSolverIF::aimstSolver, this function will return the solution for AIMST based on
-	 * scenarios available for adversary RIMSTSolverIF::adversarialScenarioSet and parameter RIMSTSolverIF::k
+	 * @details Using RRIMSTSolverIF::aimstSolver, this function will return the solution for AIMST based on
+	 * scenarios available for adversary RRIMSTSolverIF::adversarialScenarioSet and parameter RRIMSTSolverIF::k
 	 * that is a part of description of Incremental Minimum Spanning Tree problem that describes
 	 * how the IMST solution can differ from given initialSolution (how many edges we can change).
 	 *
-	 * @param initialSolution spanning tree for IMST problem with parameter RIMSTSolverIF::k which
+	 * @param initialSolution spanning tree for IMST problem with parameter RRIMSTSolverIF::k which
 	 * forbids any solutions that have more than <b>k</b> edges, that are not a part of initialSolution, to be returned.
 	 * @return solution for Adversarial Incremental Minimum Spanning Tree problem for given set
 	 * of adversarial scenarios and incremental parameter.
@@ -317,8 +314,8 @@ protected:
 
 	/** @brief Runs main algorithm to solve given Recoverable Robust Incremental Minimum Spanning Tree problem.
 	 *
-	 * @details It is a core method that RIMSTSolverIF::getMST() will call, optionally with additional
-	 * modifications around it (i.e. IMSTSolverIF::getMST(GraphEdgeCostsIF)).
+	 * @details It is a core method that RRIMSTSolverIF::getSolution() will call, optionally with additional
+	 * modifications around it (i.e. IMSTSolverIF::getSolution(GraphEdgeCostsIF)).
 	 *
 	 * @return Spanning Tree that is the best found solution for given instance of the RRIMST problem.
 	 */
@@ -336,9 +333,9 @@ public:
 	 *
 	 * @details This method allows to take control of every single step that TabuSearch algorithm will perform,
 	 * starting by selection of algorithms that will be used to solved related problems:
-	 * 	- Adversarial Incremental Minimum Spanning Tree (allowed solver types are defined in AIMSTSolverEnum),
-	 * 	- Incremental Minimum Spanning Tree (see MSTSolverEnum),
-	 * 	- Minimum Spanning Tree ( MSTSolverEnum ).
+	 * 	- Adversarial Incremental Minimum Spanning Tree (allowed solver types are defined in #AIMSTSolverEnum),
+	 * 	- Incremental Minimum Spanning Tree (see #IMSTSolverEnum),
+	 * 	- Minimum Spanning Tree (#MSTSolverEnum).
 	 *
 	 * It also allows to set basic mandatory fields like graph for which computation will take place,
 	 * adversarialScenarioSet which contains various scenarios for adversary to chose from (AIMST problem)
@@ -378,9 +375,9 @@ public:
 	 *
 	 * @details This method allows to take control of every single step that TabuSearch algorithm will perform,
 	 * starting by selection of algorithms that will be used to solved related problems:
-	 * 	- Adversarial Incremental Minimum Spanning Tree (allowed solver types are defined in AIMSTSolverEnum),
-	 * 	- Incremental Minimum Spanning Tree (see MSTSolverEnum),
-	 * 	- Minimum Spanning Tree ( MSTSolverEnum ).
+	 * 	- Adversarial Incremental Minimum Spanning Tree (allowed solver types are defined in #AIMSTSolverEnum),
+	 * 	- Incremental Minimum Spanning Tree (see #IMSTSolverEnum),
+	 * 	- Minimum Spanning Tree (#MSTSolverEnum).
 	 *
 	 * It also allows to set basic mandatory fields like graph for which computation will take place,
 	 * adversarialScenarioSet which contains various scenarios for adversary to chose from (AIMST problem)
@@ -408,8 +405,8 @@ public:
 	 *
 	 * @details This method allows to take control of given steps that TabuSearch algorithm will perform,
 	 * starting by selection of algorithms that will be used to solved related problems:
-	 * 	- Incremental Minimum Spanning Tree (see MSTSolverEnum),
-	 * 	- Minimum Spanning Tree ( MSTSolverEnum ).
+	 * 	- Incremental Minimum Spanning Tree (see #IMSTSolverEnum),
+	 * 	- Minimum Spanning Tree (#MSTSolverEnum).
 	 *
 	 * Solver type for Adversarial Incremental Minimum Spanning Tree problem is selected by default - see AIMSTSolverEnum::DEFAULT.
 	 *
@@ -448,8 +445,8 @@ public:
 	 *
 	 * @details This method allows to take control of given steps that TabuSearch algorithm will perform,
 	 * starting by selection of algorithms that will be used to solved related problems:
-	 * 	- Incremental Minimum Spanning Tree (see MSTSolverEnum),
-	 * 	- Minimum Spanning Tree ( MSTSolverEnum ).
+	 * 	- Incremental Minimum Spanning Tree (see #IMSTSolverEnum),
+	 * 	- Minimum Spanning Tree (#MSTSolverEnum).
 	 *
 	 * Solver type for Adversarial Incremental Minimum Spanning Tree problem is selected by default - see AIMSTSolverEnum::DEFAULT.
 	 *
@@ -493,7 +490,6 @@ public:
 	 * 	- numberOfIterations - number of overall iterations of TabuSearch algorithm after which it returns
 	 * 	the best found solution so far.
 	 *
-	 * @param imstSolverType - type of solver for Incremental Minimum Spanning Tree to be used by AIMST solver,
 	 * @param mstSolverType - type of solver for Minimum Spanning Tree to be used both by AIMST solver
 	 * (it will create it's own solver based on mstSolverType) and TabuSearch algorithm
 	 * to find new starting points after each numberOfPathIterations iterations without improving solution's value,
@@ -516,9 +512,9 @@ public:
 	 *
 	 * @details This method allows to take control of every single step that TabuSearch algorithm will perform,
 	 * starting by selection of algorithms that will be used to solved related problems:
-	 * 	- Adversarial Incremental Minimum Spanning Tree (allowed solver types are defined in AIMSTSolverEnum),
-	 * 	- Incremental Minimum Spanning Tree (see MSTSolverEnum),
-	 * 	- Minimum Spanning Tree ( MSTSolverEnum ).
+	 * 	- Adversarial Incremental Minimum Spanning Tree (allowed solver types are defined in #AIMSTSolverEnum),
+	 * 	- Incremental Minimum Spanning Tree (see #IMSTSolverEnum),
+	 * 	- Minimum Spanning Tree (#MSTSolverEnum).
 	 *
 	 * It also allows to set basic mandatory fields like graph for which computation will take place,
 	 * adversarialScenarioSet which contains various scenarios for adversary to chose from (AIMST problem)
@@ -587,6 +583,13 @@ public:
 	TabuSearch(GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
 			IncrementalParam k);
 
+	/** @brief Destroys TabuSearch instance.
+	 *
+	 * @details It removes TabuSearch::r, TabuSearch::sr and TabuSearch::mr objects
+	 * that are used as additional information to calculate best moves for algorithm
+	 * (see calculateMoveValue() and updateMValTables()).
+	 *
+	 */
 	virtual ~TabuSearch();
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
@@ -595,4 +598,4 @@ public:
 
 };
 
-#endif /* SRC_INCLUDE_RIMSTSOLVER_TABUSEARCH_HPP_ */
+#endif /* SRC_INCLUDE_RRIMSTSOLVER_TABUSEARCH_HPP_ */

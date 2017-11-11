@@ -48,39 +48,39 @@ MSTSolverIF::MSTSolverIF(GraphIF * const graph) {
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
 
-EdgeSetIF * MSTSolverIF::getMST()
+EdgeSetIF * MSTSolverIF::getSolution()
 		throw (GraphExceptions::DisconnectedGraphException) {
 	if (!graph->hasAnyVertex(Visibility::VISIBLE)) {
 		WARN(logger, LogBundleKey::MSTS_IF_EMPTY_INPUT_GRAPH);
 		return new EdgeSetImpl { };
 	} else {
-		return getMST(graph->nextVertex(Visibility::VISIBLE));
+		return getSolution(graph->nextVertex(Visibility::VISIBLE));
 	}
 }
 
-EdgeSetIF * MSTSolverIF::getMST(GraphEdgeCostsIF * const & graphScenario)
+EdgeSetIF * MSTSolverIF::getSolution(GraphEdgeCostsIF * const & graphScenario)
 		throw (GraphExceptions::DisconnectedGraphException) {
 	GraphEdgeCostsIF* graphEdgeCostsBackup = new GraphEdgeCostsImpl { graph };
 	GraphUtils::changeGraphCosts(graph, graphScenario);
-	EdgeSetIF * mstForScenario = this->getMST();
+	EdgeSetIF * mstForScenario = this->getSolution();
 	GraphUtils::changeGraphCosts(graph, graphEdgeCostsBackup);
 	delete graphEdgeCostsBackup;
 	return mstForScenario;
 }
 
-EdgeSetIF * MSTSolverIF::getMST(EdgeSetIF * const & visibleSet)
+EdgeSetIF * MSTSolverIF::getSolution(EdgeSetIF * const & visibleSet)
 		throw (GraphExceptions::DisconnectedGraphException) {
 	ConnectivityList connectivityList = GraphUtils::shrinkConnectivityToSet(
 			graph, visibleSet);
-	EdgeSetIF* minimumSpanningTree = getMST();
+	EdgeSetIF* minimumSpanningTree = getSolution();
 	graph->restoreConnectivityAllEdges(connectivityList);
 	return minimumSpanningTree;
 }
 
-EdgeSetIF * MSTSolverIF::getMST(VertexIF * const & initialVertex)
+EdgeSetIF * MSTSolverIF::getSolution(VertexIF * const & initialVertex)
 		throw (GraphExceptions::DisconnectedGraphException) {
 	if (initialVertex == nullptr) {
-		return getMST();
+		return getSolution();
 	}
 	if (GraphUtils::isGraphConnected(graph) == false) {
 		ERROR(logger, LogBundleKey::MSTS_IF_GRAPH_NOT_CONNECTED);
@@ -94,12 +94,12 @@ EdgeSetIF * MSTSolverIF::getMST(VertexIF * const & initialVertex)
 	}
 }
 
-EdgeSetIF * MSTSolverIF::getMST(VertexIF * const & initialVertex,
+EdgeSetIF * MSTSolverIF::getSolution(VertexIF * const & initialVertex,
 		EdgeSetIF * const & visibleSet)
 				throw (GraphExceptions::DisconnectedGraphException) {
 	VisibilityList visibilityList = GraphUtils::shrinkVisibilityToSet(graph,
 			visibleSet);
-	EdgeSetIF* minimumSpanningTree = getMST(initialVertex);
+	EdgeSetIF* minimumSpanningTree = getSolution(initialVertex);
 	graph->restoreVisibilityAllEdges(visibilityList);
 	return minimumSpanningTree;
 }

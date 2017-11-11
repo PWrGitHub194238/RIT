@@ -28,7 +28,7 @@ TEST ( MST_TEST, SMALL_VA ) {
 
 	MSTSolverIF* p = new MSTSolverImpl { g };
 
-	EdgeSetIF* eSetMST = p->getMST();
+	EdgeSetIF* eSetMST = p->getSolution();
 	std::cout << "MST: " << eSetMST->toString() << std::endl;
 
 	std::cout << "total cost: " << eSetMST->getTotalEdgeCost() << std::endl;

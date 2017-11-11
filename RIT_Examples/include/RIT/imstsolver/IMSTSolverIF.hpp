@@ -146,7 +146,7 @@ public:
 	 * @param newGraphCosts nowe koszty grafu
 	 * @return
 	 */
-	EdgeSetIF* getIMST(EdgeCount k, EdgeSetIF* baseMSTSolution,
+	EdgeSetIF* getSolution(EdgeCount k, EdgeSetIF* baseMSTSolution,
 			VertexIF* initialVertex, GraphEdgeCostsIF* newGraphCosts);
 
 	/** Zwraca MST dla grafu o kosztach newGraphCosts,
@@ -157,7 +157,7 @@ public:
 	 * @param newGraphCosts nowe koszty grafu
 	 * @return
 	 */
-	EdgeSetIF* getIMST(EdgeCount k, VertexIF* initialVertex,
+	EdgeSetIF* getSolution(EdgeCount k, VertexIF* initialVertex,
 			GraphEdgeCostsIF* newGraphCosts);
 
 	/** Zwraca MST dla grafu o kosztach newGraphCosts,
@@ -170,7 +170,7 @@ public:
 	 * @param newGraphCosts nowe koszty grafu
 	 * @return
 	 */
-	EdgeSetIF* getIMST(EdgeCount k, EdgeSetIF* baseMSTSolution,
+	EdgeSetIF* getSolution(EdgeCount k, EdgeSetIF* baseMSTSolution,
 			GraphEdgeCostsIF* newGraphCosts);
 
 	/** Zwraca MST dla grafu o kosztach newGraphCosts,
@@ -180,7 +180,7 @@ public:
 	 * @param newGraphCosts nowe koszty grafu
 	 * @return
 	 */
-	EdgeSetIF* getIMST(EdgeCount k, GraphEdgeCostsIF* newGraphCosts);
+	EdgeSetIF* getSolution(EdgeCount k, GraphEdgeCostsIF* newGraphCosts);
 
 	/** Zwraca MST dla podanego w konstruktorze grafu,
 	 * które nie różni się o więcej niż k krawędzi od baseMSTSolution.
@@ -192,7 +192,7 @@ public:
 	 * @param initialVertex początkowy wierzchołek dla MSTSolver przy szukaniu unbounded
 	 * @return
 	 */
-	EdgeSetIF* getIMST(EdgeCount k, EdgeSetIF* baseMSTSolution,
+	EdgeSetIF* getSolution(EdgeCount k, EdgeSetIF* baseMSTSolution,
 			VertexIF* initialVertex);
 
 	/** Zwraca MST dla podanego w konstruktorze grafu,
@@ -202,7 +202,7 @@ public:
 	 * @param initialVertex początkowy wierzchołek dla MSTSolver przy szukaniu unbounded
 	 * @return
 	 */
-	EdgeSetIF* getIMST(EdgeCount k, VertexIF* initialVertex);
+	EdgeSetIF* getSolution(EdgeCount k, VertexIF* initialVertex);
 
 	/** Zwraca MST dla podanego w konstruktorze grafu,
 	 * które nie różni się o więcej niż k krawędzi od baseMSTSolution.
@@ -213,7 +213,7 @@ public:
 	 * różniące się od tego zbioru o nie więcej niż k).
 	 * @return
 	 */
-	EdgeSetIF* getIMST(EdgeCount k, EdgeSetIF* baseMSTSolution);
+	EdgeSetIF* getSolution(EdgeCount k, EdgeSetIF* baseMSTSolution);
 
 	/** Zwraca MST dla podanego w konstruktorze grafu,
 	 * które nie różni się o więcej niż k krawędzi od poprzedniego rozwiązania.
@@ -221,7 +221,7 @@ public:
 	 * @param k o ile może się maks różnić nowe rozwiązanie od bazowego
 	 * @return
 	 */
-	EdgeSetIF* getIMST(EdgeCount k);
+	EdgeSetIF* getSolution(EdgeCount k);
 
 //*************************************** GETTERS & SETTERS ****************************************//
 

@@ -196,7 +196,7 @@ CPLEX_LP_IMSTSolverIF::CPLEX_LP_IMSTSolverIF(
 	this->baseMSTSolution =
 			baseSolution ?
 					new EdgeSetImpl { baseSolution, false } :
-					this->mstSolver->getMST();
+					this->mstSolver->getSolution();
 	this->baseLPMSTSolution = CPLEXUtils::transformEdgeSetToLP(graph,
 			baseMSTSolution);
 	this->isCostChanged = false;

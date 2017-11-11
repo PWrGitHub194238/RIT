@@ -23,7 +23,7 @@
 class EdgeIF;
 
 /**
- * Z uwagi na metodę konstrukcji modelu, nie da się odpalić kilka razy getMST() na tym samym obiekcie, musi być za każdym rzem tworzony od nowa.
+ * Z uwagi na metodę konstrukcji modelu, nie da się odpalić kilka razy getSolution() na tym samym obiekcie, musi być za każdym rzem tworzony od nowa.
  */
 class CPLEX_LP_MSTSolverIF: public MSTSolverIF {
 

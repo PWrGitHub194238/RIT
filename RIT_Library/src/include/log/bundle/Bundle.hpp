@@ -34,6 +34,8 @@ enum LogBundleKey {
 	AIMST_RESOLVE_THREAD_SOL,
 	AIMST_RESOLVE_THREAD_BETTER_SOL,
 	AIMST_RESOLVE_THREAD_SOLUTION,
+	AIMST_RESOLVE_FOR_SCENARIO,
+	AIMST_RESOLVE_FOR_SCENARIO_BETTER_SOL,
 
 	//**************** Warn *****************//
 	AIMST_RESOLVE_NO_SCENARIO,
@@ -568,14 +570,14 @@ enum LogBundleKey {
 	//**************** Fatal ****************//
 
 
-	//*********************************** RIMSTSolverIF.cpp ***********************************//
+	//*********************************** RRIMSTSolverIF.cpp ***********************************//
 	//**************** Trace ****************//
 	//**************** Debug ****************//
 	//**************** Info *****************//
-	RIMSTS_IF_GRAPH_COST_BACKUP,
+	RRIMSTS_IF_GRAPH_COST_BACKUP,
 
 	//**************** Warn *****************//
-	RIMSTS_IF_NEW_GRAPH_COST_SIZE_MISMATCH,
+	RRIMSTS_IF_NEW_GRAPH_COST_SIZE_MISMATCH,
 
 	//**************** Error ****************//
 	//**************** Fatal ****************//

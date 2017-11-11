@@ -5,7 +5,7 @@
  *      Author: tomasz
  */
 
-#include "../../include/rimstsolver/TabuSearch.hpp"
+#include "../../include/rrimstsolver/TabuSearch.hpp"
 
 #include <log4cxx/helpers/messagebuffer.h>
 #include <log4cxx/logger.h>
@@ -153,7 +153,7 @@ AIMSTSolution TabuSearch::getSolutionForTree(EdgeSetIF* initialSolution) {
 	IteratorId graphIteratorId = graph->getEdgeIteratorId();
 	VisibilityList visibilityList = graph->storeEdgeVisibility(graphIteratorId);
 	graph->showAllEdges(graphIteratorId);
-	AIMSTSolution solution = aimstSolver->getMST(initialSolution);
+	AIMSTSolution solution = aimstSolver->getSolution(initialSolution);
 	graph->restoreVisibilityAllEdges(visibilityList, graphIteratorId);
 	graph->removeEdgeIterator(graphIteratorId);
 	return solution;
@@ -410,7 +410,7 @@ EdgeSetIF * TabuSearch::resolve() {
 			spanningTreeCost, solutionCost);
 
 	worstCaseScenario = getWorstCaseScenario(solution);
-	nextEdgeSet = this->mstSolver->getMST(worstCaseScenario);
+	nextEdgeSet = this->mstSolver->getSolution(worstCaseScenario);
 
 	while (!stopCriterionMet(globalIterationCount)) {
 		bestNeighbor = findMinimumInNeighborhood(spanningTree, solutionCost,
@@ -444,7 +444,7 @@ EdgeSetIF * TabuSearch::resolve() {
 				solutionCost = spanningTreeCost;
 				delete worstCaseScenario;
 				worstCaseScenario = getWorstCaseScenario(solution);
-				treeWorstCaseAlternative = this->mstSolver->getMST(
+				treeWorstCaseAlternative = this->mstSolver->getSolution(
 						worstCaseScenario);
 				nextEdgeSet = EdgeSetUtils::getSetUnion(nextEdgeSet,
 						treeWorstCaseAlternative, true);
@@ -487,7 +487,7 @@ EdgeSetIF * TabuSearch::resolve() {
 			delete worstCaseScenario;
 			worstCaseScenario = getWorstCaseScenario(spanningTree);
 			MemoryUtils::removeCollection(nextEdgeSet, false);
-			nextEdgeSet = this->mstSolver->getMST(worstCaseScenario);
+			nextEdgeSet = this->mstSolver->getSolution(worstCaseScenario);
 			iterationCount = 0;
 			continue;
 		} else {
@@ -517,7 +517,7 @@ TabuSearch::TabuSearch(AIMSTSolverEnum aimstSolverType,
 		IncrementalParam k, TabuIterationCount tabuPeriod,
 		TabuIterationCount numberOfPathIterations,
 		TabuIterationCount numberOfIterations) :
-		RIMSTSolverIF(aimstSolverType, imstSolverType, mstSolverType, graph,
+		RRIMSTSolverIF(aimstSolverType, imstSolverType, mstSolverType, graph,
 				adversarialScenarioSet, k) {
 	this->vertexCount = graph->getNumberOfVertices();
 	this->tabuPeriod = tabuPeriod;

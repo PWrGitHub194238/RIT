@@ -3,26 +3,27 @@
 #include <set>
 #include <sstream>
 #include <string>
+#include <tuple>
 #include <utility>
 
-#include "../include/enums/AIMSTSolverEnum.hpp"
+#include "../include/aimstsolver/AIMSTSolverIF.hpp"
 #include "../include/enums/Connectivity.hpp"
-#include "../include/enums/IMSTSolverEnum.hpp"
-#include "../include/enums/MSTSolverEnum.hpp"
 #include "../include/enums/Visibility.hpp"
 #include "../include/log/utils/LocaleEnum.hpp"
 #include "../include/log/utils/LogUtils.hpp"
-#include "../include/rimstsolver/RIMSTSolverInclude.hpp"
+#include "../include/mstsolver/MSTSolverIF.hpp"
 #include "../include/structures/EdgeIF.hpp"
 #include "../include/structures/EdgeSetIF.hpp"
 #include "../include/structures/GraphEdgeCostsIF.hpp"
 #include "../include/structures/GraphIF.hpp"
 #include "../include/typedefs/primitive.hpp"
 #include "../include/typedefs/struct.hpp"
+#include "../include/utils/AIMSTUtils.hpp"
 #include "../include/utils/enums/InputFormat.hpp"
 #include "../include/utils/enums/InputMode.hpp"
 #include "../include/utils/IOUtils.hpp"
 #include "../include/utils/MemoryUtils.hpp"
+#include "../include/utils/SolverFactory.hpp"
 
 // TODO Jeśli koszty grafu zmieni się poza solverem (nie w getMST()) to solver tego nie wykrywa, trzeba za każsym razem sprawdzać, nie tylko gdy nie null.
 
@@ -61,14 +62,63 @@ void changeCost(GraphIF* g) {
 
 
 
+void chuj() {
+	std::ostringstream oss { };
+
+		IncrementalParam k = 5;
+		GraphIF* g = InputUtils::readGraph("/home/tomasz/git/RIT/RIT_Examples/test/rrimst/TabuSearch/4/s0.json", InputFormat::VA, InputMode::HDD);
+		GraphEdgeCostsSet adversarialScenarios { };
+		MSTSolverIF* mstSolver = SolverFactory::getMSTSolver(g);
+		AIMSTSolution aimstSolution { };
+		EdgeSetIF* solution { };
+
+		EdgeSetIF* baseSolution = mstSolver->getSolution();
+		delete mstSolver;
+
+		for (int i = 1; i <= 2; i += 1) {
+			oss << "/home/tomasz/git/RIT/RIT_Examples/test/aimst/SingleThread/4/Adv/s" << i << ".json";
+			adversarialScenarios.insert(
+				InputUtils::readCosts(oss.str().c_str(), InputFormat::VA, InputMode::HDD)
+			);
+			oss.str("");
+			oss.clear();
+		}
+
+		AIMSTSolverIF* aimstSolver = SolverFactory::getAIMSTSolver(g, adversarialScenarios, k);
+
+		aimstSolution = aimstSolver->getSolution(baseSolution);
+		solution = AIMSTUtils::getEdgeSet(aimstSolution);
+
+		MemoryUtils::removeCollection(baseSolution, false);
+		delete aimstSolver;
+
+		std::cout << solution->toString() << std::endl;
+		std::cout << solution->getTotalEdgeCost() << std::endl;
+
+
+		MemoryUtils::removeCollection(solution, false);
+		MemoryUtils::removeScenarioSet(adversarialScenarios);
+		MemoryUtils::removeGraph(g, true, true);
+}
 
 int main(int argc, char **argv) {
 
-	log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("log"));
+	chuj();
+	//log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("log"));
 
-	LogUtils::configureLog("Log4cxxConfig.xml");
+	//LogUtils::configureLog("Log4cxxConfig.xml");
 
-	LogUtils::setLocale(LocaleEnum::EN_US_UTF8);
+	//LogUtils::setLocale(LocaleEnum::EN_US_UTF8);
+
+
+
+
+
+
+
+
+
+
 
 
 	// Generowanie grafów od 100 do 10000 wierzchołków, z gęstością = 1.0
@@ -100,7 +150,7 @@ int main(int argc, char **argv) {
 
 	MSTSolverIF* mstSolver = new MSTSolverImpl { g };
 
-	EdgeSetIF* e1 = mstSolver->getMST();
+	EdgeSetIF* e1 = mstSolver->getSolution();
 
 	std::cout << "E1: " << e1->toString() << std::endl << std::endl;
 
@@ -113,7 +163,7 @@ int main(int argc, char **argv) {
 
 	std::cout << "G: " << g->toString() << std::endl;
 
-	EdgeSetIF* e2 = mstSolver->getMST();
+	EdgeSetIF* e2 = mstSolver->getSolution();
 
 	std::cout << "E2: " << e2->toString() << std::endl << std::endl;
 
@@ -157,7 +207,7 @@ int main(int argc, char **argv) {
 
 	RIMSTSolverIF* rimstSolver = new RIMSTSolverImpl { g, advScenarios, 1, 60, 10, 5 };
 
-	EdgeSetIF* solution = rimstSolver->getMST();
+	EdgeSetIF* solution = rimstSolver->getSolution();
 
 	std::cout << "COST: " << solution->getTotalEdgeCost() << std::endl;
 
@@ -217,7 +267,7 @@ int main(int argc, char **argv) {
 	AIMSTSolverIF* aimstSolver = new AIMSTSolverImpl { g, adv, 1 };
 
 	MSTSolverIF* mstSolver = new MSTSolverImpl { g };
-	EdgeSetIF* sol = mstSolver->getMST();
+	EdgeSetIF* sol = mstSolver->getSolution();
 	AIMSTSolution solution = aimstSolver->getMST(sol);
 
 	MemoryUtils::removeCollection(sol, false);
@@ -254,13 +304,13 @@ int main(int argc, char **argv) {
 
 	 MSTSolverIF* mstSolver = new MSTSolverImpl { g };
 
-	 EdgeSetIF* sol = mstSolver->getMST();
+	 EdgeSetIF* sol = mstSolver->getSolution();
 
 	 std::cout << "COST: " << sol->getTotalEdgeCost() << std::endl;
 
 	changeCost(g);
 
-	sol = mstSolver->getMST();
+	sol = mstSolver->getSolution();
 
 	changeCostBack(g,costs);
 
@@ -279,7 +329,7 @@ int main(int argc, char **argv) {
 	 //TODO zabronienie odpalenia 2 razy getMST() na tym samym obiecie
 	 CPLEX_LP_MSTSolverIF* mstSolver = new CPLEX_LP_MSTSolver_v2 { g };
 
-	 EdgeSetIF* solution = mstSolver->getMST();
+	 EdgeSetIF* solution = mstSolver->getSolution();
 
 	MemoryUtils::removeCollection(solution, false);
 	delete mstSolver;
@@ -299,7 +349,7 @@ int main(int argc, char **argv) {
 
 	MemoryUtils::removeCollection(smallSet, false);
 
-	solution = mstSolver->getMST();
+	solution = mstSolver->getSolution();
 
 	MemoryUtils::removeCollection(solution, false);
 	delete mstSolver;
@@ -321,7 +371,7 @@ int main(int argc, char **argv) {
 	 //TODO zabronienie odpalenia 2 razy getMST() na tym samym obiecie
 	 CPLEX_LP_MSTSolverIF* mstSolver = new CPLEX_LP_MSTSolver_v3 { g };
 
-	 EdgeSetIF* solution = mstSolver->getMST();
+	 EdgeSetIF* solution = mstSolver->getSolution();
 
 	MemoryUtils::removeCollection(solution, false);
 	delete mstSolver;
@@ -341,7 +391,7 @@ int main(int argc, char **argv) {
 
 	MemoryUtils::removeCollection(smallSet, false);
 
-	solution = mstSolver->getMST();
+	solution = mstSolver->getSolution();
 
 	MemoryUtils::removeCollection(solution, false);
 	delete mstSolver;
@@ -356,7 +406,7 @@ int main(int argc, char **argv) {
 	char* a = "/home/tomasz/Pulpit/TB_MST_Examples/4/s0.json";
 	GraphIF* g = InputUtils::readGraph(a, InputFormat::VA, InputMode::HDD);
 	MSTSolverIF* mstSolver = new MSTSolverImpl { g };
-	EdgeSetIF* solution = mstSolver->getMST();
+	EdgeSetIF* solution = mstSolver->getSolution();
 
 	MemoryUtils::removeCollection(solution, false);
 
@@ -372,7 +422,7 @@ int main(int argc, char **argv) {
 
 	MemoryUtils::removeCollection(smallSet, false);
 
-	solution = mstSolver->getMST();
+	solution = mstSolver->getSolution();
 
 	MemoryUtils::removeCollection(solution, false);
 	delete mstSolver;
@@ -390,7 +440,7 @@ int main(int argc, char **argv) {
 
 	IMSTSolverIF* imstSolver = new BinarySearch_v2 { MSTSolverEnum::DEFAULT, g };
 
-	EdgeSetIF* mstSol = imstSolver->getMST();
+	EdgeSetIF* mstSol = imstSolver->getSolution();
 
 	GraphEdgeCostsIF* costs = GraphEdgeCostUtils::getInverseCaseScenario(g, mstSol, 18);
 
@@ -456,7 +506,7 @@ int main(int argc, char **argv) {
 		CPLEX_LP_MSTSolverIF* lpMstSolver = new CPLEX_LP_MSTSolverImpl { g };
 		//MSTSolverIF* mstSolver = new MSTSolverImpl { g };
 
-		//EdgeSetIF* ee = mstSolver->getMST();
+		//EdgeSetIF* ee = mstSolver->getSolution();
 
 		CPLEX_LP_IMSTSolverIF* imst = new CPLEX_LP_IMSTSolverImpl { lpMstSolver, g };//, ee };
 
@@ -492,7 +542,7 @@ int main(int argc, char **argv) {
 
 	MSTSolverIF* mstSolver = new MSTSolverImpl { g };
 
-	EdgeSetIF* ee = mstSolver->getMST();
+	EdgeSetIF* ee = mstSolver->getSolution();
 
 	CPLEX_LP_MSTSolverIF* mst = new CPLEX_LP_MSTSolverImpl { g };
 
@@ -574,7 +624,7 @@ int main(int argc, char **argv) {
 
 	 CPLEX_LP_MSTSolverIF* solver = new CPLEX_LP_MSTSolverImpl { g };
 
-	 EdgeSetIF* e = solver->getMST();
+	 EdgeSetIF* e = solver->getSolution();
 
 	 delete solver;
 
@@ -601,7 +651,7 @@ int main(int argc, char **argv) {
 
 	 RIMSTSolverIF* solver = new RIMSTSolverImpl { g, adversarialScenarioSet, 1 };
 
-	 EdgeSetIF* s = solver->getMST();
+	 EdgeSetIF* s = solver->getSolution();
 
 	 std::cout << "SOLUTION: " << s->toString() << "\nwith cost: " << s->getTotalEdgeCost() << std::endl;
 
@@ -739,7 +789,7 @@ int main(int argc, char **argv) {
 	 //std::cout << s->getTotalEdgeCost() << std::endl;
 	 //MSTSolverIF* solver = new LP_MSTSolver_v1 { g };
 
-	 //EdgeSetIF * s = solver->getMST();
+	 //EdgeSetIF * s = solver->getSolution();
 
 	 delete s;
 	 delete solver;

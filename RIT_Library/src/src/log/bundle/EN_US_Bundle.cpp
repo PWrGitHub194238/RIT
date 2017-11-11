@@ -41,6 +41,10 @@ const char* logDictionary[] = {
 	"Solution given by thread %ThreadId% has better (bigger) cost that previously selected solution:\n\told solution's cost:\t:\t%EdgeCost%,\n\tnew solution's cost\t:\t%EdgeCost%.",
 	// AIMST_RESOLVE_THREAD_SOLUTION
 	"From solutions for %ScenarioCount% adversarial scenarios, solution for following scenario:\n%s\nwas selected. Given solution has following edges:\n%s\nand total cost: %EdgeCost%.",
+	// AIMST_RESOLVE_FOR_SCENARIO
+	"Running Incremental Minimum Spanning Tree solver with given adversarial scenario:\n%s\n(%ThreadId% scenario in order).",
+	// AIMST_RESOLVE_FOR_SCENARIO_BETTER_SOL
+	"Solution given by scenario %ThreadId% has better (bigger) cost that previously selected solution:\n\told solution's cost:\t:\t%EdgeCost%,\n\tnew solution's cost\t:\t%EdgeCost%.",
 
 	//**************** Warn *****************//
 	// AIMST_RESOLVE_NO_SCENARIO
@@ -879,15 +883,15 @@ const char* logDictionary[] = {
 	//**************** Error ****************//
 	//**************** Fatal ****************//
 
-	//*********************************** RIMSTSolverIF.cpp ***********************************//
+	//*********************************** RRIMSTSolverIF.cpp ***********************************//
 	//**************** Trace ****************//
 	//**************** Debug ****************//
 	//**************** Info *****************//
-	// RIMSTS_IF_GRAPH_COST_BACKUP
+	// RRIMSTS_IF_GRAPH_COST_BACKUP
 	"New set of edges' costs has been given. Changing costs of edges as shown below:\n%s.",
 
 	//**************** Warn *****************//
-	// RIMSTS_IF_NEW_GRAPH_COST_SIZE_MISMATCH
+	// RRIMSTS_IF_NEW_GRAPH_COST_SIZE_MISMATCH
 	"Newly given set of costs has different number of elements (%EdgeCount%) than number of edges in graph (%EdgeCount%). Costs of edges cannot be updated.",
 
 	//**************** Error ****************//

@@ -22,11 +22,13 @@
 #include "../../include/log/utils/LogStringUtils.hpp"
 #include "../../include/log/utils/LogUtils.hpp"
 #include "../../include/mstsolver/MSTSolverIF.hpp"
-#include "../../include/structures/EdgeSetIF.hpp"
+#include "../../include/structures/EdgeSetInclude.hpp"
 #include "../../include/structures/GraphInclude.hpp"
 #include "../../include/utils/AIMSTUtils.hpp"
 #include "../../include/utils/MemoryUtils.hpp"
 #include "../../include/utils/SolverFactory.hpp"
+
+#include <iostream>
 
 const static log4cxx::LoggerPtr logger(
 		log4cxx::Logger::getLogger("aimstsolver.AIMSTSolver"));
@@ -43,7 +45,7 @@ void AIMSTSolver::getIMST(ThreadId threadId, GraphIF* const graph,
 	INFO(logger, LogBundleKey::AIMST_THREAD_RUN, threadId);
 	IMSTSolverIF* imstSolver = new IMSTSolverImpl { mstSolverType, graph,
 			baseSolution };
-	outputSolution = imstSolver->getIMST(k, scenario);
+	outputSolution = imstSolver->getSolution(k, scenario);
 	delete imstSolver;
 	INFO(logger, LogBundleKey::AIMST_THREAD_END, threadId);
 }
@@ -52,7 +54,8 @@ void AIMSTSolver::getIMST(ThreadId threadId, GraphIF* const graph,
 
 //************************************ PROTECTED CLASS FIELDS **************************************//
 
-AIMSTSolution AIMSTSolver::resolve(EdgeSetIF* const baseSolution) {
+AIMSTSolution AIMSTSolver::resolveWithMultThreads(
+		EdgeSetIF* const baseSolution) {
 	ThreadId i { };
 	MSTSolverIF* mstSolver { };
 	EdgeSetIF* solution { };
@@ -83,22 +86,15 @@ AIMSTSolution AIMSTSolver::resolve(EdgeSetIF* const baseSolution) {
 			threadGraphSet[i] = new GraphImpl { graph };
 			baseSolutionSet[i] = AIMSTUtils::getEdgeSetCopy(threadGraphSet[i],
 					baseSolution);
-			if (AIMSTUtils::MULTITHREAD) {
-				scenarioThreads[i] = std::thread(&AIMSTSolver::getIMST, this, i,
-						threadGraphSet[i], baseSolutionSet[i], *scenarioIt,
-						std::ref(solutionSet[i]));
-			} else {
-				getIMST(i, threadGraphSet[i], baseSolutionSet[i], *scenarioIt,
-						std::ref(solutionSet[i]));
-			}
+			scenarioThreads[i] = std::thread(&AIMSTSolver::getIMST, this, i,
+					threadGraphSet[i], baseSolutionSet[i], *scenarioIt,
+					std::ref(solutionSet[i]));
 			++scenarioIt;
 		}
 
 		INFO_NOARG(logger, LogBundleKey::AIMST_RESOLVE_JOIN);
-		if (AIMSTUtils::MULTITHREAD) {
-			for (i = 0; i < numberOfScenarios; i += 1) {
-				scenarioThreads[i].join();
-			}
+		for (i = 0; i < numberOfScenarios; i += 1) {
+			scenarioThreads[i].join();
 		}
 		INFO(logger, LogBundleKey::AIMST_RESOLVE_JOINED, numberOfScenarios);
 
@@ -145,7 +141,78 @@ AIMSTSolution AIMSTSolver::resolve(EdgeSetIF* const baseSolution) {
 	} else {
 		WARN_NOARG(logger, LogBundleKey::AIMST_RESOLVE_NO_SCENARIO);
 		mstSolver = SolverFactory::getMSTSolver(mstSolverType, graph);
-		returnedSolution = mstSolver->getMST();
+		returnedSolution = mstSolver->getSolution();
+		delete mstSolver;
+		return AIMSTUtils::createAIMSTSolution(returnedSolution, nullptr,
+				returnedSolution->getTotalEdgeCost());
+	}
+}
+
+AIMSTSolution AIMSTSolver::resolveWithSingleThread(
+		EdgeSetIF* const baseSolution) {
+	ThreadId i { };
+	MSTSolverIF* mstSolver { };
+	EdgeSetIF* solution { };
+	EdgeCost solutionCost { };
+	EdgeSetIF* returnedSolution { };
+	EdgeCost returnedSolutionCost { };
+	GraphEdgeCostsIF* solutionScenario { };
+	GraphEdgeCostsSet::const_iterator scenarioIt { };
+
+	ThreadId numberOfScenarios { adversarialScenarioSet.size() };
+
+	IMSTSolverIF* imstSolver = new IMSTSolverImpl { mstSolverType, graph,
+			baseSolution };
+
+	if (numberOfScenarios > 0) {
+		INFO(logger, LogBundleKey::AIMST_RESOLVE_INIT, numberOfScenarios);
+
+		scenarioIt = adversarialScenarioSet.begin();
+
+		INFO(logger, LogBundleKey::AIMST_RESOLVE_FOR_SCENARIO, i,
+				LogStringUtils::edgeCostSetDescription(*scenarioIt, "\t").c_str());
+
+		solution = imstSolver->getSolution(k, *scenarioIt);
+
+		returnedSolutionCost = solution->getTotalEdgeCost();
+
+		for (i = 1; i < numberOfScenarios; i += 1) {
+			++scenarioIt;
+
+			INFO(logger, LogBundleKey::AIMST_RESOLVE_FOR_SCENARIO,
+					LogStringUtils::edgeCostSetDescription(*scenarioIt, "\t").c_str(), i);
+
+			std::cout << LogStringUtils::edgeCostSetDescription(*scenarioIt, "\t").c_str() << std::endl;
+			MemoryUtils::removeCollection(solution, false);
+
+			solution = imstSolver->getSolution(k, baseSolution, *scenarioIt);
+
+			solutionCost = solution->getTotalEdgeCost();
+
+			if (returnedSolutionCost < solutionCost) {
+				INFO(logger,
+						LogBundleKey::AIMST_RESOLVE_FOR_SCENARIO_BETTER_SOL, i,
+						returnedSolutionCost, solutionCost);
+				solutionScenario = *scenarioIt;
+				MemoryUtils::removeCollection(returnedSolution, false);
+				returnedSolution = new EdgeSetImpl { solution, false };
+				returnedSolutionCost = solutionCost;
+			}
+		}
+		MemoryUtils::removeCollection(solution, false);
+		delete imstSolver;
+		INFO(logger, LogBundleKey::AIMST_RESOLVE_THREAD_SOLUTION,
+				numberOfScenarios,
+				LogStringUtils::edgeCostSetDescription(solutionScenario, "\t").c_str(),
+				LogStringUtils::edgeSetVisualization(returnedSolution, "\t").c_str(),
+				returnedSolution->getTotalEdgeCost());
+
+		return AIMSTUtils::createAIMSTSolution(returnedSolution,
+				solutionScenario, solutionCost);
+	} else {
+		WARN_NOARG(logger, LogBundleKey::AIMST_RESOLVE_NO_SCENARIO);
+		mstSolver = SolverFactory::getMSTSolver(mstSolverType, graph);
+		returnedSolution = mstSolver->getSolution();
 		delete mstSolver;
 		return AIMSTUtils::createAIMSTSolution(returnedSolution, nullptr,
 				returnedSolution->getTotalEdgeCost());

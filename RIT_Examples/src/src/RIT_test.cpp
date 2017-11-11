@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 
 
 	//return 0;
-	::testing::GTEST_FLAG(filter) = "TABU_SEARCH_EXAMPLE.*";
+	::testing::GTEST_FLAG(filter) = "USE_CASE.AIMST_ST_EXAMPLE";
 	return RUN_ALL_TESTS();
 }
 

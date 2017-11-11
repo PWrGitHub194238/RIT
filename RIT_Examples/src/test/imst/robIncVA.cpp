@@ -77,7 +77,7 @@ TEST ( RIMST_TEST, SMALL_VA_NO_CHANGES ) {
 					<< vectorsX[i][4] << "\t" << vectorsX[i][5] << "\t"
 					<< std::flush;
 			solver = new IMSTSolverImpl { g, edgeSetArray[i] };
-			s = solver->getIMST(1,s1);
+			s = solver->getSolution(1,s1);
 			//std::cout << s->toString() << std::endl;
 			s1c = s->getTotalEdgeCost();
 			std::cout << s1c << "\t" << std::flush;
@@ -86,7 +86,7 @@ TEST ( RIMST_TEST, SMALL_VA_NO_CHANGES ) {
 			MemoryUtils::removeCollection(s, false);
 
 			solver = new IMSTSolverImpl { g, edgeSetArray[i] };
-			s = solver->getIMST(1,s2);
+			s = solver->getSolution(1,s2);
 			//std::cout << s->toString() << std::endl;
 			s2c = s->getTotalEdgeCost();
 			std::cout << s2c << "\t" << std::flush;

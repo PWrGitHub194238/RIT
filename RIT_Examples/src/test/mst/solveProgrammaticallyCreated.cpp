@@ -74,7 +74,7 @@ TEST ( MST_2_TEST, SMALL ) {
 //
 //	std::cout << g->toJSONString(JSONFormat::PRETTY, 3) << std::endl;
 
-	EdgeSetIF* mst = p->getMST();
+	EdgeSetIF* mst = p->getSolution();
 
 //	std::cout << mst->toString() << std::endl;
 //

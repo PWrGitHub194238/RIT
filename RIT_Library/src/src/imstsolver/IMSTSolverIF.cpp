@@ -66,6 +66,7 @@ void IMSTSolverIF::replaceEdgeCosts(GraphEdgeCostsIF* newGraphCosts) {
 	} else if (newGraphCosts->size() == graph->getNumberOfEdges()) {
 		INFO(logger, LogBundleKey::IMSTS_IF_GRAPH_COST_CHANGED,
 				LogStringUtils::edgeSetCostChanged(graph, newGraphCosts, "\t").c_str());
+		delete this->baseGraphEdgeCosts;
 		this->baseGraphEdgeCosts = new GraphEdgeCostsImpl { newGraphCosts };
 		this->isCostChanged = GraphUtils::changeGraphCostsWithCheck(graph,
 				newGraphCosts);
@@ -115,10 +116,10 @@ IMSTSolverIF::IMSTSolverIF(MSTSolverEnum const mstSolverType,
 	this->mstSolverType = mstSolverType;
 	this->mstSolver = SolverFactory::getMSTSolver(mstSolverType, graph);
 	this->graph = graph;
-	this->baseGraphEdgeCosts = nullptr;
+	this->baseGraphEdgeCosts = new GraphEdgeCostsImpl { graph };	// wszystkie typy wskaźnikowe muszą być zadeklarowane w konstruktorze, aby można było je zwolnić przed ponownym przypisaniem przy ponownym wywoływaniu innych metod.
 	this->baseMSTSolution = (baseSolution ? new EdgeSetImpl { baseSolution,
 													false } :
-											this->mstSolver->getMST());
+											this->mstSolver->getSolution());
 	this->lowerBound = lowerBound;
 	this->upperBound = upperBound;
 	this->isCostChanged = false;
@@ -214,45 +215,45 @@ void IMSTSolverIF::changeEdgeCost(EdgeIF* edge, EdgeCost newCost)
 }
 
 EdgeSetIF* IMSTSolverIF::getMST() {
-	return this->mstSolver->getMST();
+	return this->mstSolver->getSolution();
 }
 
-EdgeSetIF* IMSTSolverIF::getIMST(EdgeCount k, EdgeSetIF* baseMSTSolution,
+EdgeSetIF* IMSTSolverIF::getSolution(EdgeCount k, EdgeSetIF* baseMSTSolution,
 		VertexIF* initialVertex, GraphEdgeCostsIF* newGraphCosts) {
 	replaceBaseMSTSolution(baseMSTSolution);
 	replaceEdgeCosts(newGraphCosts);
 	return resolve(k, initialVertex);
 }
 
-EdgeSetIF* IMSTSolverIF::getIMST(EdgeCount k, VertexIF* initialVertex,
+EdgeSetIF* IMSTSolverIF::getSolution(EdgeCount k, VertexIF* initialVertex,
 		GraphEdgeCostsIF* newGraphCosts) {
-	return getIMST(k, nullptr, initialVertex, newGraphCosts);
+	return getSolution(k, nullptr, initialVertex, newGraphCosts);
 }
 
-EdgeSetIF* IMSTSolverIF::getIMST(EdgeCount k, EdgeSetIF* baseMSTSolution,
+EdgeSetIF* IMSTSolverIF::getSolution(EdgeCount k, EdgeSetIF* baseMSTSolution,
 		GraphEdgeCostsIF* newGraphCosts) {
-	return getIMST(k, baseMSTSolution, nullptr, newGraphCosts);
+	return getSolution(k, baseMSTSolution, nullptr, newGraphCosts);
 }
 
-EdgeSetIF* IMSTSolverIF::getIMST(EdgeCount k, GraphEdgeCostsIF* newGraphCosts) {
-	return getIMST(k, nullptr, nullptr, newGraphCosts);
+EdgeSetIF* IMSTSolverIF::getSolution(EdgeCount k, GraphEdgeCostsIF* newGraphCosts) {
+	return getSolution(k, nullptr, nullptr, newGraphCosts);
 }
 
-EdgeSetIF* IMSTSolverIF::getIMST(EdgeCount k, EdgeSetIF* baseMSTSolution,
+EdgeSetIF* IMSTSolverIF::getSolution(EdgeCount k, EdgeSetIF* baseMSTSolution,
 		VertexIF* initialVertex) {
-	return getIMST(k, baseMSTSolution, initialVertex, nullptr);
+	return getSolution(k, baseMSTSolution, initialVertex, nullptr);
 }
 
-EdgeSetIF* IMSTSolverIF::getIMST(EdgeCount k, VertexIF* initialVertex) {
-	return getIMST(k, nullptr, initialVertex, nullptr);
+EdgeSetIF* IMSTSolverIF::getSolution(EdgeCount k, VertexIF* initialVertex) {
+	return getSolution(k, nullptr, initialVertex, nullptr);
 }
 
-EdgeSetIF* IMSTSolverIF::getIMST(EdgeCount k, EdgeSetIF* baseMSTSolution) {
-	return getIMST(k, baseMSTSolution, nullptr, nullptr);
+EdgeSetIF* IMSTSolverIF::getSolution(EdgeCount k, EdgeSetIF* baseMSTSolution) {
+	return getSolution(k, baseMSTSolution, nullptr, nullptr);
 }
 
-EdgeSetIF* IMSTSolverIF::getIMST(EdgeCount k) {
-	return getIMST(k, nullptr, nullptr, nullptr);
+EdgeSetIF* IMSTSolverIF::getSolution(EdgeCount k) {
+	return getSolution(k, nullptr, nullptr, nullptr);
 }
 
 //*************************************** GETTERS & SETTERS ****************************************//

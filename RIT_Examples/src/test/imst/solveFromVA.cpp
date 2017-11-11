@@ -31,7 +31,7 @@ TEST ( IMST_TEST, SMALL_VA_NO_CHANGES ) {
 
 		IMSTSolverIF* bs = new IMSTSolverImpl { MSTSolverEnum::DEFAULT, g };
 
-		EdgeSetIF* kmst = bs->getIMST(100);
+		EdgeSetIF* kmst = bs->getSolution(100);
 
 		std::cout << kmst->toString() << std::endl;
 		std::cout << g->edgeSetToString() << std::endl;
@@ -63,7 +63,7 @@ TEST ( IMST_TEST, SMALL_VA_SMALL_MOD ) {
 		bs->changeEdgeCost(6, 5, 9);
 
 		std::cout << "END: " << g->edgeSetToString() << std::endl;
-		EdgeSetIF* kmst = bs->getIMST(3);
+		EdgeSetIF* kmst = bs->getSolution(3);
 
 		std::cout << kmst->toString() << std::endl;
 		std::cout << "KOSZT: " << kmst->getTotalEdgeCost() << std::endl;

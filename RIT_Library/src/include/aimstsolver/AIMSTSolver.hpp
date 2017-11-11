@@ -50,7 +50,9 @@ protected:
 
 	//************************************** PROTECTED FUNCTIONS ***************************************//
 
-	virtual AIMSTSolution resolve(EdgeSetIF* const baseSolution);
+	virtual AIMSTSolution resolveWithMultThreads(EdgeSetIF* const baseSolution);
+
+	virtual AIMSTSolution resolveWithSingleThread(EdgeSetIF* const baseSolution);
 
 public:
 

@@ -181,8 +181,8 @@ void BinarySearch_v2::generateLambdaHelperSets(
 }
 
 void BinarySearch_v2::checkLambdaBounds(EdgeCount k) {
-	EdgeSetIF*lowerBoundMST { };
-	EdgeSetIF*upperBoundMST { };
+	EdgeSetIF* lowerBoundMST { };
+	EdgeSetIF* upperBoundMST { };
 	GraphEdgeCostsIF* graphCostBackup { };
 	INFO_NOARG(logger, LogBundleKey::BS_V2_LAMBDA_BOUNDS_CHECK);
 	if (upperBound != lowerBound) {
@@ -190,10 +190,10 @@ void BinarySearch_v2::checkLambdaBounds(EdgeCount k) {
 				lowerBound, upperBound);
 
 		updateGraphEdgeCosts(lowerBound);
-		lowerBoundMST = mstSolver->getMST();
+		lowerBoundMST = mstSolver->getSolution();
 
 		updateGraphEdgeCosts(upperBound);
-		upperBoundMST = mstSolver->getMST();
+		upperBoundMST = mstSolver->getSolution();
 	}
 
 	if ((upperBound == lowerBound)
@@ -211,6 +211,8 @@ void BinarySearch_v2::checkLambdaBounds(EdgeCount k) {
 		lowerBound = getLambda(0, 0);
 		upperBound = getLambda(this->maxLambdaSetKey, this->maxLambdaSetKey);
 	}
+	MemoryUtils::removeCollection(lowerBoundMST, false);
+	MemoryUtils::removeCollection(upperBoundMST, false);
 }
 
 void BinarySearch_v2::updateGraphEdgeCosts(LambdaValue lamdaParameter) {
@@ -257,7 +259,7 @@ EdgeSetIF* BinarySearch_v2::binarySearchForSolution(EdgeCount k,
 
 		updateGraphEdgeCosts(lambdaFeasibleParameterSet.at(lambdaIdx));
 
-		mstSolution = mstSolver->getMST();
+		mstSolution = mstSolver->getSolution();
 		differentEdges = getMSTDiff(mstSolution);
 
 		if (k < differentEdges) {
@@ -343,7 +345,7 @@ EdgeSetIF* BinarySearch_v2::resolve(IncrementalParam k,
 	if (this->isCostChanged && k > 0) {
 		this->isCostChanged = false;
 		INFO(logger, LogBundleKey::BS_V2_UNBOUNDED_SOLVE, k);
-		unboundedMSTSolution = mstSolver->getMST(initialVertex);
+		unboundedMSTSolution = mstSolver->getSolution(initialVertex);
 
 		if (getMSTDiff(unboundedMSTSolution) <= k) {
 			INFO(logger, LogBundleKey::BS_V2_UNBOUNDED_OPTIMAL, k,
@@ -384,6 +386,7 @@ EdgeSetIF* BinarySearch_v2::resolve(IncrementalParam k,
 			GraphUtils::changeGraphCosts(shrunkenGraph,
 					shrunkenGraphBaseCostSet);
 			delete shrunkenGraphBaseCostSet;
+			mstSolver->setGraph(this->graph);	//przywracanie oryginalnego grafu w solverze
 			graph->restoreConnectivityAllEdges(connectivityList);
 			MemoryUtils::removeGraph(shrunkenGraph, false, false);
 
@@ -582,7 +585,7 @@ EdgeSetIF * BinarySearch_v2::resolve(IncrementalParam k) {
 			INFO(logger, LogBundleKey::BS_V2_IMST_MEDIAN_BASED_NEW_MST,
 					lambdaCurrentValue, lambdaSeedFeasibleParameterArray.size());
 
-			newMSTSolution = mstSolver->getMST();
+			newMSTSolution = mstSolver->getSolution();
 			differentEdges = getMSTDiff(newMSTSolution);
 
 			if (differentEdges == k) {

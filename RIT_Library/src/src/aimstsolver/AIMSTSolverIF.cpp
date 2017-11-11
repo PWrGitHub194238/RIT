@@ -7,12 +7,15 @@
 
 #include "../../include/aimstsolver/AIMSTSolverIF.hpp"
 
+#include <log4cxx/helpers/messagebuffer.h>
 #include <log4cxx/logger.h>
+#include <memory>
 #include <set>
 
 #include "../../include/log/bundle/Bundle.hpp"
 #include "../../include/log/utils/LogUtils.hpp"
 #include "../../include/structures/GraphEdgeCostsInclude.hpp"
+#include "../../include/utils/AIMSTUtils.hpp"
 #include "../../include/utils/GraphUtils.hpp"
 
 const static log4cxx::LoggerPtr logger(
@@ -23,6 +26,12 @@ const static log4cxx::LoggerPtr logger(
 //************************************** PRIVATE CLASS FIELDS **************************************//
 
 //*************************************** PRIVATE FUNCTIONS ****************************************//
+
+AIMSTSolution AIMSTSolverIF::resolve(EdgeSetIF* const baseSolution) {
+	return AIMSTUtils::MULTITHREAD ?
+			resolveWithMultThreads(baseSolution) :
+			resolveWithSingleThread(baseSolution);
+}
 
 //*********************************** PROTECTED CONSTANT FIELDS ************************************//
 
@@ -68,7 +77,7 @@ AIMSTSolverIF::~AIMSTSolverIF() {
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
 
-AIMSTSolution AIMSTSolverIF::getMST(EdgeSetIF* const baseSolution,
+AIMSTSolution AIMSTSolverIF::getSolution(EdgeSetIF* const baseSolution,
 		GraphEdgeCostsIF* initialGraphCosts)
 				throw (GraphExceptions::DisconnectedGraphException) {
 	GraphEdgeCostsIF* graphCosts = new GraphEdgeCostsImpl { graph };
@@ -79,7 +88,7 @@ AIMSTSolution AIMSTSolverIF::getMST(EdgeSetIF* const baseSolution,
 	return solution;
 }
 
-AIMSTSolution AIMSTSolverIF::getMST(EdgeSetIF* const baseSolution)
+AIMSTSolution AIMSTSolverIF::getSolution(EdgeSetIF* const baseSolution)
 		throw (GraphExceptions::DisconnectedGraphException) {
 	return resolve(baseSolution);
 }

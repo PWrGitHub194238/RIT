@@ -1,11 +1,11 @@
 /*
- * RIMSTSolverIF.cpp
+ * RRIMSTSolverIF.cpp
  *
  *  Created on: 13 kwi 2016
  *      Author: tomasz
  */
 
-#include "../../include/rimstsolver/RIMSTSolverIF.hpp"
+#include "../../include/rrimstsolver/RRIMSTSolverIF.hpp"
 
 #include <log4cxx/helpers/messagebuffer.h>
 #include <log4cxx/logger.h>
@@ -24,7 +24,7 @@
 #include "../../include/utils/SolverFactory.hpp"
 
 const static log4cxx::LoggerPtr logger(
-		log4cxx::Logger::getLogger("rimstsolver.RIMSTSolverIF"));
+		log4cxx::Logger::getLogger("RRIMSTsolver.RRIMSTSolverIF"));
 
 //************************************ PRIVATE CONSTANT FIELDS *************************************//
 
@@ -38,13 +38,13 @@ const static log4cxx::LoggerPtr logger(
 
 //************************************** PROTECTED FUNCTIONS ***************************************//
 
-void RIMSTSolverIF::backupGraphCosts(GraphEdgeCostsIF* newGraphCosts) {
+void RRIMSTSolverIF::backupGraphCosts(GraphEdgeCostsIF* newGraphCosts) {
 	IteratorId graphIterator { };
 	if (newGraphCosts == nullptr) {
 		this->graphCostBackup = new GraphEdgeCostsImpl { graph };
 		return;
 	} else if (newGraphCosts->size() == graph->getNumberOfEdges()) {
-		INFO(logger, LogBundleKey::RIMSTS_IF_GRAPH_COST_BACKUP,
+		INFO(logger, LogBundleKey::RRIMSTS_IF_GRAPH_COST_BACKUP,
 				LogStringUtils::edgeSetCostChanged(graph, newGraphCosts, "\t").c_str());
 		this->graphCostBackup = new GraphEdgeCostsImpl { newGraphCosts };
 		graphIterator = graph->getEdgeIteratorId();
@@ -56,7 +56,7 @@ void RIMSTSolverIF::backupGraphCosts(GraphEdgeCostsIF* newGraphCosts) {
 		graph->removeEdgeIterator(graphIterator);
 		return;
 	}
-	WARN(logger, LogBundleKey::RIMSTS_IF_NEW_GRAPH_COST_SIZE_MISMATCH,
+	WARN(logger, LogBundleKey::RRIMSTS_IF_NEW_GRAPH_COST_SIZE_MISMATCH,
 			newGraphCosts->size(), graph->getNumberOfEdges());
 }
 
@@ -66,7 +66,7 @@ void RIMSTSolverIF::backupGraphCosts(GraphEdgeCostsIF* newGraphCosts) {
 
 //************************************ CONSTRUCTOR & DESTRUCTOR ************************************//
 
-RIMSTSolverIF::RIMSTSolverIF(AIMSTSolverEnum aimstSolverType,
+RRIMSTSolverIF::RRIMSTSolverIF(AIMSTSolverEnum aimstSolverType,
 		IMSTSolverEnum imstSolverType, MSTSolverEnum mstSolverType,
 		GraphIF * const graph, GraphEdgeCostsSet adversarialScenarioSet,
 		IncrementalParam k) {
@@ -82,42 +82,42 @@ RIMSTSolverIF::RIMSTSolverIF(AIMSTSolverEnum aimstSolverType,
 	this->k = k;
 }
 
-RIMSTSolverIF::RIMSTSolverIF(IMSTSolverEnum imstSolverType,
+RRIMSTSolverIF::RRIMSTSolverIF(IMSTSolverEnum imstSolverType,
 		MSTSolverEnum mstSolverType, GraphIF * const graph,
 		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
-		RIMSTSolverIF(AIMSTSolverEnum::DEFAULT, imstSolverType, mstSolverType,
+		RRIMSTSolverIF(AIMSTSolverEnum::DEFAULT, imstSolverType, mstSolverType,
 				graph, adversarialScenarioSet, k) {
 
 }
 
-RIMSTSolverIF::RIMSTSolverIF(MSTSolverEnum mstSolverType, GraphIF * const graph,
+RRIMSTSolverIF::RRIMSTSolverIF(MSTSolverEnum mstSolverType, GraphIF * const graph,
 		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
-		RIMSTSolverIF(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
+		RRIMSTSolverIF(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
 				mstSolverType, graph, adversarialScenarioSet, k) {
 
 }
 
-RIMSTSolverIF::RIMSTSolverIF(GraphIF * const graph,
+RRIMSTSolverIF::RRIMSTSolverIF(GraphIF * const graph,
 		GraphEdgeCostsSet adversarialScenarioSet, IncrementalParam k) :
-		RIMSTSolverIF(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
+		RRIMSTSolverIF(AIMSTSolverEnum::DEFAULT, IMSTSolverEnum::DEFAULT,
 				MSTSolverEnum::DEFAULT, graph, adversarialScenarioSet, k) {
 
 }
 
-RIMSTSolverIF::~RIMSTSolverIF() {
+RRIMSTSolverIF::~RRIMSTSolverIF() {
 	delete this->aimstSolver;
 	delete this->mstSolver;
 }
 
 //*************************************** PUBLIC FUNCTIONS *****************************************//
 
-EdgeSetIF* RIMSTSolverIF::getMST(GraphEdgeCostsIF* initialGraphCosts)
+EdgeSetIF* RRIMSTSolverIF::getSolution(GraphEdgeCostsIF* initialGraphCosts)
 		throw (GraphExceptions::DisconnectedGraphException) {
 	backupGraphCosts(initialGraphCosts);
 	return resolve();
 }
 
-EdgeSetIF* RIMSTSolverIF::getMST()
+EdgeSetIF* RRIMSTSolverIF::getSolution()
 		throw (GraphExceptions::DisconnectedGraphException) {
 	return resolve();
 }

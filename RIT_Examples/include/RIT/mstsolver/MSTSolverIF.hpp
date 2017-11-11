@@ -58,7 +58,7 @@ public:
 
 	//*************************************** PUBLIC FUNCTIONS *****************************************//
 
-	EdgeSetIF * getMST() throw (GraphExceptions::DisconnectedGraphException);
+	EdgeSetIF * getSolution() throw (GraphExceptions::DisconnectedGraphException);
 
 	/** @brief Returns minimum spanning tree for given MSTSolverIF::graph.
 	 *
@@ -70,7 +70,7 @@ public:
 	 * @param graphScenario scenario that contains information about every edge cost.
 	 * @return minimum spanning tree for graph with temporarily changed edge costs according to given graphScenario.
 	 */
-	EdgeSetIF * getMST(GraphEdgeCostsIF * const & graphScenario)
+	EdgeSetIF * getSolution(GraphEdgeCostsIF * const & graphScenario)
 			throw (GraphExceptions::DisconnectedGraphException);
 
 	/** Temporary disconnects every edge that is not in given visibleSet
@@ -78,13 +78,13 @@ public:
 	 * @param visibleSet
 	 * @return
 	 */
-	EdgeSetIF * getMST(EdgeSetIF * const & visibleSet)
+	EdgeSetIF * getSolution(EdgeSetIF * const & visibleSet)
 			throw (GraphExceptions::DisconnectedGraphException);
 
-	EdgeSetIF * getMST(VertexIF * const & initialVertex)
+	EdgeSetIF * getSolution(VertexIF * const & initialVertex)
 			throw (GraphExceptions::DisconnectedGraphException);
 
-	EdgeSetIF * getMST(VertexIF * const & initialVertex, EdgeSetIF * const & visibleSet)
+	EdgeSetIF * getSolution(VertexIF * const & initialVertex, EdgeSetIF * const & visibleSet)
 			throw (GraphExceptions::DisconnectedGraphException);
 
 	//*************************************** GETTERS & SETTERS ****************************************//
