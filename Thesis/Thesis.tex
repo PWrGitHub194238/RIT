@@ -697,15 +697,6 @@
 	\tableofcontents
 	\cleardoublepage
 	
-	\mbox{}
-	\thispagestyle{empty}
-	\newpage
-	
-	\mbox{}
-	\thispagestyle{empty}
-	\newpage
-	
-	
 	
 	
 	% ***************************************************************************************************
@@ -713,12 +704,13 @@
 	% ***************************************************************************************************
 	
 	
+	
+	
 	\pagestyle{custom}
 	\mainmatter
 	
-	\clearpage
 	\input{Preface}
-	\clearpage
+	\cleardoublepage
 	
 	
 	
@@ -730,39 +722,29 @@
 	
 	
 	
-	\clearpage
 	\input{Chapter_I}
-	\clearpage
+	\cleardoublepage
 	
-	\clearpage
 	\input{Chapter_II}
-	\clearpage
+	\cleardoublepage
 	
-	\clearpage
 	\input{Chapter_III}
-	\clearpage
+	\cleardoublepage
 	
-	\mbox{}
-	\newpage
-	
-	\clearpage
 	\input{Chapter_IV}
-	\clearpage
+	\cleardoublepage
 	
-	\mbox{}
-	\newpage
-		
-	\clearpage
 	\input{Chapter_V}
-	\clearpage
+	\cleardoublepage
 	
-	\clearpage
 	\input{Chapter_VI}
-	\clearpage
+	\cleardoublepage
 
-	\clearpage
 	\input{Chapter_VII}
-	\clearpage	
+	\cleardoublepage
+	
+	
+		
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BIBLIOGRAFIA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -774,12 +756,7 @@
 	\bibliographystyle{plain}
 	\bibliography{P2P}
 	\thispagestyle{chapterBeginStyle}
-
-	\clearpage
-	
-	\mbox{}
-	\thispagestyle{chapterBeginStyle}
-	\newpage
+	\cleardoublepage
 
 	
 	
@@ -790,11 +767,10 @@
 	
 	
 	
+	
 	\appendix
 	\pagestyle{appendixStyle}
 	
-	\clearpage
 	\input{Appendix_I}
-	\clearpage
 
 \end{document}
